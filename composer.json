@@ -1,0 +1,7 @@
+{
+    "name": "crmfrontend",
+    "require": {
+        "php": "^7.4"
+        
+    }
+}
