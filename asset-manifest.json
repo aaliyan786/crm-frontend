@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.36d9c190.css",
+    "main.js": "/static/js/main.bdcc3358.js",
+    "static/js/498.72ff5106.chunk.js": "/static/js/498.72ff5106.chunk.js",
+    "static/js/703.58009f39.chunk.js": "/static/js/703.58009f39.chunk.js",
+    "static/js/513.67955b3b.chunk.js": "/static/js/513.67955b3b.chunk.js",
+    "static/media/signInImage.png": "/static/media/signInImage.54090d1d6f00462e1f4b.png",
+    "static/media/StampLogo.png": "/static/media/StampLogo.517e3258fdc12ad935c0.png",
+    "static/media/FourSeasonLogoBlack.png": "/static/media/FourSeasonLogoBlack.8f85b7b8e632956371e4.png",
+    "static/media/FourSeasonLogoWhite.png": "/static/media/FourSeasonLogoWhite.729a2921f017c3309a48.png",
+    "index.html": "/index.html",
+    "main.36d9c190.css.map": "/static/css/main.36d9c190.css.map",
+    "main.bdcc3358.js.map": "/static/js/main.bdcc3358.js.map",
+    "498.72ff5106.chunk.js.map": "/static/js/498.72ff5106.chunk.js.map",
+    "703.58009f39.chunk.js.map": "/static/js/703.58009f39.chunk.js.map",
+    "513.67955b3b.chunk.js.map": "/static/js/513.67955b3b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.36d9c190.css",
+    "static/js/main.bdcc3358.js"
+  ]
+}
