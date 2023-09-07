@@ -1,10 +1,7 @@
 {
-    "name": "sdss/crm-frontend",
-    "type": "yes",
-    "autoload": {
-        "psr-4": {
-            "Sdss\\CrmFrontend\\": "src/"
-        }
-    },
+    "name": "sdss/placeholder",
+    "description": "Placeholder package for deployment",
+    "type": "project",
+    "license": "MIT",
     "require": {}
 }
