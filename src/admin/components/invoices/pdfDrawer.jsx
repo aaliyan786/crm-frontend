@@ -446,7 +446,7 @@ const PdfDrawer = ({ data, onClose }) => {
               <Text>Vat Number: {pdfData.data.settings.vat_no}</Text>
             </VStack>
             <VStack align="end">
-              <Text fontSize={40} fontWeight="bold" align="end">
+              <Text fontSize={{base:25, md:40}} fontWeight="bold" align="end">
                 {data.InvoiceData.isPerforma}
               </Text>
               <Text fontSize={15}>{data.InvoiceData.number}</Text>

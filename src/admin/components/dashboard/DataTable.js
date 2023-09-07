@@ -68,7 +68,7 @@ const DataTable = ({ data, title, buttonLabel, to }) => {
         </GridItem>
         <GridItem colSpan={1 / 3} style={{ justifySelf: "end" }}>
           <Link to={to}>
-            <Button variant="solid" colorScheme="blue">
+            <Button variant="solid" colorScheme="blue" size={{base:"sm",}}>
               {buttonLabel}
             </Button>
           </Link>

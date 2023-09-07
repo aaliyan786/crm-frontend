@@ -222,7 +222,7 @@ console.log('Response of fetch payment again',response )
           shadow="md"
           width="100%"
         >
-          <Stack direction="row" align="center" justify="space-between">
+          <SimpleGrid columns={{base:1, md:2}} >
             <HStack>
               <Text fontWeight="bold" fontSize="lg">
                 Invoice # {data.InvoiceData.number}
@@ -235,7 +235,7 @@ console.log('Response of fetch payment again',response )
                 {data.InvoiceData.payment_status}
               </Badge>
             </HStack>
-            <HStack>
+            <HStack justify="end">
               <Button
                 variant="outline"
                 colorScheme="blue"
@@ -251,7 +251,7 @@ console.log('Response of fetch payment again',response )
                 Download PDF
               </Button>
             </HStack>
-          </Stack>
+          </SimpleGrid>
 
           <Stack direction="row" justify="space-around" align="start" mt={4}>
             <SimpleGrid row={2} spacing={2}>

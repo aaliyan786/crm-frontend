@@ -66,7 +66,7 @@ const AdminDashboardPage = () => {
   return (
     <Box bg={bgColor} width="auto" minH="100vh">
       <Container maxW="container.xl" marginRight="0">
-      {department === "admin" && (<Heading as="h1" size="xl" mb={4}>
+        {department === "admin" && (<Heading as="h1" size="xl" mb={4}>
           Admin Dashboard
         </Heading>)}
         {department === "accounts" && (<Heading as="h1" size="xl" mb={4}>
@@ -78,8 +78,8 @@ const AdminDashboardPage = () => {
         {
           dashboardData ? (
             <>
-            {department === "sales"  && (
-              <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
+              {department === "sales" && (
+                <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
                   {dashboardData.invoiceData.map((data, index) => {
                     // Check if the department is not equal to 'admin' and the title is not 'revenue card'
                     if (department !== 'admin' && data.title == 'Revenue') {
@@ -95,9 +95,9 @@ const AdminDashboardPage = () => {
                       />
                     );
                   })}
-              </SimpleGrid> )}
-              {department === "admin"  && (
-              <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
+                </SimpleGrid>)}
+              {department === "admin" && (
+                <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
                   {dashboardData.invoiceData.map((data, index) => {
                     // Check if the department is not equal to 'admin' and the title is not 'revenue card'
                     if (department !== 'admin' && data.title == 'Revenue') {
@@ -113,51 +113,52 @@ const AdminDashboardPage = () => {
                       />
                     );
                   })}
-              </SimpleGrid> )}
-
-              <SimpleGrid templateColumns="3fr 1fr" spacing={4} marginTop={3}>
                   {department == "accounts" && (<StatusBarChart data={dashboardData.statusGraphData} />)}
                   {department == "admin" && (<StatusBarChart data={dashboardData.statusGraphData} />)}
                   {department === "admin" && (
                     <CircularProgressCard data={dashboardData.customerPercentage} />
                   )}
-              </SimpleGrid>   
+                </SimpleGrid>)}
+
+              {/* <SimpleGrid templateColumns="3fr 1fr" spacing={4} marginTop={3}>
+                  
+              </SimpleGrid>    */}
 
 
-              <SimpleGrid columns={2} spacing={4}>
-  {department === "admin" && (
-    <>
-      <DataTable
-        data={dashboardData.recentInvoicesData}
-        title="Recent Invoices"
-        buttonLabel="View All"
-        to="/invoices"
-      />
-      <DataTable
-        data={dashboardData.recentQuotesData}
-        title="Recent Quotes"
-        buttonLabel="View All"
-        to="/quotes"
-      />
-    </>
-  )}
-  {department === "sales" && (
-    <DataTable
-      data={dashboardData.recentQuotesData}
-      title="Recent Quotes"
-      buttonLabel="View All"
-      to="/quotes"
-    />
-  )}
-  {department === "accounts" && (
-    <DataTable
-      data={dashboardData.recentInvoicesData}
-      title="Recent Invoices"
-      buttonLabel="View All"
-      to="/invoices"
-    />
-  )}
-</SimpleGrid>
+              <SimpleGrid columns={{base:1, md:2}} spacing={4}>
+                {department === "admin" && (
+                  <>
+                    <DataTable
+                      data={dashboardData.recentInvoicesData}
+                      title="Recent Invoices"
+                      buttonLabel="View All"
+                      to="/invoices"
+                    />
+                    <DataTable
+                      data={dashboardData.recentQuotesData}
+                      title="Recent Quotes"
+                      buttonLabel="View All"
+                      to="/quotes"
+                    />
+                  </>
+                )}
+                {department === "sales" && (
+                  <DataTable
+                    data={dashboardData.recentQuotesData}
+                    title="Recent Quotes"
+                    buttonLabel="View All"
+                    to="/quotes"
+                  />
+                )}
+                {department === "accounts" && (
+                  <DataTable
+                    data={dashboardData.recentInvoicesData}
+                    title="Recent Invoices"
+                    buttonLabel="View All"
+                    to="/invoices"
+                  />
+                )}
+              </SimpleGrid>
 
             </>
           ) :
