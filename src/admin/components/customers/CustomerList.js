@@ -155,7 +155,7 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
       width="100%"
     >
       <Flex align="end" justify="flex-end" mb={4}>
-        <Flex align="end">
+        <Flex align="end" justify="center">
           <InputGroup maxW="300px">
             <InputLeftElement pointerEvents="none" color="gray.400" fontSize="1.2em" ml={2}>
               <BiSearch />
@@ -174,7 +174,7 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
             />
           </InputGroup>
         </Flex>
-        <Button colorScheme="blue" borderRadius="0.5rem" px={8} py={3} fontSize="md" onClick={handleAddCustomerClick}>
+        <Button size={{base:"sm", md:"md"}} colorScheme="blue" borderRadius="0.5rem" px={8} py={3} fontSize="md" onClick={handleAddCustomerClick}>
           Add New Customer
         </Button>
       </Flex>
