@@ -315,10 +315,10 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
               <option value={1}>Draft</option>
               <option value={2}>Pending</option>
               <option value={3}>Sent</option>
-              <option value={4}>Expired</option>
-              <option value={5}>Declined</option>
+              {/* <option value={4}>Expired</option> */}
+              {/* <option value={5}>Declined</option> */}
               <option value={6}>Accepted</option>
-              <option value={7}>Lost</option>
+              {/* <option value={7}>Lost</option> */}
             </Select>
           </Box>
           <Box>

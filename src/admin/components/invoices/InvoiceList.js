@@ -241,10 +241,10 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
             <option value="DRAFT">Draft</option>
             <option value="PENDING">Pending</option>
             <option value="SENT">Sent</option>
-            <option value="EXPIRED">Expired</option>
-            <option value="DECLINED">Declined</option>
+            {/* <option value="EXPIRED">Expired</option> */}
+            {/* <option value="DECLINED">Declined</option> */}
             <option value="ACCEPTED">Accepted</option>
-            <option value="LOST">Lost</option>
+            {/* <option value="LOST">Lost</option> */}
           </Select>
 
         </Box>
