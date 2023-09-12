@@ -277,7 +277,7 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
                 <Th>Invoice  Number</Th>
                 <Th>Client</Th>
                 <Th >Date</Th>
-                <Th >Due Date</Th>
+                {/* <Th >Due Date</Th> */}
                 {department == "admin" ? (<Th >Added by</Th>) : null}
                 <Th>Total</Th>
                 <Th>Balance</Th>
@@ -293,7 +293,7 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
                   <Td>{invoice.InvoiceData.number}</Td>
                   <Td>{invoice.InvoiceData.client_fname + ' ' + invoice.InvoiceData.client_lname}</Td>
                   <Td>{new Date(invoice.InvoiceData.invoice_current_date).toISOString().split("T")[0]}</Td>
-                  <Td>{new Date(invoice.InvoiceData.expiry_date).toISOString().split("T")[0]}</Td>
+                  {/* <Td>{new Date(invoice.InvoiceData.expiry_date).toISOString().split("T")[0]}</Td> */}
 
                   {department == "admin" ? (<Td>{invoice.InvoiceData.employee_name + ' ' + invoice.InvoiceData.employee_surname}</Td>) : null}
                   <Td>{invoice.InvoiceData.total_amount}</Td>

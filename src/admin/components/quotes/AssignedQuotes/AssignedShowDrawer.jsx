@@ -212,7 +212,7 @@ const AssignedShowDrawer = ({ data }) => {
             <Text fontWeight="bold">AED {totalAmount}</Text>
           </HStack>
           <HStack>
-            <Text>Tax Total (0%):</Text>
+            <Text>VAT (0%):</Text>
             <Text fontWeight="bold">AED {totalAmount}</Text>
           </HStack>
           <HStack>

@@ -157,7 +157,7 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
       return;
     }
     // Update invoice data fields
-    let email=localStorage.getItem("email");
+    let email = localStorage.getItem("email");
     const selectedExpiryDateISO = selectedExpiryDate
       ? new Date(selectedExpiryDate)
           .toISOString()
@@ -281,7 +281,11 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
             />{" "}
             Cancel
           </Button>
-          <Button variant="solid" colorScheme="blue">
+          <Button
+            variant="solid"
+            colorScheme="blue"
+            onClick={handleSaveInvoice}
+          >
             <AddIcon mr={4} /> Save Invoice
           </Button>
         </HStack>
@@ -316,10 +320,10 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
               <option value={1}>Draft</option>
               <option value={2}>Pending</option>
               <option value={3}>Sent</option>
-              {/* <option value={4}>Expired</option> */}
-              {/* <option value={5}>Declined</option> */}
+              <option value={4}>Expired</option>
+              <option value={5}>Declined</option>
               <option value={6}>Accepted</option>
-              {/* <option value={7}>Lost</option> */}
+              <option value={7}>Lost</option>
             </Select>
           </Box>
           <Box>
@@ -333,7 +337,7 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
             </Select>
           </Box>
 
-          <Box>
+          {/* <Box>
             <FormLabel>Expiry Date</FormLabel>
             <Input
               value={selectedExpiryDate}
@@ -341,7 +345,7 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
               type="date"
               style={inputStyles}
             ></Input>
-          </Box>
+          </Box> */}
         </SimpleGrid>
       </FormControl>
       <Divider orientation="horizontal" borderColor="7F7F7F" my={6} />
@@ -517,17 +521,7 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
       <Divider orientation="horizontal" borderColor="7F7F7F" my={4} />
       <Divider orientation="horizontal" my={4} />
 
-      <SimpleGrid columns={2} spacing={10}>
-        <Button
-          size="lg"
-          variant="solid"
-          colorScheme="blue"
-          onClick={handleSaveInvoice}
-        >
-          <AddIcon mr={4} />
-          Save Invoice
-        </Button>
-
+      <SimpleGrid columns={1} spacing={10}>
         <Flex
           direction="column"
           align="flex-end"
@@ -544,9 +538,16 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
             <Text fontWeight="bold">AED {(subtotalAmount / 100) * 5}</Text>
           </HStack>
           <HStack>
+            <Text>Discount:</Text>
+            <Text fontWeight="bold">AED {data.InvoiceData.discount}</Text>
+          </HStack>
+          <HStack>
             <Text>Total Amount:</Text>
             <Text fontWeight="bold">
-              AED {subtotalAmount + (subtotalAmount / 100) * 5}
+              AED{" "}
+              {subtotalAmount +
+                (subtotalAmount / 100) * 5 -
+                data.InvoiceData.discount}
             </Text>
           </HStack>
         </Flex>

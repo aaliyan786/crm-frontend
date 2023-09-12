@@ -346,7 +346,7 @@ console.log('Response of fetch payment again',response )
                 <Text fontWeight="bold">AED {totalAmount}</Text>
               </HStack>
               <HStack>
-                <Text>VAT Tax(5%):</Text>
+                <Text>VAT(5%):</Text>
                 <Text fontWeight="bold">AED {(totalAmount / 100) * 5}</Text>
               </HStack>
               <HStack>

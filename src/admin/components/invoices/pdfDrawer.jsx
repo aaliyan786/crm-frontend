@@ -154,11 +154,11 @@ const PdfDrawer = ({ data, onClose }) => {
     const timestamp = data.InvoiceData.expiry_date;
     const date = new Date(timestamp);
     const formattedDate = date.toISOString().split("T")[0];
-    doc.text(
-      "Expiry Date: " + formattedDate,
-      pageWidth - doc.getTextWidth("Expiry Date: " + formattedDate) - 15,
-      55
-    );
+    // doc.text(
+    //   "Expiry Date: " + formattedDate,
+    //   pageWidth - doc.getTextWidth("Expiry Date: " + formattedDate) - 15,
+    //   55
+    // );
     doc.text(
       "Sales Agent: " +
         data.InvoiceData.employee_name +
@@ -237,9 +237,9 @@ const PdfDrawer = ({ data, onClose }) => {
     const textSpacing = 5;
     doc.setFontSize(8);
     doc.text(
-      "Sub Total: AED" + pdfData.data.Summarry.subtotal,
+      "Sub Total: AED " + pdfData.data.Summarry.subtotal,
       pageWidth -
-        doc.getTextWidth("Sub Total: AED" + pdfData.data.Summarry.subtotal) -
+        doc.getTextWidth("Sub Total: AED " + pdfData.data.Summarry.subtotal) -
         15,
       lastTableBottomY + textSpacing
     );
@@ -247,12 +247,12 @@ const PdfDrawer = ({ data, onClose }) => {
     doc.text(
       `Tax (${
         (pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
-      }%): ` + pdfData.data.Summarry.tax,
+      }%): AED ` + pdfData.data.Summarry.tax,
       pageWidth -
         doc.getTextWidth(
           `Vat (${
             (pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
-          }%): ` + pdfData.data.Summarry.tax
+          }%): AED ` + pdfData.data.Summarry.tax
         ) -
         15,
       lastTableBottomY + textSpacing + 5
@@ -269,72 +269,73 @@ const PdfDrawer = ({ data, onClose }) => {
     //   15,
     //   lastTableBottomY + textSpacing + 10
     // );
-
     doc.text(
-      "Total: AED" + pdfData.data.Summarry.total,
+      "Discount: AED " + pdfData.data.invoiceData.discount,
       pageWidth -
-        doc.getTextWidth("Total: AED" + pdfData.data.Summarry.total) -
+        doc.getTextWidth("Discount: AED " + pdfData.data.invoiceData.discount) -
         15,
       lastTableBottomY + textSpacing + 10
     );
-    let startY = lastTableBottomY + textSpacing + 15; // Initial Y position
+    doc.text(
+      "Total: AED " +
+        (pdfData.data.Summarry.total - pdfData.data.invoiceData.discount),
+      pageWidth -
+        doc.getTextWidth(
+          "Total: AED " +
+            (pdfData.data.Summarry.total - pdfData.data.invoiceData.discount)
+        ) -
+        15,
+      lastTableBottomY + textSpacing + 15
+    );
+    let startY = lastTableBottomY + textSpacing + 20; // Initial Y position
     const lineHeight = 4; // Adjust this value as needed for line spacing
+    const topMargin = 10;
+    // Function to add text with dynamic page breaks and a line break
+    const addTextWithPageBreak = (text, maxWidth) => {
+      // Add a top margin
+      // startY += topMargin;
+      const lines = doc.splitTextToSize(text, maxWidth);
+      for (const line of lines) {
+        doc.text(line, 15, startY);
+        startY += lineHeight;
+        if (startY >= doc.internal.pageSize.height - 20) {
+          doc.addPage();
+          startY = 20;
+        }
+      }
+      // Add a line break
+      startY += lineHeight;
+    };
 
-    startY = addTextWithMaxWidth(
-      doc,
-      "Note:",
-      `${pdfData.data.invoiceData.note}`,
-      180, // Max width
-      startY,
-      lineHeight
+    addTextWithPageBreak("Note:\n" + pdfData.data.invoiceData.note, 175);
+
+    addTextWithPageBreak(
+      "Terms & Conditions:\n" + pdfData.data.invoiceData.terms_and_condition,
+      175
     );
 
-    startY = addTextWithMaxWidth(
-      doc,
-      "Terms & Conditions:",
-      `${pdfData.data.invoiceData.terms_and_condition}`,
-
-      180, // Max width
-      startY,
-      lineHeight
+    addTextWithPageBreak(
+      "Payment Terms:\n" + pdfData.data.invoiceData.payment_terms,
+      175
     );
 
-    startY = addTextWithMaxWidth(
-      doc,
-      "Payment Terms:",
-      `${pdfData.data.invoiceData.payment_terms}`,
-
-      180, // Max width
-      startY,
-      lineHeight
+    addTextWithPageBreak(
+      "Execution Time:\n" + pdfData.data.invoiceData.execution_time,
+      175
     );
 
-    startY = addTextWithMaxWidth(
-      doc,
-      "Execution Time:",
-      `${pdfData.data.invoiceData.execution_time}`,
-
-      180, // Max width
-      startY,
-      lineHeight
+    addTextWithPageBreak(
+      "Bank Account Details:\n" + pdfData.data.invoiceData.bank_details,
+      175
     );
-
-    startY = addTextWithMaxWidth(
-      doc,
-      "Bank Account Details:",
-      `${pdfData.data.invoiceData.bank_details}`,
-
-      180, // Max width
-      startY,
-      lineHeight
-    );
-    doc.text("Authorised Signature", 15, startY); // X: 15, Y: 85
-    doc.addImage(logoStamp, "JPEG", 15, startY, 20, 20);
+    doc.text("Authorised Signature", 15, startY + 5); // X: 15, Y: 85
+    doc.addImage(logoStamp, "JPEG", 15, startY + 7, 20, 20);
 
     // Save the complete PDF
     return doc;
     // doc.save(data.InvoiceData.isPerforma + " " + data.InvoiceData.number);
   };
+
   const toast = useToast();
   const sendPdf = async () => {
     try {
@@ -352,7 +353,7 @@ const PdfDrawer = ({ data, onClose }) => {
         `${data.InvoiceData.isPerforma} ${data.InvoiceData.number}.pdf`,
         { type: "application/pdf" }
       );
-      const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA"; 
+      const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA";
       const encryptedData = localStorage.getItem("password");
       const decryptedData = CryptoJS.AES.decrypt(
         encryptedData,
@@ -363,7 +364,7 @@ const PdfDrawer = ({ data, onClose }) => {
         pdfFile,
         data.InvoiceData.added_by_employee, // Replace with the appropriate employeeId
         data.InvoiceData.client_id, // Replace with the appropriate clientId
-        decryptedData// Replace with the appropriate employeePassword
+        decryptedData // Replace with the appropriate employeePassword
       );
 
       toast({
@@ -446,7 +447,11 @@ const PdfDrawer = ({ data, onClose }) => {
               <Text>Vat Number: {pdfData.data.settings.vat_no}</Text>
             </VStack>
             <VStack align="end">
-              <Text fontSize={{base:25, md:40}} fontWeight="bold" align="end">
+              <Text
+                fontSize={{ base: 25, md: 40 }}
+                fontWeight="bold"
+                align="end"
+              >
                 {data.InvoiceData.isPerforma}
               </Text>
               <Text fontSize={15}>{data.InvoiceData.number}</Text>
@@ -465,7 +470,7 @@ const PdfDrawer = ({ data, onClose }) => {
               </Text>
               <Text>{data.InvoiceData.client_phone}</Text>
               <Divider orientation="horizontal" height={10} />
-              <Text>Expiry Date: {data.InvoiceData.expiry_date}</Text>
+              {/* <Text>Expiry Date: {data.InvoiceData.expiry_date}</Text> */}
               <Text>
                 Sales Agent: {data.InvoiceData.employee_name}{" "}
                 {data.InvoiceData.employee_surname}
@@ -526,6 +531,9 @@ const PdfDrawer = ({ data, onClose }) => {
                 Adjustment
               </Text> */}
                 <Text align="start" fontWeight="bold" flex="1">
+                  Discount
+                </Text>
+                <Text align="start" fontWeight="bold" flex="1">
                   Total
                 </Text>
               </VStack>
@@ -533,31 +541,47 @@ const PdfDrawer = ({ data, onClose }) => {
                 <Text align="end">AED {pdfData.data.Summarry.subtotal}</Text>
                 <Text align="end">AED {pdfData.data.Summarry.tax}</Text>
                 {/* <Text align="end">AED {adjustment}</Text> */}
-                <Text align="end">AED {pdfData.data.Summarry.total}</Text>
+                <Text align="end">
+                  AED {pdfData.data.invoiceData?.discount}
+                </Text>
+                <Text align="end">
+                  AED{" "}
+                  {pdfData.data.Summarry.total -
+                    pdfData.data.invoiceData?.discount}
+                </Text>
               </VStack>
             </SimpleGrid>
           </VStack>
           <VStack align="start">
             <Text fontWeight="bold">Note:</Text>
-            <Text>{pdfData.data.invoiceData.note}</Text>
+            <Text whiteSpace="pre-line">{pdfData.data.invoiceData.note}</Text>
             <Divider orientation="horizontal" height={10} />
 
             <Text fontWeight="bold">Terms & Conditions:</Text>
-            <Text>{pdfData.data.invoiceData.terms_and_condition}</Text>
+            <Text whiteSpace="pre-line">
+              {pdfData.data.invoiceData.terms_and_condition}
+            </Text>
             <Divider orientation="horizontal" height={10} />
 
             <Text fontWeight="bold">Payment Terms:</Text>
-            <Text>{pdfData.data.invoiceData.payment_terms}</Text>
+            <Text whiteSpace="pre-line">
+              {pdfData.data.invoiceData.payment_terms}
+            </Text>
             <Divider orientation="horizontal" height={10} />
 
             <Text fontWeight="bold">Execution Time:</Text>
-            <Text>{pdfData.data.invoiceData.execution_time}</Text>
+            <Text whiteSpace="pre-line">
+              {pdfData.data.invoiceData.execution_time}
+            </Text>
             <Divider orientation="horizontal" height={10} />
 
             <Text fontWeight="bold">Bank Account Details:</Text>
-            <Text>{pdfData.data.invoiceData.bank_details}</Text>
+            <Text whiteSpace="pre-line">
+              {pdfData.data.invoiceData.bank_details}
+            </Text>
             <Divider orientation="horizontal" height={10} />
           </VStack>
+
           <Divider orientation="horizontal" height={10} />
           <Text>Authorised Signature</Text>
           <Image

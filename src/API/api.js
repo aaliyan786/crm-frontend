@@ -1,5 +1,5 @@
 import axios from "axios";
-export const BASE_URL = "https://backend.fourseasonglassrooms.com:3000";
+export const BASE_URL = "http://localhost:3000";
 
 const token = localStorage.getItem("token");
 
@@ -218,9 +218,13 @@ export const AddClient = async (clientData) => {
       lname,
       email,
       phone,
+      vat,
+      address,
       date,
       company_name,
       added_by_employee,
+      
+
     } = clientData;
 
     const response = await axios.post(`${BASE_URL}/client`, {
@@ -228,9 +232,12 @@ export const AddClient = async (clientData) => {
       lname,
       email,
       phone,
+      vat,
+      address,
       date,
       company_name,
       added_by_employee,
+      
     });
     if (response.status === 201 || response.status === 200) {
       return "Client added successfully";

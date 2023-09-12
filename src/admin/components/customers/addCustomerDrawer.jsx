@@ -34,6 +34,8 @@ const AddCustomerDrawer = ({
     managerName: "",
     email: "",
     phone: "",
+    vat: "",
+    address: "",
     // Other fields...
   });
 
@@ -105,6 +107,8 @@ const AddCustomerDrawer = ({
           lname: newCustomer.managerSurname, // Assuming managerSurname corresponds to last name
           email: newCustomer.email,
           phone: newCustomer.phone,
+          vat: newCustomer.vat,
+          address: newCustomer.address,
           date: formattedDate, // You might need to adjust this date format
           company_name: newCustomer.company,
           added_by_employee: "1", // added by employee ki id session se ayegi
@@ -241,6 +245,38 @@ const AddCustomerDrawer = ({
                 {errors.phone && (
                   <Text color="red.500" ml={150} fontSize="sm">
                     {errors.phone}
+                  </Text>
+                )}
+              </Box>
+              <Box>
+                <SimpleGrid templateColumns="repeat(2, 20% 80%)" spacing="24px">
+                  <FormLabel fontWeight="bold">VAT Number</FormLabel>
+                  <Input
+                    name="vat"
+                    type="text"
+                    value={newCustomer.vat}
+                    onChange={handleInputChange}
+                  />
+                </SimpleGrid>
+                {errors.vat && (
+                  <Text color="red.500" ml={150} fontSize="sm">
+                    {errors.vat}
+                  </Text>
+                )}
+              </Box>
+              <Box>
+                <SimpleGrid templateColumns="repeat(2, 20% 80%)" spacing="24px">
+                  <FormLabel fontWeight="bold">Address</FormLabel>
+                  <Input
+                    name="address"
+                    type="text"
+                    value={newCustomer.address}
+                    onChange={handleInputChange}
+                  />
+                </SimpleGrid>
+                {errors.address && (
+                  <Text color="red.500" ml={150} fontSize="sm">
+                    {errors.address}
                   </Text>
                 )}
               </Box>

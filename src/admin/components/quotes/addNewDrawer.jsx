@@ -231,7 +231,7 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
     (total, row) => total + row.item_quantity * row.item_price,
     0
   );
-  const vatTax = 0.15 * subTotal; // 15% VAT tax
+  const vatTax = 0.05 * subTotal; // 5% VAT tax
   const totalAmount = subTotal + vatTax;
   // BAKI KRLENA PLIS
   return (
@@ -549,7 +549,7 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
           <Text fontWeight="bold">AED {subTotal.toFixed(2)}</Text>
         </HStack>
         <HStack>
-          <Text>Tax Total (15%):</Text>
+          <Text>VAT (5%):</Text>
           <Text fontWeight="bold">AED {vatTax.toFixed(2)}</Text>
         </HStack>
         <HStack>
