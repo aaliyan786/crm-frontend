@@ -30,7 +30,11 @@ import { getInvoiceById } from "../../../API/api";
 import DeleteAlert from "../../../components/common/DeleteAlert";
 import { deletePayment } from "../../../API/api";
 
-
+// const items = [
+//   { name: "Item 1", price: 10, quantity: 2 },
+//   { name: "Item 2", price: 5, quantity: 1 },
+//   { name: "Item 3", price: 15, quantity: 3 },
+// ];
 const InvoiceItem = ({ name,price, subtotal, quantity,height, width, }) => {
 
 
@@ -274,8 +278,8 @@ const ShowDrawer = ({ data, handleUpdateInvoice }) => {
               </Text>
               <Text fontWeight="bold" fontSize="2xl">
                 AED{" "}
-                {totalAmount +
-                  (totalAmount / 100) * 5 -
+                {data.InvoiceData.total_amount +
+                  (data.InvoiceData.total_amount / 100) * 5 -
                   data.InvoiceData.discount}
               </Text>
             </SimpleGrid>
@@ -285,8 +289,8 @@ const ShowDrawer = ({ data, handleUpdateInvoice }) => {
               </Text>
               <Text fontWeight="bold" fontSize="2xl">
                 AED{" "}
-                {totalAmount +
-                  (totalAmount / 100) * 5 -
+                {data.InvoiceData.total_amount +
+                  (data.InvoiceData.total_amount / 100) * 5 -
                   data.InvoiceData.discount -
                   data.InvoiceData.total_amount_paid}
               </Text>
@@ -306,7 +310,7 @@ const ShowDrawer = ({ data, handleUpdateInvoice }) => {
           </Stack>
 
           <Divider orientation="horizontal" borderColor="0000" my={8} />
-          <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
+          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
             <HStack spacing={2}>
               <Text>Email:</Text>
               <Text>{data.InvoiceData.client_email}</Text>
@@ -314,14 +318,6 @@ const ShowDrawer = ({ data, handleUpdateInvoice }) => {
             <HStack spacing={2}>
               <Text>Phone:</Text>
               <Text>{data.InvoiceData.client_phone}</Text>
-            </HStack>
-            <HStack spacing={2}>
-              <Text>Address:</Text>
-              {/* <Text>{data.InvoiceData.client_address}</Text> */}
-            </HStack>
-            <HStack spacing={2}>
-              <Text>VAT Number:</Text>
-              {/* <Text>{data.InvoiceData.client_vat}</Text> */}
             </HStack>
           </SimpleGrid>
           <Divider orientation="horizontal" borderColor="0000" my={4} />
@@ -359,11 +355,11 @@ const ShowDrawer = ({ data, handleUpdateInvoice }) => {
             <Flex direction="column" align="flex-end" justify="flex-end" mt={2}>
               <HStack>
                 <Text>Sub Total:</Text>
-                <Text fontWeight="bold">AED {totalAmount}</Text>
+                <Text fontWeight="bold">AED {data.InvoiceData.total_amount}</Text>
               </HStack>
               <HStack>
-                <Text>VAT Tax (5%):</Text>
-                <Text fontWeight="bold">AED {(totalAmount / 100) * 5}</Text>
+                <Text>VAT Tax(5%):</Text>
+                <Text fontWeight="bold">AED {(data.InvoiceData.total_amount / 100) * 5}</Text>
               </HStack>
               <HStack>
                 <Text>Discount:</Text>
@@ -373,8 +369,8 @@ const ShowDrawer = ({ data, handleUpdateInvoice }) => {
                 <Text>Total Amount:</Text>
                 <Text fontWeight="bold">
                   AED{" "}
-                  {totalAmount +
-                    (totalAmount / 100) * 5 -
+                  {data.InvoiceData.total_amount +
+                    (data.InvoiceData.total_amount / 100) * 5 -
                     data.InvoiceData.discount}
                 </Text>
               </HStack>
