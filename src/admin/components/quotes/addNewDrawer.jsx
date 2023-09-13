@@ -534,8 +534,6 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
             <Textarea
               value={noteDetails}
               onChange={(e) => setNoteDetails(e.target.value)}
-              // value={value}
-              // onChange={handleNoteInputChange}
               placeholder="Here is a sample placeholder"
               size="sm"
             />

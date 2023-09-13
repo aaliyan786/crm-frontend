@@ -11,7 +11,6 @@ import {
   HStack,
   Divider,
   Flex,
-  Container,
   TableContainer,
   Table,
   Thead,
@@ -25,11 +24,6 @@ import { getPaymentsByQuoteId } from "../../../API/api";
 import EditDrawer from "./editDrawer";
 import PdfDrawerQ from "./pdfDrawer";
 
-// const items = [
-//   { name: "Item 1", price: 10, quantity: 2 },
-//   { name: "Item 2", price: 5, quantity: 1 },
-//   { name: "Item 3", price: 15, quantity: 3 },
-// ];
 const QuoteItem = ({ name, price, quantity }) => {
   const total = price * quantity;
 
@@ -164,14 +158,6 @@ const ShowDrawer = ({ data }) => {
                 {data.quotesData.total_amount}
               </Text>
             </SimpleGrid>
-            {/* <SimpleGrid row={2} spacing={2}>
-          <Text fontSize="sm" fontWeight="lighter">
-            Balance
-          </Text>
-          <Text fontWeight="bold" fontSize="2xl">
-            {data.quotesData.total_amount - data.quotesData.total_amount_paid}
-          </Text>
-        </SimpleGrid> */}
           </Stack>
 
           <Divider orientation="horizontal" my={4} />
