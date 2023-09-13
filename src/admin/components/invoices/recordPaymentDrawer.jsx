@@ -241,13 +241,13 @@ const RecordPaymentDrawer = ({ data, onClose, handleUpdateInvoice }) => {
               <Box>
                 <HStack fontWeight="thin" justify="space-between">
                   <Text>Address: </Text>
-                  {/* <Text>{data.InvoiceData.client_address}</Text> */}
+                  <Text>{data.InvoiceData.client_address}</Text>
                 </HStack>
               </Box>
               <Box>
                 <HStack fontWeight="thin" justify="space-between">
                   <Text>VAT Number: </Text>
-                  {/* <Text>{data.InvoiceData.client_vat}</Text> */}
+                  <Text>{data.InvoiceData.client_vat}</Text>
                 </HStack>
               </Box>
               <Box>
@@ -265,25 +265,25 @@ const RecordPaymentDrawer = ({ data, onClose, handleUpdateInvoice }) => {
               <Box>
                 <HStack fontWeight="thin" justify="space-between">
                   <Text>Sub Total: </Text>
-                  <Text>{data.InvoiceData.total_amount}</Text>
+                  <Text>AED {data.InvoiceData.total_amount}</Text>
                 </HStack>
               </Box>
               <Box>
                 <HStack fontWeight="thin" justify="space-between">
                   <Text>Vat(5%):</Text>
-                  <Text>{data.InvoiceData.total_amount*(5/100)}</Text>
+                  <Text>AED {data.InvoiceData.total_amount*(5/100)}</Text>
                 </HStack>
               </Box>
               <Box>
                 <HStack fontWeight="thin" justify="space-between">
                   <Text>Discount:</Text>
-                  <Text>{data.InvoiceData.discount} AED</Text>
+                  <Text>AED {data.InvoiceData.discount} AED</Text>
                 </HStack>
               </Box>
               <Box>
                 <HStack fontWeight="thin" justify="space-between">
                   <Text>Total: </Text>
-                  <Text>{(data.InvoiceData.total_amount+data.InvoiceData.total_amount*(5/100))-(data.InvoiceData.total_amount*data.InvoiceData.discount)}</Text>
+                  <Text>AED {(data.InvoiceData.total_amount+data.InvoiceData.total_amount*(5/100))-(data.InvoiceData.discount)}</Text>
                 </HStack>
               </Box>
               <Box>
@@ -296,7 +296,7 @@ const RecordPaymentDrawer = ({ data, onClose, handleUpdateInvoice }) => {
                 <HStack fontWeight="thin" justify="space-between">
                   <Text>Balance: </Text>
                   <Text>
-                    AED {data.InvoiceData.total_amount - data.InvoiceData.total_amount_paid}
+                    AED {(data.InvoiceData.total_amount+data.InvoiceData.total_amount*(5/100))-(data.InvoiceData.discount) - data.InvoiceData.total_amount_paid}
                   </Text>
                 </HStack>
               </Box>
