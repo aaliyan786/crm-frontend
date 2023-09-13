@@ -48,22 +48,44 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
   };
 
   const handleAddRow = () => {
+    // Create a new row template
     const newRow = {
-      item: "",
-      description: "",
-      quantity: "",
-      price: "",
-      dimensionX: "",
-      dimensionY: "",
+      item_name: "",
+      item_description: "",
+      item_quantity: "",
+      // price: "",
+      item_xdim: "",
+      item_ydim: "",
       item_price: 0,
       calculationType: 0,
-      totalPrice: 0,
+      item_total: 0,
       item_quantity_disabled: true, // Initialize these properties
-      item_xdim_disabled: false,    // Initialize these properties
+      item_xdim_disabled: false, // Initialize these properties
       item_ydim_disabled: false,
     };
 
-    setTableRows([...tableRows, newRow]);
+    // Initialize the properties for each existing row in tableRows
+    const updatedRows = tableRows.map((row) => ({
+      item_name: row.item_name,
+      item_description: row.item_description,
+      item_quantity: row.item_quantity,
+      // price: row.price,
+      item_xdim: row.item_xdim,
+      item_ydim: row.item_ydim,
+      item_price: row.item_price,
+      calculationType: row.calculationType,
+      item_total: row.item_total,
+      item_quantity_disabled:
+        row.item_xdim * row.item_ydim * row.item_price === row.item_total,
+      item_xdim_disabled: row.item_quantity * row.item_price === row.item_total,
+      item_ydim_disabled: row.item_quantity * row.item_price === row.item_total,
+    }));
+
+    // Add the newly created row to the updatedRows array
+    updatedRows.push(newRow);
+
+    // Update the state with the updatedRows
+    setTableRows(updatedRows);
   };
 
   const handleDeleteRow = (index) => {
@@ -83,22 +105,32 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
     updatedRows[index][field] = value;
     if (updatedRows[index].calculationType === 0) {
       updatedRows[index].item_quantity = 1;
-      updatedRows[index].totalPrice = updatedRows[index].item_xdim * updatedRows[index].item_ydim * updatedRows[index].item_price;
-    }
-    else if (updatedRows[index].calculationType === 1) {
-      updatedRows[index].totalPrice = updatedRows[index].item_quantity * updatedRows[index].item_price;
+      updatedRows[index].item_total =
+        updatedRows[index].item_xdim *
+        updatedRows[index].item_ydim *
+        updatedRows[index].item_price;
+    } else if (updatedRows[index].calculationType === 1) {
+      updatedRows[index].item_total =
+        updatedRows[index].item_quantity * updatedRows[index].item_price;
     }
     // Update the disabled state based on the Calculation Type
-    if (field === 'calculationType') {
-      if (value === '0') {
-        updatedRows[index].calculationType = 0
-        updatedRows[index].totalPrice = updatedRows[index].item_xdim * updatedRows[index].item_ydim * updatedRows[index].item_price;
+    if (field === "calculationType") {
+      if (value === "0") {
+        updatedRows[index].item_quantity = 1;
+        updatedRows[index].calculationType = 0;
+        updatedRows[index].item_total =
+          updatedRows[index].item_xdim *
+          updatedRows[index].item_ydim *
+          updatedRows[index].item_price;
         updatedRows[index].item_quantity_disabled = true;
         updatedRows[index].item_xdim_disabled = false;
         updatedRows[index].item_ydim_disabled = false;
-      } else if (value === '1') {
-        updatedRows[index].calculationType = 1
-        updatedRows[index].totalPrice = updatedRows[index].item_quantity * updatedRows[index].item_price;
+      } else if (value === "1") {
+        updatedRows[index].item_xdim = 0;
+        updatedRows[index].item_ydim = 0;
+        updatedRows[index].calculationType = 1;
+        updatedRows[index].item_total =
+          updatedRows[index].item_quantity * updatedRows[index].item_price;
         updatedRows[index].item_quantity_disabled = false;
         updatedRows[index].item_xdim_disabled = true;
         updatedRows[index].item_ydim_disabled = true;
@@ -106,11 +138,17 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
     }
     if (updatedRows[index].calculationType === 0) {
       updatedRows[index].item_quantity = 1;
-      updatedRows[index].totalPrice = updatedRows[index].item_xdim * updatedRows[index].item_ydim * updatedRows[index].item_price;
+      updatedRows[index].item_total =
+        updatedRows[index].item_xdim *
+        updatedRows[index].item_ydim *
+        updatedRows[index].item_price;
+    } else if (updatedRows[index].calculationType === 1) {
+      updatedRows[index].item_total =
+        updatedRows[index].item_quantity * updatedRows[index].item_price;
+      updatedRows[index].item_xdim = 0;
+      updatedRows[index].item_ydim = 0;
     }
-    else if (updatedRows[index].calculationType === 1) {
-      updatedRows[index].totalPrice = updatedRows[index].item_quantity * updatedRows[index].item_price;
-    }
+
     // Recalculate sub total for the edited row
     updatedRows[index].item_subtotal =
       updatedRows[index].item_quantity * updatedRows[index].item_price;
@@ -227,9 +265,9 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
             item_xdim: row.item_xdim,
             item_ydim: row.item_ydim,
             item_price: row.item_price,
-            item_subtotal: row.item_subtotal,
+            item_subtotal: row.item_total,
             item_tax: row.item_tax,
-            item_total: row.item_subtotal,
+            item_total: row.item_total,
           });
         } else {
           // If the row doesn't have an ID, it's a new item that needs to be added
@@ -240,8 +278,8 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
             item_xdim: row.item_xdim,
             item_ydim: row.item_ydim,
             item_price: row.item_price,
-            item_subtotal: row.item_subtotal,
-            item_total: row.item_subtotal * row.item_subtotal,
+            item_subtotal: row.item_total,
+            item_total: row.item_total,
             item_tax: 0,
           });
         }
@@ -416,7 +454,7 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
                   <Td>
                     <Input
                       style={inputStyles}
-                      value={row.description}
+                      value={row.item_description}
                       onChange={(e) =>
                         handleInputChange(
                           index,
@@ -429,7 +467,7 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
                   <Td>
                     <Input
                       style={inputStyles}
-                      value={row.dimensionX}
+                      value={row.item_xdim}
                       type="number"
                       isDisabled={row.item_xdim_disabled}
                       onChange={(e) =>
@@ -440,7 +478,7 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
                   <Td>
                     <Input
                       style={inputStyles}
-                      value={row.dimensionY}
+                      value={row.item_ydim}
                       type="number"
                       isDisabled={row.item_ydim_disabled}
                       onChange={(e) =>
@@ -477,7 +515,7 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
                   <Td>
                     <Input
                       style={inputStyles}
-                      value={row.price}
+                      value={row.item_price}
                       type="number"
                       onChange={(e) =>
                         handleInputChange(index, "item_price", e.target.value)
@@ -486,7 +524,7 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
                   </Td>
 
                   <Td>
-                  {row.totalPrice}
+                  {row.item_total}
                 </Td>
 
                   <Td>

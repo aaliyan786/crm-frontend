@@ -502,8 +502,8 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
                 {data.quotesData.client_fname} {data.quotesData.client_lname}
               </Text>
               <Text>{data.quotesData.client_phone}</Text>
-              <Text>{/*data.quotesData.client_address*/} uncomment this to get Address here</Text>
-              <Text>{/*data.quotesData.client_vat*/} uncomment this to get VAT Number here</Text>
+              <Text>{data.quotesData.client_address} </Text>
+              <Text>{data.quotesData.client_vat} </Text>
               <Divider orientation="horizontal" height={10} />
               <Text>Expiry Date: {data.quotesData.expiry_date}</Text>
               <Text>
