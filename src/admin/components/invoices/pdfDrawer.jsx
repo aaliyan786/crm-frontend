@@ -22,13 +22,12 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import Logo from "../../../images/FourSeasonLogoBlack.png";
-import StampImg from "../../../images/StampLogo.png";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { getInvoicePdfById } from "../../../API/api";
 import { sendPdfByEmail, BASE_URL } from "../../../API/api";
 import ConfirmationAlert from "../../../components/common/ConfirmationAlert";
+import { Link } from "react-router-dom";
 
 function addTextWithMaxWidth(doc, title, text, maxWidth, startY, lineHeight) {
   doc.setFont("helvetica", "bold");
@@ -138,10 +137,10 @@ const PdfDrawer = ({ data, onClose }) => {
     doc.text(
       data.InvoiceData.client_fname + " " + data.InvoiceData.client_lname,
       pageWidth -
-        doc.getTextWidth(
-          data.InvoiceData.client_fname + " " + data.InvoiceData.client_lname
-        ) -
-        15,
+      doc.getTextWidth(
+        data.InvoiceData.client_fname + " " + data.InvoiceData.client_lname
+      ) -
+      15,
       45
     );
     doc.setFont("helvetica", "normal");
@@ -161,17 +160,17 @@ const PdfDrawer = ({ data, onClose }) => {
     // );
     doc.text(
       "Sales Agent: " +
+      data.InvoiceData.employee_name +
+      " " +
+      data.InvoiceData.employee_surname,
+      pageWidth -
+      doc.getTextWidth(
+        "Sales Agent: " +
         data.InvoiceData.employee_name +
         " " +
-        data.InvoiceData.employee_surname,
-      pageWidth -
-        doc.getTextWidth(
-          "Sales Agent: " +
-            data.InvoiceData.employee_name +
-            " " +
-            data.InvoiceData.employee_surname
-        ) -
-        15,
+        data.InvoiceData.employee_surname
+      ) -
+      15,
       65
     );
 
@@ -239,22 +238,20 @@ const PdfDrawer = ({ data, onClose }) => {
     doc.text(
       "Sub Total: AED " + pdfData.data.Summarry.subtotal,
       pageWidth -
-        doc.getTextWidth("Sub Total: AED " + pdfData.data.Summarry.subtotal) -
-        15,
+      doc.getTextWidth("Sub Total: AED " + pdfData.data.Summarry.subtotal) -
+      15,
       lastTableBottomY + textSpacing
     );
 
     doc.text(
-      `Tax (${
-        (pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
+      `Tax (${(pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
       }%): AED ` + pdfData.data.Summarry.tax,
       pageWidth -
-        doc.getTextWidth(
-          `Vat (${
-            (pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
-          }%): AED ` + pdfData.data.Summarry.tax
-        ) -
-        15,
+      doc.getTextWidth(
+        `Vat (${(pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
+        }%): AED ` + pdfData.data.Summarry.tax
+      ) -
+      15,
       lastTableBottomY + textSpacing + 5
     );
 
@@ -272,19 +269,19 @@ const PdfDrawer = ({ data, onClose }) => {
     doc.text(
       "Discount: AED " + pdfData.data.invoiceData.discount,
       pageWidth -
-        doc.getTextWidth("Discount: AED " + pdfData.data.invoiceData.discount) -
-        15,
+      doc.getTextWidth("Discount: AED " + pdfData.data.invoiceData.discount) -
+      15,
       lastTableBottomY + textSpacing + 10
     );
     doc.text(
       "Total: AED " +
-        (pdfData.data.Summarry.total - pdfData.data.invoiceData.discount),
+      (pdfData.data.Summarry.total - pdfData.data.invoiceData.discount),
       pageWidth -
-        doc.getTextWidth(
-          "Total: AED " +
-            (pdfData.data.Summarry.total - pdfData.data.invoiceData.discount)
-        ) -
-        15,
+      doc.getTextWidth(
+        "Total: AED " +
+        (pdfData.data.Summarry.total - pdfData.data.invoiceData.discount)
+      ) -
+      15,
       lastTableBottomY + textSpacing + 15
     );
     let startY = lastTableBottomY + textSpacing + 20; // Initial Y position
@@ -404,8 +401,15 @@ const PdfDrawer = ({ data, onClose }) => {
     return (
       <div>
         <Center>
-          Error loading PDF data, complete the settings first and other
-          information!!
+          <VStack>
+            <Text>
+              Error loading PDF data, complete the settings first and other
+              information!!
+            </Text>
+            <Link to="/settings">
+              <Button variant="solid" colorScheme="blue">Continue to settings</Button>
+            </Link>
+          </VStack>
         </Center>
       </div>
     );

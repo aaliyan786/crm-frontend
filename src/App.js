@@ -19,6 +19,7 @@ import AdminPaymentModes from "./admin/pages/AdminPaymentModes";
 import AdminLossQuotesPage from "./admin/pages/AdminLossQuotesPage";
 import AdminAcceptedQuotesPage from "./admin/pages/AdminAcceptedQuotesPage";
 import SalesAssignedQuotes from "./admin/pages/SalesAssignedQuotes";
+import NotFoundPage from "./admin/pages/NotFoundPage";
 
 
 export default function App() {
@@ -56,6 +57,7 @@ export default function App() {
         {isLoggedIn && <Route path="/employees" element={<AdminEmployeesPage />} />}
         {isLoggedIn && <Route path="/settings" element={<AdminSettingsPage />} />}
         {isLoggedIn && <Route path="/settings/paymentmodes" element={<AdminPaymentModes />} />}
+        <Route path="*" element={<NotFoundPage/>}/>
       </Routes>
       {isLoggedIn && <Footer />}
 

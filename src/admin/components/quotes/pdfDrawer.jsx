@@ -1,6 +1,7 @@
 // PdfDrawerQ.js
 import CryptoJS from "crypto-js";
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Box,
   Button,
@@ -30,7 +31,7 @@ import { getInvoicePdfById } from "../../../API/api";
 import { getQuotePdfById } from "../../../API/api";
 import { updateQuoteData } from "../../../API/api";
 import ConfirmationAlert from "../../../components/common/ConfirmationAlert";
-import { sendPdfByEmail,BASE_URL } from "../../../API/api";
+import { sendPdfByEmail, BASE_URL } from "../../../API/api";
 
 function addTextWithMaxWidth(doc, title, text, maxWidth, startY, lineHeight) {
   doc.setFont("helvetica", "bold");
@@ -92,7 +93,7 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
   };
   const toast = useToast();
   const sendPdf = async () => {
-    console.log("data.quotesData.status: ",data.quotesData.status)
+    console.log("data.quotesData.status: ", data.quotesData.status)
     if (data.quotesData.status != "ACCEPTED") {
       try {
         const updatedQuoteData = {
@@ -141,7 +142,7 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
           `Quote ${data.quotesData.number}.pdf`,
           { type: "application/pdf" }
         );
-        const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA"; 
+        const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA";
         const encryptedData = localStorage.getItem("password");
         const decryptedData = CryptoJS.AES.decrypt(
           encryptedData,
@@ -157,7 +158,7 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
 
         toast({
           title: "Email Send",
-          description: "The invoice email has been send successfully.",
+          description: "The quote email has been send successfully.",
           status: "success",
           position: "top-right",
           duration: 3000,
@@ -239,10 +240,10 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     doc.text(
       data.quotesData.client_fname + " " + data.quotesData.client_lname,
       pageWidth -
-        doc.getTextWidth(
-          data.quotesData.client_fname + " " + data.quotesData.client_lname
-        ) -
-        15,
+      doc.getTextWidth(
+        data.quotesData.client_fname + " " + data.quotesData.client_lname
+      ) -
+      15,
       45
     );
     doc.setFont("helvetica", "normal");
@@ -262,17 +263,17 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     );
     doc.text(
       "Sales Agent: " +
+      data.quotesData.employee_name +
+      " " +
+      data.quotesData.employee_surname,
+      pageWidth -
+      doc.getTextWidth(
+        "Sales Agent: " +
         data.quotesData.employee_name +
         " " +
-        data.quotesData.employee_surname,
-      pageWidth -
-        doc.getTextWidth(
-          "Sales Agent: " +
-            data.quotesData.employee_name +
-            " " +
-            data.quotesData.employee_surname
-        ) -
-        15,
+        data.quotesData.employee_surname
+      ) -
+      15,
       65
     );
 
@@ -340,22 +341,20 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     doc.text(
       "Sub Total: AED" + pdfData.data.Summarry.subtotal,
       pageWidth -
-        doc.getTextWidth("Sub Total: AED" + pdfData.data.Summarry.subtotal) -
-        15,
+      doc.getTextWidth("Sub Total: AED" + pdfData.data.Summarry.subtotal) -
+      15,
       lastTableBottomY + textSpacing
     );
 
     doc.text(
-      `Tax (${
-        (pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
+      `Tax (${(pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
       }%): ` + pdfData.data.Summarry.tax,
       pageWidth -
-        doc.getTextWidth(
-          `Vat (${
-            (pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
-          }%): ` + pdfData.data.Summarry.tax
-        ) -
-        15,
+      doc.getTextWidth(
+        `Vat (${(pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
+        }%): ` + pdfData.data.Summarry.tax
+      ) -
+      15,
       lastTableBottomY + textSpacing + 5
     );
 
@@ -374,64 +373,52 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     doc.text(
       "Total: AED" + pdfData.data.Summarry.total,
       pageWidth -
-        doc.getTextWidth("Total: AED" + pdfData.data.Summarry.total) -
-        15,
+      doc.getTextWidth("Total: AED" + pdfData.data.Summarry.total) -
+      15,
       lastTableBottomY + textSpacing + 10
     );
     let startY = lastTableBottomY + textSpacing + 15; // Initial Y position
     const lineHeight = 4; // Adjust this value as needed for line spacing
 
-    startY = addTextWithMaxWidth(
-      doc,
-      "Note:",
-      `${pdfData.data.quoteData.note}`,
-      180, // Max width
-      startY,
-      lineHeight
+    const addTextWithPageBreak = (text, maxWidth) => {
+      // Add a top margin
+      // startY += topMargin;
+      const lines = doc.splitTextToSize(text, maxWidth);
+      for (const line of lines) {
+        doc.text(line, 15, startY);
+        startY += lineHeight;
+        if (startY >= doc.internal.pageSize.height - 20) {
+          doc.addPage();
+          startY = 20;
+        }
+      }
+      // Add a line break
+      startY += lineHeight;
+    };
+
+    addTextWithPageBreak("Note:\n" + pdfData.data.quoteData.note, 175);
+
+    addTextWithPageBreak(
+      "Terms & Conditions:\n" + pdfData.data.quoteData.terms_and_condition,
+      175
     );
 
-    startY = addTextWithMaxWidth(
-      doc,
-      "Terms & Conditions:",
-      `${pdfData.data.quoteData.terms_and_condition}`,
-
-      180, // Max width
-      startY,
-      lineHeight
+    addTextWithPageBreak(
+      "Payment Terms:\n" + pdfData.data.quoteData.payment_terms,
+      175
     );
 
-    startY = addTextWithMaxWidth(
-      doc,
-      "Payment Terms:",
-      `${pdfData.data.quoteData.payment_terms}`,
-
-      180, // Max width
-      startY,
-      lineHeight
+    addTextWithPageBreak(
+      "Execution Time:\n" + pdfData.data.quoteData.execution_time,
+      175
     );
 
-    startY = addTextWithMaxWidth(
-      doc,
-      "Execution Time:",
-      `${pdfData.data.quoteData.execution_time}`,
-
-      180, // Max width
-      startY,
-      lineHeight
+    addTextWithPageBreak(
+      "Bank Account Details:\n" + pdfData.data.quoteData.bank_details,
+      175
     );
-
-    startY = addTextWithMaxWidth(
-      doc,
-      "Bank Account Details:",
-      `${pdfData.data.quoteData.bank_details}`,
-
-      180, // Max width
-      startY,
-      lineHeight
-    );
-    doc.text("Authorised Signature", 15, startY); // X: 15, Y: 85
-    doc.addImage(logoStamp, "JPEG", 15, startY, 20, 20);
-
+    doc.text("Authorised Signature", 15, startY + 5); // X: 15, Y: 85
+    doc.addImage(logoStamp, "JPEG", 15, startY + 7, 20, 20);
 
     // Save the complete PDF
     return doc;
@@ -447,8 +434,15 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     return (
       <div>
         <Center>
-          Error loading PDF data, complete the settings first and other
-          information!!
+          <VStack>
+            <Text>
+              Error loading PDF data, complete the settings first and other
+              information!!
+            </Text>
+            <Link to="/settings">
+              <Button variant="solid" colorScheme="blue">Continue to settings</Button>
+            </Link>
+          </VStack>
         </Center>
       </div>
     );
