@@ -241,10 +241,10 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
             <option value="DRAFT">Draft</option>
             <option value="PENDING">Pending</option>
             <option value="SENT">Sent</option>
-            {/* <option value="EXPIRED">Expired</option> */}
-            {/* <option value="DECLINED">Declined</option> */}
+            <option value="EXPIRED">Expired</option>
+            <option value="DECLINED">Declined</option>
             <option value="ACCEPTED">Accepted</option>
-            {/* <option value="LOST">Lost</option> */}
+            <option value="LOST">Lost</option>
           </Select>
 
         </Box>
@@ -261,8 +261,8 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
 
           </Select>
         </Box>
-        <Button size={{ base: "sm", md: "md" }} fontSize={{ base: "xs", md: "md" }} w={{ base: "xs", md: "auto" }} colorScheme="blue" borderRadius="0.3rem" px={8} py={3}  onClick={() =>
-          openDrawer("addNew")}>
+        <Button colorScheme="blue" borderRadius="0.3rem" px={8} py={3} fontSize="md" onClick={() =>
+          openDrawer("addNew")} size={'sm'}>
           Add New Invoice
         </Button>
       </Flex>
@@ -296,8 +296,18 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
                   {/* <Td>{new Date(invoice.InvoiceData.expiry_date).toISOString().split("T")[0]}</Td> */}
 
                   {department == "admin" ? (<Td>{invoice.InvoiceData.employee_name + ' ' + invoice.InvoiceData.employee_surname}</Td>) : null}
-                  <Td>{invoice.InvoiceData.total_amount}</Td>
-                  <Td>{invoice.InvoiceData.total_amount - invoice.InvoiceData.total_amount_paid}</Td>
+                  <Td>
+                    {
+                      (invoice.InvoiceData.total_amount
+                        + ((invoice.InvoiceData.total_amount / 100) * 5) - invoice.InvoiceData.discount)
+                    }
+                  </Td>
+                  <Td>
+                    {
+                      (invoice.InvoiceData.total_amount
+                        + ((invoice.InvoiceData.total_amount / 100) * 5) - invoice.InvoiceData.discount)
+                      - invoice.InvoiceData.total_amount_paid}
+                  </Td>
                   <Td>
                     <Badge
                       px={2}
