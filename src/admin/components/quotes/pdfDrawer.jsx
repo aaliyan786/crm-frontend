@@ -93,7 +93,7 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
   };
   const toast = useToast();
   const sendPdf = async () => {
-    console.log("data.quotesData.status: ", data.quotesData.status)
+    console.log("data.quotesData.status: ", data.quotesData.status);
     if (data.quotesData.status != "ACCEPTED") {
       try {
         const updatedQuoteData = {
@@ -240,10 +240,10 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     doc.text(
       data.quotesData.client_fname + " " + data.quotesData.client_lname,
       pageWidth -
-      doc.getTextWidth(
-        data.quotesData.client_fname + " " + data.quotesData.client_lname
-      ) -
-      15,
+        doc.getTextWidth(
+          data.quotesData.client_fname + " " + data.quotesData.client_lname
+        ) -
+        15,
       45
     );
     doc.setFont("helvetica", "normal");
@@ -263,17 +263,17 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     );
     doc.text(
       "Sales Agent: " +
-      data.quotesData.employee_name +
-      " " +
-      data.quotesData.employee_surname,
-      pageWidth -
-      doc.getTextWidth(
-        "Sales Agent: " +
         data.quotesData.employee_name +
         " " +
-        data.quotesData.employee_surname
-      ) -
-      15,
+        data.quotesData.employee_surname,
+      pageWidth -
+        doc.getTextWidth(
+          "Sales Agent: " +
+            data.quotesData.employee_name +
+            " " +
+            data.quotesData.employee_surname
+        ) -
+        15,
       65
     );
 
@@ -341,20 +341,22 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     doc.text(
       "Sub Total: AED" + pdfData.data.Summarry.subtotal,
       pageWidth -
-      doc.getTextWidth("Sub Total: AED" + pdfData.data.Summarry.subtotal) -
-      15,
+        doc.getTextWidth("Sub Total: AED" + pdfData.data.Summarry.subtotal) -
+        15,
       lastTableBottomY + textSpacing
     );
 
     doc.text(
-      `Tax (${(pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
+      `Tax (${
+        (pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
       }%): ` + pdfData.data.Summarry.tax,
       pageWidth -
-      doc.getTextWidth(
-        `Vat (${(pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
-        }%): ` + pdfData.data.Summarry.tax
-      ) -
-      15,
+        doc.getTextWidth(
+          `Vat (${
+            (pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
+          }%): ` + pdfData.data.Summarry.tax
+        ) -
+        15,
       lastTableBottomY + textSpacing + 5
     );
 
@@ -373,8 +375,8 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     doc.text(
       "Total: AED" + pdfData.data.Summarry.total,
       pageWidth -
-      doc.getTextWidth("Total: AED" + pdfData.data.Summarry.total) -
-      15,
+        doc.getTextWidth("Total: AED" + pdfData.data.Summarry.total) -
+        15,
       lastTableBottomY + textSpacing + 10
     );
     let startY = lastTableBottomY + textSpacing + 15; // Initial Y position
@@ -440,7 +442,9 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
               information!!
             </Text>
             <Link to="/settings">
-              <Button variant="solid" colorScheme="blue">Continue to settings</Button>
+              <Button variant="solid" colorScheme="blue">
+                Continue to settings
+              </Button>
             </Link>
           </VStack>
         </Center>
@@ -502,8 +506,8 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
                 {data.quotesData.client_fname} {data.quotesData.client_lname}
               </Text>
               <Text>{data.quotesData.client_phone}</Text>
-              <Text>{/*data.quotesData.client_address*/} uncomment this to get Address here</Text>
-              <Text>{/*data.quotesData.client_vat*/} uncomment this to get VAT Number here</Text>
+              <Text>{data.quotesData.client_address} </Text>
+              <Text>{data.quotesData.client_vat} </Text>
               <Divider orientation="horizontal" height={10} />
               <Text>Expiry Date: {data.quotesData.expiry_date}</Text>
               <Text>

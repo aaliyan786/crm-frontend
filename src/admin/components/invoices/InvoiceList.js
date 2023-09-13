@@ -288,107 +288,107 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
               </Tr>
             </Thead>
             <Tbody>
-              {currentInvoices.map((invoice) => (
-                <Tr key={invoice.InvoiceData.id}>
-                  <Td>{invoice.InvoiceData.number}</Td>
-                  <Td>{invoice.InvoiceData.client_fname + ' ' + invoice.InvoiceData.client_lname}</Td>
-                  <Td>{new Date(invoice.InvoiceData.invoice_current_date).toISOString().split("T")[0]}</Td>
-                  {/* <Td>{new Date(invoice.InvoiceData.expiry_date).toISOString().split("T")[0]}</Td> */}
-
-                  {department == "admin" ? (<Td>{invoice.InvoiceData.employee_name + ' ' + invoice.InvoiceData.employee_surname}</Td>) : null}
-                  <Td>
-                    {
-                      (invoice.InvoiceData.total_amount
-                        + ((invoice.InvoiceData.total_amount / 100) * 5) - invoice.InvoiceData.discount)
-                    }
-                  </Td>
-                  <Td>
-                    {
-                      (invoice.InvoiceData.total_amount
-                        + ((invoice.InvoiceData.total_amount / 100) * 5) - invoice.InvoiceData.discount)
-                      - invoice.InvoiceData.total_amount_paid}
-                  </Td>
-                  <Td>
-                    <Badge
-                      px={2}
-                      py={1}
-                      borderRadius="md"
-                      variant='outline'
-                      colorScheme={statusColors[invoice.InvoiceData.status]}
-                    >
-                      {invoice.InvoiceData.status}
-                    </Badge>
-                  </Td>
-                  <Td>
-                    <Badge
-                      px={2}
-                      py={1}
-                      borderRadius="md"
-                      variant='outline'
-                      colorScheme={typeColors[invoice.InvoiceData.isPerforma]}
-                    >
-                      {invoice.InvoiceData.isPerforma}
-                    </Badge>
-                  </Td>
-                  <Td>
-                    <Badge
-                      px={2}
-                      py={1}
-                      borderRadius="md"
-                      variant='solid'
-                      colorScheme={paymentColors[invoice.InvoiceData.payment_status]}
-                    >
-                      {invoice.InvoiceData.payment_status}
-                    </Badge>
-                  </Td>
-                  <Td>
-                    <Menu>
-                      <MenuButton
-                        as={IconButton}
-                        icon={<HiDotsVertical />}
-                        variant="ghost"
-                        size="sm"
-                      />
-                      <MenuList>
-                        <MenuItem
-                          icon={<BiShow />}
-                          onClick={() => openDrawer("show", invoice)}
-                        >
-                          Show
-                        </MenuItem>
-                        <MenuItem
-                          icon={<FiEdit />}
-                          onClick={() => openDrawer("edit", invoice)}
-                        >
-                          Edit
-                        </MenuItem>
-                        <MenuItem
-                          icon={<BiCreditCard />}
-                          onClick={() => openDrawer("recordPayment", invoice)}
-                        >
-                          Record Payment
-                        </MenuItem>
-                        <MenuItem
-                          icon={<FiFile />}
-                          onClick={() => openDrawer("pdf", invoice)}
-                        >
-                          Download PDF
-                        </MenuItem>
-                        <MenuItem
-                          // onClick={() => handleDeleteClick(customer)}
-                          icon={<FiTrash2 />}
-                          onClick={() => handleDeleteClick(invoice.InvoiceData.id)}
-                        >
-                          Delete
-                        </MenuItem>
-                      </MenuList>
-                    </Menu>
-                  </Td>
-                </Tr>
-              )
-              )
-              }
+              {currentInvoices
+                .filter((invoice) => invoice.InvoiceData.is_LPO === 0)
+                .map((invoice) => (
+                  <Tr key={invoice.InvoiceData.id}>
+                    <Td>{invoice.InvoiceData.number}</Td>
+                    <Td>{invoice.InvoiceData.client_fname + ' ' + invoice.InvoiceData.client_lname}</Td>
+                    <Td>{new Date(invoice.InvoiceData.invoice_current_date).toISOString().split("T")[0]}</Td>
+                    {/* <Td>{new Date(invoice.InvoiceData.expiry_date).toISOString().split("T")[0]}</Td> */}
+                    {department === "admin" ? (<Td>{invoice.InvoiceData.employee_name + ' ' + invoice.InvoiceData.employee_surname}</Td>) : null}
+                    <Td>
+                      {
+                        (invoice.InvoiceData.total_amount
+                          + ((invoice.InvoiceData.total_amount / 100) * 5) - invoice.InvoiceData.discount)
+                      }
+                    </Td>
+                    <Td>
+                      {
+                        (invoice.InvoiceData.total_amount
+                          + ((invoice.InvoiceData.total_amount / 100) * 5) - invoice.InvoiceData.discount)
+                        - invoice.InvoiceData.total_amount_paid
+                      }
+                    </Td>
+                    <Td>
+                      <Badge
+                        px={2}
+                        py={1}
+                        borderRadius="md"
+                        variant='outline'
+                        colorScheme={statusColors[invoice.InvoiceData.status]}
+                      >
+                        {invoice.InvoiceData.status}
+                      </Badge>
+                    </Td>
+                    <Td>
+                      <Badge
+                        px={2}
+                        py={1}
+                        borderRadius="md"
+                        variant='outline'
+                        colorScheme={typeColors[invoice.InvoiceData.isPerforma]}
+                      >
+                        {invoice.InvoiceData.isPerforma}
+                      </Badge>
+                    </Td>
+                    <Td>
+                      <Badge
+                        px={2}
+                        py={1}
+                        borderRadius="md"
+                        variant='solid'
+                        colorScheme={paymentColors[invoice.InvoiceData.payment_status]}
+                      >
+                        {invoice.InvoiceData.payment_status}
+                      </Badge>
+                    </Td>
+                    <Td>
+                      <Menu>
+                        <MenuButton
+                          as={IconButton}
+                          icon={<HiDotsVertical />}
+                          variant="ghost"
+                          size="sm"
+                        />
+                        <MenuList>
+                          <MenuItem
+                            icon={<BiShow />}
+                            onClick={() => openDrawer("show", invoice)}
+                          >
+                            Show
+                          </MenuItem>
+                          <MenuItem
+                            icon={<FiEdit />}
+                            onClick={() => openDrawer("edit", invoice)}
+                          >
+                            Edit
+                          </MenuItem>
+                          <MenuItem
+                            icon={<BiCreditCard />}
+                            onClick={() => openDrawer("recordPayment", invoice)}
+                          >
+                            Record Payment
+                          </MenuItem>
+                          <MenuItem
+                            icon={<FiFile />}
+                            onClick={() => openDrawer("pdf", invoice)}
+                          >
+                            Download PDF
+                          </MenuItem>
+                          <MenuItem
+                            icon={<FiTrash2 />}
+                            onClick={() => handleDeleteClick(invoice.InvoiceData.id)}
+                          >
+                            Delete
+                          </MenuItem>
+                        </MenuList>
+                      </Menu>
+                    </Td>
+                  </Tr>
+                ))}
             </Tbody>
+
           </Table>
         </TableContainer>
       </Box>

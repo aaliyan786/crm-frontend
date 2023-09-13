@@ -155,7 +155,7 @@ const ShowDrawer = ({ data }) => {
                 Total
               </Text>
               <Text fontWeight="bold" fontSize="2xl">
-                {data.quotesData.total_amount}
+                {data.quotesData.total_amount + (data.quotesData.total_amount*5/100)-data.quotesData.discount }
               </Text>
             </SimpleGrid>
           </Stack>
@@ -226,7 +226,7 @@ const ShowDrawer = ({ data }) => {
               </HStack>
               <HStack>
                 <Text>VAT (5%):</Text>
-                <Text fontWeight="bold">AED {(totalAmount / 100) * 5}</Text>
+                <Text fontWeight="bold">AED {(data.quotesData.total_amount / 100) * 5}</Text>
               </HStack>
               <HStack>
                 <Text>Discount:</Text>
@@ -236,8 +236,8 @@ const ShowDrawer = ({ data }) => {
                 <Text>Total Amount:</Text>
                 <Text fontWeight="bold">
                   AED{" "}
-                  {totalAmount +
-                    (totalAmount / 100) * 5 -
+                  {data.quotesData.total_amount +
+                    (data.quotesData.total_amount / 100) * 5 -
                     data.quotesData.discount}
                 </Text>
               </HStack>

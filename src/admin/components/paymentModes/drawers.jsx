@@ -77,18 +77,18 @@ function DrawersPayM({
             <InputGroup w="100%">
               {" "}
               {/* Set the desired width for the search input */}
-              <Input type="text" placeholder="Search payment modes." />
-              <InputRightElement>
+              {/* <Input type="text" placeholder="Search payment modes." /> */}
+              {/* <InputRightElement>
                 <Search2Icon bg="transparent" />
-              </InputRightElement>
+              </InputRightElement> */}
             </InputGroup>
-            {drawerType !== "addNew" && ( // Fixed the conditional rendering
+            {/* {drawerType !== "addNew" && ( // Fixed the conditional rendering
               <IconButton
                 icon={<BiPlus />}
                 w="10%"
                 onClick={() => handleOptionClick("addNew", null)}
               />
-            )}
+            )} */}
           </SimpleGrid>
           {selectedDrawerType !== null && renderDrawer(selectedDrawerType)}
         </DrawerBody>
