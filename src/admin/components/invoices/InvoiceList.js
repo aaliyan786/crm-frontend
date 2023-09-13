@@ -149,7 +149,7 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
         title: "Invoice Deleted",
         description: "The invoice has been deleted successfully.",
         status: "success",
-        position:'top-right',
+        position: 'top-right',
         duration: 3000,
         isClosable: true,
       });
@@ -163,8 +163,8 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
           title: "Error",
           description: error.response.data.error,
           status: "error",
-        position:'top-right',
-        duration: 3000,
+          position: 'top-right',
+          duration: 3000,
           isClosable: true,
         });
       }
@@ -261,8 +261,8 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
 
           </Select>
         </Box>
-        <Button colorScheme="blue" borderRadius="0.3rem" px={8} py={3} fontSize="md" onClick={() =>
-          openDrawer("addNew")} size={'sm'}>
+        <Button size={{ base: "sm", md: "md" }} fontSize={{ base: "xs", md: "md" }} w={{ base: "xs", md: "auto" }} colorScheme="blue" borderRadius="0.3rem" px={8} py={3}  onClick={() =>
+          openDrawer("addNew")}>
           Add New Invoice
         </Button>
       </Flex>
