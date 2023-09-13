@@ -150,6 +150,16 @@ const PdfDrawer = ({ data, onClose }) => {
       pageWidth - doc.getTextWidth(data.InvoiceData.client_phone) - 15,
       50
     );
+    doc.text(
+      data.InvoiceData.client_address,
+      pageWidth - doc.getTextWidth(data.InvoiceData.client_address) - 15,
+      55
+    );
+    doc.text(
+      data.InvoiceData.client_vat,
+      pageWidth - doc.getTextWidth(data.InvoiceData.client_vat) - 15,
+      60
+    );
     const timestamp = data.InvoiceData.expiry_date;
     const date = new Date(timestamp);
     const formattedDate = date.toISOString().split("T")[0];
