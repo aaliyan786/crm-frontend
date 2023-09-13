@@ -30,20 +30,18 @@ import { getInvoiceById } from "../../../API/api";
 import DeleteAlert from "../../../components/common/DeleteAlert";
 import { deletePayment } from "../../../API/api";
 
-// const items = [
-//   { name: "Item 1", price: 10, quantity: 2 },
-//   { name: "Item 2", price: 5, quantity: 1 },
-//   { name: "Item 3", price: 15, quantity: 3 },
-// ];
-const InvoiceItem = ({ name, price, quantity }) => {
-  const total = price * quantity;
+
+const InvoiceItem = ({ name,price, subtotal, quantity,height, width, }) => {
+
 
   return (
     <Tr>
       <Td>{name}</Td>
+      <Td>{height}</Td>
+      <Td>{width}</Td>
       <Td>AED {price}</Td>
       <Td>{quantity}</Td>
-      <Td>AED {total}</Td>
+      <Td>AED {subtotal}</Td>
     </Tr>
   );
 };
@@ -74,14 +72,14 @@ const ShowDrawer = ({ data, handleUpdateInvoice }) => {
   const [selectedPaymentId, setSelectedPaymentId] = useState();
   const toast = useToast();
   const [paymentRecords, setPaymentRecords] = useState([]);
-  
+
   const handleConfirmDelete = async () => {
     try {
       await deletePayment(selectedPaymentId);
       toast({
         title: "Payment Record Deleted",
         description: "The payment record has been deleted successfully.",
-        position:'top-right',
+        position: "top-right",
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -96,8 +94,8 @@ const ShowDrawer = ({ data, handleUpdateInvoice }) => {
           title: "Error",
           description: error.response.data.error,
           status: "error",
-        position:'top-right',
-        duration: 3000,
+          position: "top-right",
+          duration: 3000,
           isClosable: true,
         });
       } else {
@@ -105,8 +103,8 @@ const ShowDrawer = ({ data, handleUpdateInvoice }) => {
           title: "Error",
           description: "Error deleting payment record",
           status: "error",
-        position:'top-right',
-        duration: 3000,
+          position: "top-right",
+          duration: 3000,
           isClosable: true,
         });
         console.error("Error deleting payment record:", error);
@@ -133,7 +131,7 @@ const ShowDrawer = ({ data, handleUpdateInvoice }) => {
   const fetchPaymentRecords = async () => {
     try {
       const response = await getPaymentsByInvoiceId(data.InvoiceData.id);
-console.log('Response of fetch payment again',response )
+      console.log("Response of fetch payment again", response);
       if (response.status === 404) {
         // Handle the case where the invoice does not exist
         setPaymentRecords([]); // Set paymentRecords to an empty array
@@ -148,7 +146,6 @@ console.log('Response of fetch payment again',response )
         // Payments found, update paymentRecords
         setPaymentRecords(response.payments);
       }
-      
     } catch (error) {
       setPaymentRecords([]);
       console.error("Error fetching payment records:", error);
@@ -173,7 +170,7 @@ console.log('Response of fetch payment again',response )
     setIsEditRecordPaymentDrawerOpen(true);
   };
   console.log("befor update invoice data ", data);
-  console.log("befor update invoice data ", data)
+  console.log("befor update invoice data ", data);
   const fetchInvoiceData = async () => {
     try {
       const invoiceId = data.InvoiceData.id; // Replace with the actual way you get the invoice ID
@@ -209,7 +206,7 @@ console.log('Response of fetch payment again',response )
             fetchInvoiceData();
           }}
 
-        // handleUpdateInvoice={/* Function to update the invoice */}
+          // handleUpdateInvoice={/* Function to update the invoice */}
         />
       ) : (
         <Box
@@ -222,7 +219,7 @@ console.log('Response of fetch payment again',response )
           shadow="md"
           width="100%"
         >
-          <SimpleGrid columns={{base:1, md:2}} >
+          <SimpleGrid columns={{ base: 1, md: 2 }}>
             <HStack>
               <Text fontWeight="bold" fontSize="lg">
                 Invoice # {data.InvoiceData.number}
@@ -276,7 +273,10 @@ console.log('Response of fetch payment again',response )
                 Total
               </Text>
               <Text fontWeight="bold" fontSize="2xl">
-                {data.InvoiceData.total_amount}
+                AED{" "}
+                {totalAmount +
+                  (totalAmount / 100) * 5 -
+                  data.InvoiceData.discount}
               </Text>
             </SimpleGrid>
             <SimpleGrid row={2} spacing={2}>
@@ -284,7 +284,10 @@ console.log('Response of fetch payment again',response )
                 Balance
               </Text>
               <Text fontWeight="bold" fontSize="2xl">
-                {data.InvoiceData.total_amount -
+                AED{" "}
+                {totalAmount +
+                  (totalAmount / 100) * 5 -
+                  data.InvoiceData.discount -
                   data.InvoiceData.total_amount_paid}
               </Text>
             </SimpleGrid>
@@ -320,6 +323,8 @@ console.log('Response of fetch payment again',response )
               <Thead>
                 <Tr>
                   <Th>Item</Th>
+                  <Th>height</Th>
+                  <Th>Width</Th>
                   <Th>Price</Th>
                   <Th>Quantity</Th>
                   <Th>Total</Th>
@@ -330,9 +335,12 @@ console.log('Response of fetch payment again',response )
                   <InvoiceItem
                     key={index}
                     name={item.item_name}
+                    height={item.item_ydim}
+                    width={item.item_xdim}
                     description={item.item_description}
                     quantity={item.item_quantity}
                     price={item.item_price}
+                    subtotal={item.item_subtotal}
                   />
                 ))}
               </Tbody>
@@ -346,13 +354,20 @@ console.log('Response of fetch payment again',response )
                 <Text fontWeight="bold">AED {totalAmount}</Text>
               </HStack>
               <HStack>
-                <Text>VAT(5%):</Text>
+                <Text>VAT Tax(5%):</Text>
                 <Text fontWeight="bold">AED {(totalAmount / 100) * 5}</Text>
+              </HStack>
+              <HStack>
+                <Text>Discount:</Text>
+                <Text fontWeight="bold">AED {data.InvoiceData.discount}</Text>
               </HStack>
               <HStack>
                 <Text>Total Amount:</Text>
                 <Text fontWeight="bold">
-                  AED {totalAmount + (totalAmount / 100) * 5}
+                  AED{" "}
+                  {totalAmount +
+                    (totalAmount / 100) * 5 -
+                    data.InvoiceData.discount}
                 </Text>
               </HStack>
             </Flex>

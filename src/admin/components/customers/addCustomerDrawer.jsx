@@ -19,6 +19,11 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 import { AddClient } from "../../../API/api";
+
+
+const userData = JSON.parse(sessionStorage.getItem('user'));
+const userId = userData ? userData.id : null;
+const employee_id = userId.toString();
 const AddCustomerDrawer = ({
   isOpen,
   onClose,
@@ -36,7 +41,7 @@ const AddCustomerDrawer = ({
     phone: "",
     vat: "",
     address: "",
-    // Other fields...
+    
   });
 
   const [errors, setErrors] = useState({
@@ -60,7 +65,6 @@ const AddCustomerDrawer = ({
   const handleInputChange = (event) => {
     const { name, value } = event.target;
 
-    // Basic validation
     let error = "";
     if (name === "email" && value && !validateEmail(value)) {
       error = "Invalid email format";
@@ -84,7 +88,6 @@ const AddCustomerDrawer = ({
   const handleSaveClick = async () => {
     const currentDate = new Date();
     const formattedDate = currentDate.toISOString().slice(0, 10);
-    // Check for validation errors
     const validationErrors = {};
     for (const field in newCustomer) {
       if (!newCustomer[field]) {
@@ -102,19 +105,19 @@ const AddCustomerDrawer = ({
       setErrors(validationErrors);
     } else {
       try {
+        console.log(employee_id);
         const response = await AddClient({
-          fname: newCustomer.managerName, // Assuming managerName corresponds to first name
-          lname: newCustomer.managerSurname, // Assuming managerSurname corresponds to last name
+          fname: newCustomer.managerName, 
+          lname: newCustomer.managerSurname,
           email: newCustomer.email,
           phone: newCustomer.phone,
           vat: newCustomer.vat,
           address: newCustomer.address,
-          date: formattedDate, // You might need to adjust this date format
+          date: formattedDate, 
           company_name: newCustomer.company,
-          added_by_employee: "1", // added by employee ki id session se ayegi
+          added_by_employee: employee_id, // added by employee ki id session se ayegi
         });
-        // Show success message
-        // After successfully adding a customer, update the customers state
+
 
         toast({
           title: "Client Added",
@@ -123,11 +126,7 @@ const AddCustomerDrawer = ({
           duration: 3000,
           isClosable: true,
         });
-        // Update the customers state by adding the new customer
-        // console.log("newCustomer: ", newCustomer);
-        // console.log("prevCustomers: ", prevCustomers);
-        // console.log(" response.data: ", response.data)
-        // console.log(" response: ", response)
+       
         handleFetchUpdatedCustomer();
         onClose(onClose);
       } catch (error) {
@@ -136,7 +135,6 @@ const AddCustomerDrawer = ({
           error.response.data &&
           error.response.data.error
         ) {
-          // Show the specific error message from the API response
           toast({
             title: "Error",
             description: error.response.data.error,
@@ -145,7 +143,6 @@ const AddCustomerDrawer = ({
             isClosable: true,
           });
         }
-        // Handle API error, show a message or take appropriate action
         console.error("Error adding client:", error);
       }
     }
@@ -293,7 +290,7 @@ const AddCustomerDrawer = ({
           </Button>
         </DrawerFooter>
       </DrawerContent>
-      {/* Popup for success or error message */}
+      
     </Drawer>
   );
 };
