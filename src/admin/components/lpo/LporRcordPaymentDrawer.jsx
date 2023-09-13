@@ -20,9 +20,9 @@ import {
 import { AddIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import { BiFileBlank } from "react-icons/bi";
 import { fetchPaymentModes, makePayment } from "../../../API/api";
-import ShowDrawer from "./showDrawer";
+import ShowDrawer from "./LpoShowDrawer";
 
-const RecordPaymentDrawer = ({ data, onClose, handleUpdateInvoice }) => {
+const LpoRecordPaymentDrawer = ({ data, onClose, handleUpdateInvoice }) => {
   const bgColor = useColorModeValue("gray.100", "gray.700");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const inputStyles = {
@@ -316,4 +316,4 @@ const RecordPaymentDrawer = ({ data, onClose, handleUpdateInvoice }) => {
   );
 };
 
-export default RecordPaymentDrawer;
+export default LpoRecordPaymentDrawer;

@@ -28,6 +28,7 @@ import { getInvoicePdfById } from "../../../API/api";
 import { sendPdfByEmail, BASE_URL } from "../../../API/api";
 import ConfirmationAlert from "../../../components/common/ConfirmationAlert";
 import { Link } from "react-router-dom";
+import QRCode from "react-qr-code";
 
 function addTextWithMaxWidth(doc, title, text, maxWidth, startY, lineHeight) {
   doc.setFont("helvetica", "bold");
@@ -52,6 +53,7 @@ const PdfDrawer = ({ data, onClose }) => {
   const [Items, setItems] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  
 
   useEffect(() => {
     const fetchInvoiceData = async () => {
@@ -254,16 +256,15 @@ const PdfDrawer = ({ data, onClose }) => {
     );
 
     doc.text(
-      `Tax (${(pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
-      }%): AED ` + pdfData.data.Summarry.tax,
+      `Tax (${((pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100).toFixed(2)}%): AED ${pdfData.data.Summarry.tax.toFixed(2)}`,
       pageWidth -
       doc.getTextWidth(
-        `Vat (${(pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
-        }%): AED ` + pdfData.data.Summarry.tax
+        `Vat (${((pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100).toFixed(2)}%): AED ${pdfData.data.Summarry.tax.toFixed(2)}`
       ) -
       15,
       lastTableBottomY + textSpacing + 5
     );
+
 
     // doc.text(
     //   "Adjustment: " +
@@ -285,11 +286,11 @@ const PdfDrawer = ({ data, onClose }) => {
     );
     doc.text(
       "Total: AED " +
-      (pdfData.data.Summarry.total - pdfData.data.invoiceData.discount),
+      (pdfData.data.Summarry.total - pdfData.data.invoiceData.discount).toFixed(2),
       pageWidth -
       doc.getTextWidth(
         "Total: AED " +
-        (pdfData.data.Summarry.total - pdfData.data.invoiceData.discount)
+        (pdfData.data.Summarry.total - pdfData.data.invoiceData.discount).toFixed(2)
       ) -
       15,
       lastTableBottomY + textSpacing + 15
@@ -538,9 +539,9 @@ const PdfDrawer = ({ data, onClose }) => {
                 </Text>
                 <Text align="start" fontWeight="bold" flex="1">
                   Tax (
-                  {(pdfData.data.Summarry.tax /
+                  {((pdfData.data.Summarry.tax /
                     pdfData.data.Summarry.subtotal) *
-                    100}
+                    100).toFixed(2)}
                   )%
                 </Text>
                 {/* <Text align="start" fontWeight="bold" flex="1">
@@ -555,7 +556,7 @@ const PdfDrawer = ({ data, onClose }) => {
               </VStack>
               <VStack align="start">
                 <Text align="end">AED {pdfData.data.Summarry.subtotal}</Text>
-                <Text align="end">AED {pdfData.data.Summarry.tax}</Text>
+                <Text align="end">AED {pdfData.data.Summarry.tax.toFixed(2)}</Text>
                 {/* <Text align="end">AED {adjustment}</Text> */}
                 <Text align="end">
                   AED {pdfData.data.invoiceData?.discount}
@@ -604,6 +605,13 @@ const PdfDrawer = ({ data, onClose }) => {
             src={`${BASE_URL}/uploads/stamp/${pdfData.data.settings.stamp_img}`}
             width="200px"
             mb={50}
+          />
+          <QRCode
+            title={data.InvoiceData.number}
+            value="http://localhost:3001/invoices"
+            bgColor="white"
+            fgColor="black"
+            size="128"
           />
           {/* <HStack>
             <Image

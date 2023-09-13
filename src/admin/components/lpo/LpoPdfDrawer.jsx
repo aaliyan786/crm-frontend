@@ -1,7 +1,6 @@
-// PdfDrawerQ.js
+// LpoPdfDrawer.js
 import CryptoJS from "crypto-js";
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import {
   Box,
   Button,
@@ -23,15 +22,12 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import Logo from "../../../images/FourSeasonLogoBlack.png";
-import StampImg from "../../../images/StampLogo.png";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { getInvoicePdfById } from "../../../API/api";
-import { getQuotePdfById } from "../../../API/api";
-import { updateQuoteData } from "../../../API/api";
-import ConfirmationAlert from "../../../components/common/ConfirmationAlert";
 import { sendPdfByEmail, BASE_URL } from "../../../API/api";
+import ConfirmationAlert from "../../../components/common/ConfirmationAlert";
+import { Link } from "react-router-dom";
 
 function addTextWithMaxWidth(doc, title, text, maxWidth, startY, lineHeight) {
   doc.setFont("helvetica", "bold");
@@ -51,32 +47,26 @@ function addTextWithMaxWidth(doc, title, text, maxWidth, startY, lineHeight) {
   return startY + textLines.length * lineHeight + 10; // Adjust spacing as needed
 }
 
-const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
+const LpoPdfDrawer = ({ data, onClose }) => {
   const [pdfData, setPdfData] = useState(null);
   const [Items, setItems] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch the invoice data when the component mounts
-    const fetchQuoteData = async () => {
-      console.log("datatatatatat quotes: ", data);
+    const fetchInvoiceData = async () => {
       setIsLoading(true);
       try {
-        const pdfData = await getQuotePdfById(data.quotesData.id);
+        const pdfData = await getInvoicePdfById(data.InvoiceData.id);
         setPdfData(pdfData);
-        console.log("quote items", pdfData.data.quoteItems);
-        console.log(Items);
-        setItems(pdfData.data.quoteItems);
-        console.log("New items", Items);
-        console.log("PDF DATA", pdfData);
+        setItems(pdfData.data.invoiceItems);
       } catch (error) {
         setError(error);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchQuoteData();
+    fetchInvoiceData();
   }, []);
   console.log(Items);
   console.log("pdf", pdfData);
@@ -91,113 +81,16 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
 
     return maxItemsPerPage;
   };
-  const toast = useToast();
-  const sendPdf = async () => {
-    console.log("data.quotesData.status: ", data.quotesData.status)
-    if (data.quotesData.status != "ACCEPTED") {
-      try {
-        const updatedQuoteData = {
-          status: 3,
-        };
-        await updateQuoteData(data.quotesData.id, updatedQuoteData);
-        toast({
-          title: "Email send",
-          description: "Email send to admin for approval.",
-          status: "success",
-          duration: 3000,
-          position: "top-right",
-          isClosable: true,
-        });
-        handleAddUpdateDeleteQuote();
-        onClose(onClose);
-      } catch (error) {
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.error
-        ) {
-          toast({
-            title: "Error",
-            description: error.response.data.error,
-            status: "error",
-            duration: 3000,
-            position: "top-right",
-            isClosable: true,
-          });
-        } else console.error("Error saving Quote:", error);
-      }
-    } else {
-      try {
-        // Generate the PDF using CreatePdf function
-        const pdf = CreatePdf();
-
-        // Convert the PDF to a Blob
-        const pdfBlob = new Blob([pdf.output("blob")], {
-          type: "application/pdf",
-        });
-
-        // Create a File object from the Blob with a custom filename
-        const pdfFile = new File(
-          [pdfBlob],
-          `Quote ${data.quotesData.number}.pdf`,
-          { type: "application/pdf" }
-        );
-        const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA";
-        const encryptedData = localStorage.getItem("password");
-        const decryptedData = CryptoJS.AES.decrypt(
-          encryptedData,
-          secretKey
-        ).toString(CryptoJS.enc.Utf8);
-        // Use the sendPdfByEmail function to send the PDF via the API
-        const response = await sendPdfByEmail(
-          pdfFile,
-          data.quotesData.added_by_employee, // Replace with the appropriate employeeId
-          data.quotesData.client_id, // Replace with the appropriate clientId
-          decryptedData // Replace with the appropriate employeePassword
-        );
-
-        toast({
-          title: "Email Send",
-          description: "The quote email has been send successfully.",
-          status: "success",
-          position: "top-right",
-          duration: 3000,
-          isClosable: true,
-        });
-        onClose(onClose);
-        // Handle the API response (e.g., show a success message)
-        console.log("PDF sent successfully:", response);
-      } catch (error) {
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.error
-        ) {
-          toast({
-            title: "Error",
-            description: error.response.data.error,
-            position: "top-right",
-            status: "error",
-            duration: 3000,
-            isClosable: true,
-          });
-        }
-        // Handle or display the error (e.g., show an error message)
-        console.error("Error sending PDF:", error);
-      }
-    }
-  };
-
   const download = () => {
     const doc = CreatePdf();
-    doc.save("Quote" + " " + data.quotesData.number);
+    doc.save(data.InvoiceData.isPerforma + " " + data.InvoiceData.number);
   };
   const CreatePdf = () => {
     const doc = new jsPDF();
     const logoURL = `${BASE_URL}/uploads/logo/${pdfData.data.settings.logo_img}`;
     const logoStamp = `${BASE_URL}/uploads/stamp/${pdfData.data.settings.stamp_img}`;
+
     doc.addImage(logoURL, "JPEG", 15, 10, 80, 20);
-    // doc.addImage(Logo, "JPEG", 15, 10, 80, 20);
     doc.setFontSize(10);
 
     // Place "Four Seasons" text below the image, aligned with the left edge
@@ -208,29 +101,33 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     doc.setFontSize(8);
     // Place address lines below the "Four Seasons" text, aligned with the left edge
     doc.text(`${pdfData.data.settings.address}`, 15, 45); // X: 15, Y: 95
-    doc.text("United Arab Emirates 37613", 15, 50); // X: 15, Y: 105
-    doc.text("Vat Number: " + `${pdfData.data.settings.vat_no}`, 15, 55); // X: 15, Y: 115
+    // doc.text("United Arab Emirates 37613", 15, 50); // X: 15, Y: 105
+    doc.text("Vat Number: " + `${pdfData.data.settings.vat_no}`, 15, 50); // X: 15, Y: 115
 
     const pageWidth = doc.internal.pageSize.width;
     const textWidth = doc.getTextWidth(
-      "Expiry Date: " + data.quotesData.expiry_date
+      "Expiry Date: " + data.InvoiceData.expiry_date
     ); // Choose the longest text
     const textX = pageWidth - textWidth - 15;
     // doc.setFontSize(14)
     doc.setFont("helvetica", "bold");
     doc.setFontSize(18);
-    doc.text("QUOTATION", pageWidth - doc.getTextWidth("QUOTATION") - 15, 20);
+    doc.text(
+      data.InvoiceData.isPerforma,
+      pageWidth - doc.getTextWidth(data.InvoiceData.isPerforma) - 15,
+      20
+    );
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
     doc.text(
-      data.quotesData.number,
-      pageWidth - doc.getTextWidth(data.quotesData.number) - 15,
+      data.InvoiceData.number,
+      pageWidth - doc.getTextWidth(data.InvoiceData.number) - 15,
       25
     );
     doc.text(
-      data.quotesData.status,
-      pageWidth - doc.getTextWidth(data.quotesData.status) - 15,
+      data.InvoiceData.status,
+      pageWidth - doc.getTextWidth(data.InvoiceData.status) - 15,
       30
     );
 
@@ -238,10 +135,10 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     doc.setFontSize(10);
     doc.text("To", pageWidth - doc.getTextWidth("To") - 15, 40);
     doc.text(
-      data.quotesData.client_fname + " " + data.quotesData.client_lname,
+      data.InvoiceData.client_fname + " " + data.InvoiceData.client_lname,
       pageWidth -
       doc.getTextWidth(
-        data.quotesData.client_fname + " " + data.quotesData.client_lname
+        data.InvoiceData.client_fname + " " + data.InvoiceData.client_lname
       ) -
       15,
       45
@@ -249,29 +146,39 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
     doc.text(
-      data.quotesData.client_phone,
-      pageWidth - doc.getTextWidth(data.quotesData.client_phone) - 15,
+      data.InvoiceData.client_phone,
+      pageWidth - doc.getTextWidth(data.InvoiceData.client_phone) - 15,
       50
     );
-    const timestamp = data.quotesData.expiry_date;
-    const date = new Date(timestamp);
-    const formattedDate = date.toISOString().split("T")[0];
     doc.text(
-      "Expiry Date: " + formattedDate,
-      pageWidth - doc.getTextWidth("Expiry Date: " + formattedDate) - 15,
+      data.InvoiceData.client_address,
+      pageWidth - doc.getTextWidth(data.InvoiceData.client_address) - 15,
       55
     );
     doc.text(
+      data.InvoiceData.client_vat,
+      pageWidth - doc.getTextWidth(data.InvoiceData.client_vat) - 15,
+      60
+    );
+    const timestamp = data.InvoiceData.expiry_date;
+    const date = new Date(timestamp);
+    const formattedDate = date.toISOString().split("T")[0];
+    // doc.text(
+    //   "Expiry Date: " + formattedDate,
+    //   pageWidth - doc.getTextWidth("Expiry Date: " + formattedDate) - 15,
+    //   55
+    // );
+    doc.text(
       "Sales Agent: " +
-      data.quotesData.employee_name +
+      data.InvoiceData.employee_name +
       " " +
-      data.quotesData.employee_surname,
+      data.InvoiceData.employee_surname,
       pageWidth -
       doc.getTextWidth(
         "Sales Agent: " +
-        data.quotesData.employee_name +
+        data.InvoiceData.employee_name +
         " " +
-        data.quotesData.employee_surname
+        data.InvoiceData.employee_surname
       ) -
       15,
       65
@@ -339,24 +246,23 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     const textSpacing = 5;
     doc.setFontSize(8);
     doc.text(
-      "Sub Total: AED" + pdfData.data.Summarry.subtotal,
+      "Sub Total: AED " + pdfData.data.Summarry.subtotal,
       pageWidth -
-      doc.getTextWidth("Sub Total: AED" + pdfData.data.Summarry.subtotal) -
+      doc.getTextWidth("Sub Total: AED " + pdfData.data.Summarry.subtotal) -
       15,
       lastTableBottomY + textSpacing
     );
 
     doc.text(
-      `Tax (${(pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
-      }%): ` + pdfData.data.Summarry.tax,
+      `Tax (${((pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100).toFixed(2)}%): AED ${pdfData.data.Summarry.tax.toFixed(2)}`,
       pageWidth -
       doc.getTextWidth(
-        `Vat (${(pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
-        }%): ` + pdfData.data.Summarry.tax
+        `Vat (${((pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100).toFixed(2)}%): AED ${pdfData.data.Summarry.tax.toFixed(2)}`
       ) -
       15,
       lastTableBottomY + textSpacing + 5
     );
+
 
     // doc.text(
     //   "Adjustment: " +
@@ -369,17 +275,28 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     //   15,
     //   lastTableBottomY + textSpacing + 10
     // );
-
     doc.text(
-      "Total: AED" + pdfData.data.Summarry.total,
+      "Discount: AED " + pdfData.data.invoiceData.discount,
       pageWidth -
-      doc.getTextWidth("Total: AED" + pdfData.data.Summarry.total) -
+      doc.getTextWidth("Discount: AED " + pdfData.data.invoiceData.discount) -
       15,
       lastTableBottomY + textSpacing + 10
     );
-    let startY = lastTableBottomY + textSpacing + 15; // Initial Y position
+    doc.text(
+      "Total: AED " +
+      (pdfData.data.Summarry.total - pdfData.data.invoiceData.discount).toFixed(2),
+      pageWidth -
+      doc.getTextWidth(
+        "Total: AED " +
+        (pdfData.data.Summarry.total - pdfData.data.invoiceData.discount).toFixed(2)
+      ) -
+      15,
+      lastTableBottomY + textSpacing + 15
+    );
+    let startY = lastTableBottomY + textSpacing + 20; // Initial Y position
     const lineHeight = 4; // Adjust this value as needed for line spacing
-
+    const topMargin = 10;
+    // Function to add text with dynamic page breaks and a line break
     const addTextWithPageBreak = (text, maxWidth) => {
       // Add a top margin
       // startY += topMargin;
@@ -396,25 +313,25 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
       startY += lineHeight;
     };
 
-    addTextWithPageBreak("Note:\n" + pdfData.data.quoteData.note, 175);
+    addTextWithPageBreak("Note:\n" + pdfData.data.invoiceData.note, 175);
 
     addTextWithPageBreak(
-      "Terms & Conditions:\n" + pdfData.data.quoteData.terms_and_condition,
+      "Terms & Conditions:\n" + pdfData.data.invoiceData.terms_and_condition,
       175
     );
 
     addTextWithPageBreak(
-      "Payment Terms:\n" + pdfData.data.quoteData.payment_terms,
+      "Payment Terms:\n" + pdfData.data.invoiceData.payment_terms,
       175
     );
 
     addTextWithPageBreak(
-      "Execution Time:\n" + pdfData.data.quoteData.execution_time,
+      "Execution Time:\n" + pdfData.data.invoiceData.execution_time,
       175
     );
 
     addTextWithPageBreak(
-      "Bank Account Details:\n" + pdfData.data.quoteData.bank_details,
+      "Bank Account Details:\n" + pdfData.data.invoiceData.bank_details,
       175
     );
     doc.text("Authorised Signature", 15, startY + 5); // X: 15, Y: 85
@@ -422,6 +339,65 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
 
     // Save the complete PDF
     return doc;
+    // doc.save(data.InvoiceData.isPerforma + " " + data.InvoiceData.number);
+  };
+
+  const toast = useToast();
+  const sendPdf = async () => {
+    try {
+      // Generate the PDF using CreatePdf function
+      const pdf = CreatePdf();
+
+      // Convert the PDF to a Blob
+      const pdfBlob = new Blob([pdf.output("blob")], {
+        type: "application/pdf",
+      });
+
+      // Create a File object from the Blob with a custom filename
+      const pdfFile = new File(
+        [pdfBlob],
+        `${data.InvoiceData.isPerforma} ${data.InvoiceData.number}.pdf`,
+        { type: "application/pdf" }
+      );
+      const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA";
+      const encryptedData = localStorage.getItem("password");
+      const decryptedData = CryptoJS.AES.decrypt(
+        encryptedData,
+        secretKey
+      ).toString(CryptoJS.enc.Utf8);
+      // Use the sendPdfByEmail function to send the PDF via the API
+      const response = await sendPdfByEmail(
+        pdfFile,
+        data.InvoiceData.added_by_employee, // Replace with the appropriate employeeId
+        data.InvoiceData.client_id, // Replace with the appropriate clientId
+        decryptedData // Replace with the appropriate employeePassword
+      );
+
+      toast({
+        title: "Email Send",
+        description: "The invoice email has been send successfully.",
+        status: "success",
+        position: "top-right",
+        duration: 3000,
+        isClosable: true,
+      });
+      onClose(onClose);
+      // Handle the API response (e.g., show a success message)
+      console.log("PDF sent successfully:", response);
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.error) {
+        toast({
+          title: "Error",
+          description: error.response.data.error,
+          position: "top-right",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+      // Handle or display the error (e.g., show an error message)
+      console.error("Error sending PDF:", error);
+    }
   };
   const [isSendEmail, setIsSendEmail] = useState(false);
 
@@ -473,21 +449,25 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
         <div ref={pdfRef} style={{ padding: "2rem" }}>
           <SimpleGrid columns={2} justifyContent="space-between">
             <VStack justify="start" align="start">
-              {/* <Image src={Logo} width="400px" mb={50} /> */}
               <Image
                 src={`${BASE_URL}/uploads/logo/${pdfData.data.settings.logo_img}`}
                 width="400px"
                 mb={50}
               />
+              {/* <Image src={Logo} width="400px" mb={50} /> */}
               <Text fontWeight="bold">{pdfData.data.settings.name}</Text>
               <Text>Address: {pdfData.data.settings.address}</Text>
-              <Text>VAT Number: {pdfData.data.settings.vat_no}</Text>
+              <Text>Vat Number: {pdfData.data.settings.vat_no}</Text>
             </VStack>
             <VStack align="end">
-              <Text fontSize={{ base: 25, md: 40 }} fontWeight="bold" align="end">
-                QUOTATION
+              <Text
+                fontSize={{ base: 25, md: 40 }}
+                fontWeight="bold"
+                align="end"
+              >
+                {data.InvoiceData.isPerforma}
               </Text>
-              <Text fontSize={15}>{data.quotesData.number}</Text>
+              <Text fontSize={15}>{data.InvoiceData.number}</Text>
               <Text
                 fontSize={15}
                 border="1px black solid"
@@ -495,22 +475,22 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
                 padding={1}
                 fontWeight="bold"
               >
-                {data.quotesData.status}
+                {data.InvoiceData.status}
               </Text>
               <Text fontWeight="bold">To</Text>
               <Text fontWeight="bold">
-                {data.quotesData.client_fname} {data.quotesData.client_lname}
+                {data.InvoiceData.client_fname} {data.InvoiceData.client_lname}
               </Text>
-              <Text>{data.quotesData.client_phone}</Text>
-              <Text>{/*data.quotesData.client_address*/} uncomment this to get Address here</Text>
-              <Text>{/*data.quotesData.client_vat*/} uncomment this to get VAT Number here</Text>
+              <Text>{data.InvoiceData.client_phone}</Text>
+              <Text>{data.InvoiceData.client_address} </Text>
+              <Text>{data.InvoiceData.client_vat}</Text>
               <Divider orientation="horizontal" height={10} />
-              <Text>Expiry Date: {data.quotesData.expiry_date}</Text>
+              {/* <Text>Expiry Date: {data.InvoiceData.expiry_date}</Text> */}
               <Text>
-                Sales Agent: {data.quotesData.employee_name}{" "}
-                {data.quotesData.employee_surname}
+                Sales Agent: {data.InvoiceData.employee_name}{" "}
+                {data.InvoiceData.employee_surname}
               </Text>
-              <Text>{data.quotesData.employee_email}</Text>
+              <Text>{data.InvoiceData.employee_email}</Text>
             </VStack>
           </SimpleGrid>
           <Divider orientation="horizontal" height={10} />
@@ -532,7 +512,12 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
                 {Items.map((item) => (
                   <Tr key={item.id}>
                     <Td>{item.id}</Td>
-                    <Td>{item.item_description}</Td>
+                    <Td style={{ whiteSpace: "normal" }}>
+                      <VStack align="start">
+                        {/* <Text fontWeight="bold">{item.item_name}</Text> */}
+                        <Text>{item.item_description}</Text>
+                      </VStack>
+                    </Td>
                     <Td>{item.item_xdim + "x" + item.item_ydim}</Td>
                     <Td>{"Sqm"}</Td>
                     <Td>{item.item_quantity}</Td>
@@ -552,47 +537,66 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
                 </Text>
                 <Text align="start" fontWeight="bold" flex="1">
                   Tax (
-                  {(pdfData.data.Summarry.tax /
+                  {((pdfData.data.Summarry.tax /
                     pdfData.data.Summarry.subtotal) *
-                    100}
+                    100).toFixed(2)}
                   )%
                 </Text>
                 {/* <Text align="start" fontWeight="bold" flex="1">
                 Adjustment
               </Text> */}
                 <Text align="start" fontWeight="bold" flex="1">
+                  Discount
+                </Text>
+                <Text align="start" fontWeight="bold" flex="1">
                   Total
                 </Text>
               </VStack>
               <VStack align="start">
                 <Text align="end">AED {pdfData.data.Summarry.subtotal}</Text>
-                <Text align="end">AED {pdfData.data.Summarry.tax}</Text>
+                <Text align="end">AED {pdfData.data.Summarry.tax.toFixed(2)}</Text>
                 {/* <Text align="end">AED {adjustment}</Text> */}
-                <Text align="end">AED {pdfData.data.Summarry.total}</Text>
+                <Text align="end">
+                  AED {pdfData.data.invoiceData?.discount}
+                </Text>
+                <Text align="end">
+                  AED{" "}
+                  {pdfData.data.Summarry.total -
+                    pdfData.data.invoiceData?.discount}
+                </Text>
               </VStack>
             </SimpleGrid>
           </VStack>
           <VStack align="start">
             <Text fontWeight="bold">Note:</Text>
-            <Text>{pdfData.data.quoteData.note}</Text>
+            <Text whiteSpace="pre-line">{pdfData.data.invoiceData.note}</Text>
             <Divider orientation="horizontal" height={10} />
 
             <Text fontWeight="bold">Terms & Conditions:</Text>
-            <Text>{pdfData.data.quoteData.terms_and_condition}</Text>
+            <Text whiteSpace="pre-line">
+              {pdfData.data.invoiceData.terms_and_condition}
+            </Text>
             <Divider orientation="horizontal" height={10} />
 
             <Text fontWeight="bold">Payment Terms:</Text>
-            <Text>{pdfData.data.quoteData.payment_terms}</Text>
+            <Text whiteSpace="pre-line">
+              {pdfData.data.invoiceData.payment_terms}
+            </Text>
             <Divider orientation="horizontal" height={10} />
 
             <Text fontWeight="bold">Execution Time:</Text>
-            <Text>{pdfData.data.quoteData.execution_time}</Text>
+            <Text whiteSpace="pre-line">
+              {pdfData.data.invoiceData.execution_time}
+            </Text>
             <Divider orientation="horizontal" height={10} />
 
             <Text fontWeight="bold">Bank Account Details:</Text>
-            <Text>{pdfData.data.quoteData.bank_details}</Text>
+            <Text whiteSpace="pre-line">
+              {pdfData.data.invoiceData.bank_details}
+            </Text>
             <Divider orientation="horizontal" height={10} />
           </VStack>
+
           <Divider orientation="horizontal" height={10} />
           <Text>Authorised Signature</Text>
           <Image
@@ -600,6 +604,13 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
             width="200px"
             mb={50}
           />
+          {/* <HStack>
+            <Image
+              src={`${BASE_URL}/uploads/stamp/${pdfData.data.settings.stamp_img}`}
+              width="400px"
+              mb={50}
+            />
+          </HStack> */}
         </div>
       )}
       <ConfirmationAlert
@@ -608,7 +619,7 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
         onConfirm={sendPdf}
         HeaderText={"Send Email"}
         BodyText={
-          "Are you sure you want to send this qoute to client? this action is not reversible, this qoute is send to admin for approval"
+          "Are you sure you want to send this invoice to client? this action is not reversible"
         }
         confirmButtonColorScheme="green" // Customize button color for accepting
         confirmButtonText="Accept" // Customize the text for the confirm button
@@ -618,4 +629,4 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
   );
 };
 
-export default PdfDrawerQ;
+export default LpoPdfDrawer;

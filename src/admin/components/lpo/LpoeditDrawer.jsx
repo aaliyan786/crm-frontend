@@ -36,7 +36,7 @@ import {
   editInvoiceItem,
   updateInvoiceData,
 } from "../../../API/api";
-function EditDrawer({ data, handleUpdateInvoice, onClose }) {
+function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
   const bgColor = useColorModeValue("gray.100", "gray.700");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const [tableRows, setTableRows] = useState(data.InvoiceItemsData);
@@ -642,4 +642,4 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
   );
 }
 
-export default EditDrawer;
+export default LpoEditDrawer;
