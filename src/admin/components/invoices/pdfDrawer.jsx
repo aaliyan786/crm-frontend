@@ -469,8 +469,8 @@ const PdfDrawer = ({ data, onClose }) => {
                 {data.InvoiceData.client_fname} {data.InvoiceData.client_lname}
               </Text>
               <Text>{data.InvoiceData.client_phone}</Text>
-              <Text>{/*data.InvoiceData.client_address*/} uncomment this to get Address here</Text>
-              <Text>{/*data.InvoiceData.client_vat*/} uncomment this to get VAT Number here</Text>
+              <Text>{data.InvoiceData.client_address} </Text>
+              <Text>{data.InvoiceData.client_vat}</Text>
               <Divider orientation="horizontal" height={10} />
               {/* <Text>Expiry Date: {data.InvoiceData.expiry_date}</Text> */}
               <Text>
