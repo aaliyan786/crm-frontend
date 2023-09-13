@@ -486,8 +486,8 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
                 mb={50}
               />
               <Text fontWeight="bold">{pdfData.data.settings.name}</Text>
-              <Text>{pdfData.data.settings.address}</Text>
-              <Text>Vat Number: {pdfData.data.settings.vat_no}</Text>
+              <Text>Address: {pdfData.data.settings.address}</Text>
+              <Text>VAT Number: {pdfData.data.settings.vat_no}</Text>
             </VStack>
             <VStack align="end">
               <Text fontSize={40} fontWeight="bold" align="end">
@@ -508,6 +508,8 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
                 {data.quotesData.client_fname} {data.quotesData.client_lname}
               </Text>
               <Text>{data.quotesData.client_phone}</Text>
+              <Text>{/*data.quotesData.client_address*/} uncomment this to get Address here</Text>
+              <Text>{/*data.quotesData.client_vat*/} uncomment this to get VAT Number here</Text>
               <Divider orientation="horizontal" height={10} />
               <Text>Expiry Date: {data.quotesData.expiry_date}</Text>
               <Text>

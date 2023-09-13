@@ -597,7 +597,6 @@ const PdfDrawer = ({ data, onClose }) => {
               width="400px"
               mb={50}
             />
-            
           </HStack> */}
         </div>
       )}

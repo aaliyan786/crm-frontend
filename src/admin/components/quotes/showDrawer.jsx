@@ -197,6 +197,14 @@ const ShowDrawer = ({ data }) => {
               <Text>Phone:</Text>
               <Text>{data.quotesData.client_phone}</Text>
             </HStack>
+            <HStack spacing={2}>
+              <Text>Address:</Text>
+              {/* <Text>{data.quotesData.client_address}</Text> */}
+            </HStack>
+            <HStack spacing={2}>
+              <Text>VAT Number:</Text>
+              {/* <Text>{data.quotesData.client_vat}</Text> */}
+            </HStack>
           </SimpleGrid>
           <Divider orientation="horizontal" borderColor="0000" my={4} />
 
@@ -231,12 +239,21 @@ const ShowDrawer = ({ data }) => {
                 <Text fontWeight="bold">AED {totalAmount}</Text>
               </HStack>
               <HStack>
-                <Text>VAT (0%):</Text>
-                <Text fontWeight="bold">AED {totalAmount}</Text>
+                <Text>VAT (5%):</Text>
+                <Text fontWeight="bold">AED {(totalAmount / 100) * 5}</Text>
+              </HStack>
+              <HStack>
+                <Text>Discount:</Text>
+                <Text fontWeight="bold">AED {data.quotesData.discount}</Text>
               </HStack>
               <HStack>
                 <Text>Total Amount:</Text>
-                <Text fontWeight="bold">AED {totalAmount}</Text>
+                <Text fontWeight="bold">
+                  AED{" "}
+                  {totalAmount +
+                    (totalAmount / 100) * 5 -
+                    data.quotesData.discount}
+                </Text>
               </HStack>
             </Flex>
           </Box>
