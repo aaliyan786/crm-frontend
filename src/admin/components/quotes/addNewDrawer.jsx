@@ -207,13 +207,13 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
   const [customers, setCustomers] = useState([]);
   const [selectedClient, setSelectedClient] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(1);
-  const [selectedExpiryDate, setSelectedExpiryDate] = useState("");
+  const [selectedExpiryDate, setSelectedExpiryDate] = useState(new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]);
   const [termsAndConditions, setTermsAndConditions] = useState("");
   const [paymentTerms, setPaymentTerms] = useState("");
   const [executionTime, setExecutionTime] = useState("");
   const [bankDetails, setBankDetails] = useState("");
   const [noteDetails, setNoteDetails] = useState("");
-  const [discount, setDiscount] = useState("");
+  const [discount, setDiscount] = useState(0);
 
   useEffect(() => {
     // Fetch customer data when the component mounts

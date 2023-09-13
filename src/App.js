@@ -19,11 +19,8 @@ import AdminPaymentModes from "./admin/pages/AdminPaymentModes";
 import AdminLossQuotesPage from "./admin/pages/AdminLossQuotesPage";
 import AdminAcceptedQuotesPage from "./admin/pages/AdminAcceptedQuotesPage";
 import SalesAssignedQuotes from "./admin/pages/SalesAssignedQuotes";
-<<<<<<< HEAD
 import NotFoundPage from "./admin/pages/NotFoundPage";
-=======
 import AdminLpuPage from "./admin/pages/AdminLpuPage";
->>>>>>> 87bc93e3eb8c4d2f5e2b184e79c7ca667ff215be
 
 
 export default function App() {

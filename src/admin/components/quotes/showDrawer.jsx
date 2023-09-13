@@ -185,11 +185,11 @@ const ShowDrawer = ({ data }) => {
             </HStack>
             <HStack spacing={2}>
               <Text>Address:</Text>
-              {/* <Text>{data.quotesData.client_address}</Text> */}
+              <Text>{data.quotesData.client_address}</Text>
             </HStack>
             <HStack spacing={2}>
               <Text>VAT Number:</Text>
-              {/* <Text>{data.quotesData.client_vat}</Text> */}
+              <Text>{data.quotesData.client_vat}</Text>
             </HStack>
           </SimpleGrid>
           <Divider orientation="horizontal" borderColor="0000" my={4} />
