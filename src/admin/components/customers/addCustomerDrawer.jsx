@@ -23,7 +23,7 @@ import { AddClient } from "../../../API/api";
 
 const userData = JSON.parse(sessionStorage.getItem('user'));
 const userId = userData ? userData.id : null;
-const employee_id = userId.toString();
+const employee_id = userId
 const AddCustomerDrawer = ({
   isOpen,
   onClose,
