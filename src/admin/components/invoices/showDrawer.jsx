@@ -306,7 +306,7 @@ const ShowDrawer = ({ data, handleUpdateInvoice }) => {
           </Stack>
 
           <Divider orientation="horizontal" borderColor="0000" my={8} />
-          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
+          <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
             <HStack spacing={2}>
               <Text>Email:</Text>
               <Text>{data.InvoiceData.client_email}</Text>
@@ -314,6 +314,14 @@ const ShowDrawer = ({ data, handleUpdateInvoice }) => {
             <HStack spacing={2}>
               <Text>Phone:</Text>
               <Text>{data.InvoiceData.client_phone}</Text>
+            </HStack>
+            <HStack spacing={2}>
+              <Text>Address:</Text>
+              {/* <Text>{data.InvoiceData.client_address}</Text> */}
+            </HStack>
+            <HStack spacing={2}>
+              <Text>VAT Number:</Text>
+              {/* <Text>{data.InvoiceData.client_vat}</Text> */}
             </HStack>
           </SimpleGrid>
           <Divider orientation="horizontal" borderColor="0000" my={4} />
@@ -354,7 +362,7 @@ const ShowDrawer = ({ data, handleUpdateInvoice }) => {
                 <Text fontWeight="bold">AED {totalAmount}</Text>
               </HStack>
               <HStack>
-                <Text>VAT Tax(5%):</Text>
+                <Text>VAT Tax (5%):</Text>
                 <Text fontWeight="bold">AED {(totalAmount / 100) * 5}</Text>
               </HStack>
               <HStack>

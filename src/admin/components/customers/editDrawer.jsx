@@ -24,7 +24,6 @@ const EditCustomerDrawer = ({
   isOpen,
   onClose,
   customerDetails,
-  onSave,
   handleFetchUpdatedCustomer,
 }) => {
   const bgColor = useColorModeValue("gray.100", "gray.700");

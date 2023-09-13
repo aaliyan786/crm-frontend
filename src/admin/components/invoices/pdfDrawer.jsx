@@ -443,7 +443,7 @@ const PdfDrawer = ({ data, onClose }) => {
               />
               {/* <Image src={Logo} width="400px" mb={50} /> */}
               <Text fontWeight="bold">{pdfData.data.settings.name}</Text>
-              <Text>{pdfData.data.settings.address}</Text>
+              <Text>Address: {pdfData.data.settings.address}</Text>
               <Text>Vat Number: {pdfData.data.settings.vat_no}</Text>
             </VStack>
             <VStack align="end">
@@ -469,6 +469,8 @@ const PdfDrawer = ({ data, onClose }) => {
                 {data.InvoiceData.client_fname} {data.InvoiceData.client_lname}
               </Text>
               <Text>{data.InvoiceData.client_phone}</Text>
+              <Text>{/*data.InvoiceData.client_address*/} uncomment this to get Address here</Text>
+              <Text>{/*data.InvoiceData.client_vat*/} uncomment this to get VAT Number here</Text>
               <Divider orientation="horizontal" height={10} />
               {/* <Text>Expiry Date: {data.InvoiceData.expiry_date}</Text> */}
               <Text>

@@ -38,7 +38,6 @@ import { createInvoiceApi, fetchCustomers } from "../../../API/api";
 function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
   const bgColor = useColorModeValue("gray.100", "gray.700");
   const borderColor = useColorModeValue("gray.200", "gray.600");
-
   const [tableRows, setTableRows] = useState([]);
   const inputStyles = {
     border: "1px solid grey",
@@ -73,8 +72,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
     console.log('tableRows[index].calculationType: ', tableRows[index].calculationType)
     console.log('updatedRows[index].calculationType: ', updatedRows[index].calculationType)
     if (updatedRows[index].calculationType === 0) {
-      updatedRows[index].item_quantity=1;
-      console.log('asfasfasfasfasfafas')
+      updatedRows[index].item_quantity = 1;
       updatedRows[index].totalPrice = updatedRows[index].item_xdim * updatedRows[index].item_ydim * updatedRows[index].item_price;
     }
     else if (updatedRows[index].calculationType === 1) {
@@ -97,8 +95,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
       }
     }
     if (updatedRows[index].calculationType === 0) {
-      updatedRows[index].item_quantity=1;
-      console.log('asfasfasfasfasfafas')
+      updatedRows[index].item_quantity = 1;
       updatedRows[index].totalPrice = updatedRows[index].item_xdim * updatedRows[index].item_ydim * updatedRows[index].item_price;
     }
     else if (updatedRows[index].calculationType === 1) {
@@ -114,16 +111,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
   const handleSaveInvoice = async () => {
     setIsLoading(true);
 
-    // Prepare invoice data based on the form input\
-    // console.log(selectedClient);
-    // const selectedExpiryDateISO = selectedExpiryDate
-    //   ? new Date(selectedExpiryDate)
-    //     .toISOString()
-    //     .slice(0, 19)
-    //     .replace("T", " ")
-    //   : null; // Set to null if selectedExpiryDate is not provided
-    // // console.log(selectedExpiryDateISO);
-    // // console.log(selectedExpiryDate);
+
     let email = localStorage.getItem("email");
     const currentDate = new Date();
     const todayISO = currentDate.toISOString().split('T')[0]; // Get the date part in ISO format
@@ -158,7 +146,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
     }));
     const storedToken = localStorage.getItem("token");
     try {
-      
+
       const response = await createInvoiceApi(
         {
           invoiceData,
@@ -207,7 +195,6 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
   const [selectedType, setSelectedType] = useState(1);
 
 
-  const [selectedExpiryDate, setSelectedExpiryDate] = useState("");
   const [termsAndConditions, setTermsAndConditions] = useState("");
   const [paymentTerms, setPaymentTerms] = useState("");
   const [executionTime, setExecutionTime] = useState("");
@@ -216,13 +203,11 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
   const [discount, setDiscount] = useState("");
 
   useEffect(() => {
-    // Fetch customer data when the component mounts
     async function fetchData() {
       try {
         const customerData = await fetchCustomers();
-        setCustomers(customerData.data); // Access the customer data inside the "data" array
+        setCustomers(customerData.data);
       } catch (error) {
-        // Handle the error here
         console.error("Error fetching customers:", error);
       }
     }
@@ -238,7 +223,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
     const query = e.target.value;
     setSearchQuery(query);
 
-    setSelectedClientName(query); // Update selectedClientName directly
+    setSelectedClientName(query);
 
     const filtered = customers.filter((customer) =>
       customer.company_name.toLowerCase().includes(query.toLowerCase())
@@ -284,8 +269,6 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
     >
       <Flex direction="row" justify="space-between">
         <HStack>
-          {/* <Text fontWeight='bold' fontSize='lg'>Invoice # YAHAN WO (SHERJEEL RANDOM NUMBER AYEGA)</Text>
-                    <Badge colorScheme="red" variant='solid' fontSize='0.8rem'>(STATUS?)</Badge> */}
         </HStack>
         <HStack>
           <Button variant="ghost" onClick={onClose}>
@@ -381,20 +364,6 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
               <option value={2}>Performa invoice</option>
             </Select>
           </Box>
-          {/* <Box>
-            <FormLabel>Date</FormLabel>
-            <Input  value={executionTime}
-        onChange={(e) => setExecutionTime(e.target.value)} type="date" style={inputStyles}></Input>
-          </Box> */}
-          {/* <Box>
-            <FormLabel>Expiry Date</FormLabel>
-            <Input
-              value={selectedExpiryDate}
-              onChange={(e) => setSelectedExpiryDate(e.target.value)}
-              type="date"
-              style={inputStyles}
-            ></Input>
-          </Box> */}
           <Box>
             <FormLabel>Discount</FormLabel>
             <InputGroup>
@@ -407,7 +376,6 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
               />
             </InputGroup>
           </Box>
-
         </SimpleGrid>
       </FormControl>
       <Divider orientation="horizontal" borderColor="7F7F7F" my={6} />
@@ -448,7 +416,6 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
                     }
                   />
                 </Td>
-
                 <Td>
                   <Input
                     style={inputStyles}
@@ -471,7 +438,6 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
                     }
                   />
                 </Td>
-
                 <Td>
                   <Input
                     style={inputStyles}
@@ -483,7 +449,6 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
                     }
                   />
                 </Td>
-
                 <Td>
                   <Select
                     value={row.calculationType}
@@ -505,12 +470,9 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
                     }
                   />
                 </Td>
-
                 <Td>
                   {row.totalPrice}
                 </Td>
-
-
                 <Td>
                   <Button
                     variant="ghost"
@@ -527,9 +489,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
         </Table>
       </TableContainer>
 
-
       <Divider orientation="horizontal" my={4} />
-
       <Flex justify="center" align="center">
         <Button
           variant="outline"
@@ -549,8 +509,6 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
             <Textarea
               value={noteDetails}
               onChange={(e) => setNoteDetails(e.target.value)}
-              // value={value}
-              // onChange={handleNoteInputChange}
               placeholder="Here is a sample placeholder"
               size="sm"
             />
@@ -616,9 +574,18 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
           <Text fontWeight="bold">AED {vatTax.toFixed(2)}</Text>
         </HStack>
         <HStack>
-          <Text>Total Amount:</Text>
-          <Text fontWeight="bold">AED {totalAmount.toFixed(2)}</Text>
+          <Text>Discount:</Text>
+          <Text fontWeight="bold">AED {discount}</Text>
         </HStack>
+        <HStack>
+                <Text>Total Amount:</Text>
+                <Text fontWeight="bold">
+                  AED{" "}
+                  {totalAmount +
+                    (totalAmount / 100) * 5 -
+                    discount}
+                </Text>
+              </HStack>
       </Flex>
     </Box>
   );

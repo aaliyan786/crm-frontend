@@ -27,7 +27,6 @@ const employee_id = userId.toString();
 const AddCustomerDrawer = ({
   isOpen,
   onClose,
-  onSave,
   handleFetchUpdatedCustomer,
 }) => {
   const bgColor = useColorModeValue("gray.100", "gray.700");

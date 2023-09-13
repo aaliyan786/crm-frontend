@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import {
-  Badge,
   Box,
   Button,
-  Container,
   Divider,
   Flex,
   FormControl,
@@ -12,26 +10,16 @@ import {
   Input,
   Select,
   SimpleGrid,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Text,
-  Textarea,
-  Th,
-  Thead,
-  Tr,
-  VStack,
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
 import {
   AddIcon,
-  CloseIcon,
-  DeleteIcon,
   SmallCloseIcon,
 } from "@chakra-ui/icons";
 import { createEmployee } from "../../../API/api";
+
+
 function AddNewDrawerE({ onClose, handleAddOrUpdateEmployee }) {
   const bgColor = useColorModeValue("gray.100", "gray.700");
   const borderColor = useColorModeValue("gray.200", "gray.600");

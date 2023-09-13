@@ -52,6 +52,12 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
       price: "",
       dimensionX: "",
       dimensionY: "",
+      item_price: 0,
+      calculationType: 0,
+      totalPrice: 0,
+      item_quantity_disabled: true, // Initialize these properties
+      item_xdim_disabled: false,    // Initialize these properties
+      item_ydim_disabled: false, 
     };
 
     setTableRows([...tableRows, newRow]);
@@ -69,9 +75,40 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
   const [subtotalAmount, setSubtotalotalAmount] = useState(
     data.InvoiceData.total_amount
   );
+
   const handleInputChange = (index, field, value) => {
     const updatedRows = [...tableRows];
     updatedRows[index][field] = value;
+    if (updatedRows[index].calculationType === 0) {
+      updatedRows[index].item_quantity = 1;
+      updatedRows[index].totalPrice = updatedRows[index].item_xdim * updatedRows[index].item_ydim * updatedRows[index].item_price;
+    }
+    else if (updatedRows[index].calculationType === 1) {
+      updatedRows[index].totalPrice = updatedRows[index].item_quantity * updatedRows[index].item_price;
+    }
+    // Update the disabled state based on the Calculation Type
+    if (field === 'calculationType') {
+      if (value === '0') {
+        updatedRows[index].calculationType = 0
+        updatedRows[index].totalPrice = updatedRows[index].item_xdim * updatedRows[index].item_ydim * updatedRows[index].item_price;
+        updatedRows[index].item_quantity_disabled = true;
+        updatedRows[index].item_xdim_disabled = false;
+        updatedRows[index].item_ydim_disabled = false;
+      } else if (value === '1') {
+        updatedRows[index].calculationType = 1
+        updatedRows[index].totalPrice = updatedRows[index].item_quantity * updatedRows[index].item_price;
+        updatedRows[index].item_quantity_disabled = false;
+        updatedRows[index].item_xdim_disabled = true;
+        updatedRows[index].item_ydim_disabled = true;
+      }
+    }
+    if (updatedRows[index].calculationType === 0) {
+      updatedRows[index].item_quantity = 1;
+      updatedRows[index].totalPrice = updatedRows[index].item_xdim * updatedRows[index].item_ydim * updatedRows[index].item_price;
+    }
+    else if (updatedRows[index].calculationType === 1) {
+      updatedRows[index].totalPrice = updatedRows[index].item_quantity * updatedRows[index].item_price;
+    }
 
     // Recalculate sub total for the edited row
     updatedRows[index].item_subtotal =
@@ -97,10 +134,7 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
     ACCEPTED: "teal",
     LOST: "gray",
   };
-  //   let handleNoteInputChange = (e) => {
-  //     let inputValue = e.target.value;
-  //     setValue(inputValue);
-  //   };
+ 
   const statusValue = {
     DRAFT: 1,
     PENDING: 2,
@@ -134,7 +168,8 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
   );
   const [bankDetails, setBankDetails] = useState(data.InvoiceData.bank_details);
   const [noteDetails, setNoteDetails] = useState(data.InvoiceData.note);
-
+  const [discount, setDiscount] = useState(data.InvoiceData.discount);
+  
   const [removedItems, setRemovedItems] = useState([]);
   const [hasAtLeastOneItem, setHasAtLeastOneItem] = useState(false);
 
@@ -158,16 +193,13 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
     }
     // Update invoice data fields
     let email = localStorage.getItem("email");
-    const selectedExpiryDateISO = selectedExpiryDate
-      ? new Date(selectedExpiryDate)
-          .toISOString()
-          .slice(0, 19)
-          .replace("T", " ")
-      : null; // Set to null if selectedExpiryDate is not provided
+    const currentDate = new Date();
+    const todayISO = currentDate.toISOString().split('T')[0];
     const updatedInvoiceData = {
       status: selectedStatus,
       employee_email: email, // emp ki email ayegi
-      expiry_date: selectedExpiryDateISO,
+      expiry_date: todayISO,
+      discount: discount,
       terms_and_condition: termsAndConditions,
       payment_terms: paymentTerms,
       execution_time: executionTime,
@@ -336,16 +368,18 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
               <option value={2}>Performa invoice</option>
             </Select>
           </Box>
-
-          {/* <Box>
-            <FormLabel>Expiry Date</FormLabel>
-            <Input
-              value={selectedExpiryDate}
-              onChange={(e) => setSelectedExpiryDate(e.target.value)}
-              type="date"
-              style={inputStyles}
-            ></Input>
-          </Box> */}
+          <Box>
+            <FormLabel>Discount</FormLabel>
+           
+              <Input
+                value={discount} // Use selectedClientName as the value
+                onChange={(e) => setDiscount(e.target.value)}
+                bg={bgColor}
+                type="number"
+                placeholder="Enter Discount"
+              />
+            
+          </Box>
         </SimpleGrid>
       </FormControl>
       <Divider orientation="horizontal" borderColor="7F7F7F" my={6} />
@@ -359,95 +393,101 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
               <Th>Dimension X</Th>
               <Th>Dimension Y</Th>
               <Th>Quantity</Th>
+              <Th>Calculation Type</Th>
               <Th>Price</Th>
               <Th>Total</Th>
+              <Th>Action</Th>
             </Tr>
           </Thead>
           <Tbody>
             {tableRows.map((row, index) => (
-              <>
-                <Tr key={index}>
-                  <Td>
-                    <Input
-                      style={inputStyles}
-                      value={row.item_name}
-                      onChange={(e) =>
-                        handleInputChange(index, "item_name", e.target.value)
-                      }
-                    />
-                  </Td>
-                  <Td>
-                    <Input
-                      style={inputStyles}
-                      value={row.item_description}
-                      onChange={(e) =>
-                        handleInputChange(
-                          index,
-                          "item_description",
-                          e.target.value
-                        )
-                      }
-                    />
-                  </Td>
-                  <Td>
-                    <Input
-                      style={inputStyles}
-                      value={row.item_xdim}
-                      type="number"
-                      onChange={(e) =>
-                        handleInputChange(index, "item_xdim", e.target.value)
-                      }
-                    />
-                  </Td>
-                  <Td>
-                    <Input
-                      style={inputStyles}
-                      value={row.item_ydim}
-                      type="number"
-                      onChange={(e) =>
-                        handleInputChange(index, "item_ydim", e.target.value)
-                      }
-                    />
-                  </Td>
-                  <Td>
-                    <Input
-                      style={inputStyles}
-                      value={row.item_quantity}
-                      type="number"
-                      onChange={(e) =>
-                        handleInputChange(
-                          index,
-                          "item_quantity",
-                          e.target.value
-                        )
-                      }
-                    />
-                  </Td>
-                  <Td>
-                    <Input
-                      style={inputStyles}
-                      value={row.item_price}
-                      type="number"
-                      onChange={(e) =>
-                        handleInputChange(index, "item_price", e.target.value)
-                      }
-                    />
-                  </Td>
-
-                  <Td>{row.item_quantity * row.item_price}</Td>
-
-                  <Td>
-                    <Button
-                      variant="ghost"
-                      colorScheme="red"
-                      size="sm"
-                      onClick={() => handleDeleteRow(index)}
-                    >
-                      <DeleteIcon />
-                    </Button>
-                  </Td>
-                </Tr>
-              </>
+              <Tr key={index}>
+                <Td>
+                  <Input
+                    style={inputStyles}
+                    value={row.item_name}
+                    onChange={(e) =>
+                      handleInputChange(index, "item_name", e.target.value)
+                    }
+                  />
+                </Td>
+                <Td>
+                  <Input
+                    style={inputStyles}
+                    value={row.description}
+                    onChange={(e) =>
+                      handleInputChange(index, "item_description", e.target.value)
+                    }
+                  />
+                </Td>
+                <Td>
+                  <Input
+                    style={inputStyles}
+                    value={row.dimensionX}
+                    type="number"
+                    isDisabled={row.item_xdim_disabled} // Use isDisabled prop
+                    onChange={(e) =>
+                      handleInputChange(index, "item_xdim", e.target.value)
+                    }
+                  />
+                </Td>
+                <Td>
+                  <Input
+                    style={inputStyles}
+                    value={row.dimensionY}
+                    type="number"
+                    isDisabled={row.item_ydim_disabled} // Use isDisabled prop
+                    onChange={(e) =>
+                      handleInputChange(index, "item_ydim", e.target.value)
+                    }
+                  />
+                </Td>
+                <Td>
+                  <Input
+                    style={inputStyles}
+                    value={row.item_quantity}
+                    type="number"
+                    isDisabled={row.item_quantity_disabled} // Use isDisabled prop
+                    onChange={(e) =>
+                      handleInputChange(index, "item_quantity", e.target.value)
+                    }
+                  />
+                </Td>
+                <Td>
+                  <Select
+                    value={row.calculationType}
+                    onChange={(e) => {
+                      handleInputChange(index, "calculationType", e.target.value);
+                    }}
+                  >
+                    <option value={0}>Dimensions</option>
+                    <option value={1}>Quantity</option>
+                  </Select>
+                </Td>
+                <Td>
+                  <Input
+                    style={inputStyles}
+                    value={row.price}
+                    type="number"
+                    onChange={(e) =>
+                      handleInputChange(index, "item_price", e.target.value)
+                    }
+                  />
+                </Td>
+                <Td>
+                  {row.totalPrice}
+                </Td>
+                <Td>
+                  <Button
+                    variant="ghost"
+                    colorScheme="red"
+                    size="sm"
+                    onClick={() => handleDeleteRow(index)}
+                  >
+                    <DeleteIcon />
+                  </Button>
+                </Td>
+              </Tr>
             ))}
           </Tbody>
         </Table>
