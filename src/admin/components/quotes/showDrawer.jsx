@@ -11,7 +11,6 @@ import {
   HStack,
   Divider,
   Flex,
-  Container,
   TableContainer,
   Table,
   Thead,
@@ -25,11 +24,6 @@ import { getPaymentsByQuoteId } from "../../../API/api";
 import EditDrawer from "./editDrawer";
 import PdfDrawerQ from "./pdfDrawer";
 
-// const items = [
-//   { name: "Item 1", price: 10, quantity: 2 },
-//   { name: "Item 2", price: 5, quantity: 1 },
-//   { name: "Item 3", price: 15, quantity: 3 },
-// ];
 const QuoteItem = ({ name, price, quantity }) => {
   const total = price * quantity;
 
@@ -164,14 +158,6 @@ const ShowDrawer = ({ data }) => {
                 {data.quotesData.total_amount}
               </Text>
             </SimpleGrid>
-            {/* <SimpleGrid row={2} spacing={2}>
-          <Text fontSize="sm" fontWeight="lighter">
-            Balance
-          </Text>
-          <Text fontWeight="bold" fontSize="2xl">
-            {data.quotesData.total_amount - data.quotesData.total_amount_paid}
-          </Text>
-        </SimpleGrid> */}
           </Stack>
 
           <Divider orientation="horizontal" my={4} />
@@ -196,6 +182,14 @@ const ShowDrawer = ({ data }) => {
             <HStack spacing={2}>
               <Text>Phone:</Text>
               <Text>{data.quotesData.client_phone}</Text>
+            </HStack>
+            <HStack spacing={2}>
+              <Text>Address:</Text>
+              {/* <Text>{data.quotesData.client_address}</Text> */}
+            </HStack>
+            <HStack spacing={2}>
+              <Text>VAT Number:</Text>
+              {/* <Text>{data.quotesData.client_vat}</Text> */}
             </HStack>
           </SimpleGrid>
           <Divider orientation="horizontal" borderColor="0000" my={4} />
@@ -231,12 +225,21 @@ const ShowDrawer = ({ data }) => {
                 <Text fontWeight="bold">AED {totalAmount}</Text>
               </HStack>
               <HStack>
-                <Text>VAT (0%):</Text>
-                <Text fontWeight="bold">AED {totalAmount}</Text>
+                <Text>VAT (5%):</Text>
+                <Text fontWeight="bold">AED {(totalAmount / 100) * 5}</Text>
+              </HStack>
+              <HStack>
+                <Text>Discount:</Text>
+                <Text fontWeight="bold">AED {data.quotesData.discount}</Text>
               </HStack>
               <HStack>
                 <Text>Total Amount:</Text>
-                <Text fontWeight="bold">AED {totalAmount}</Text>
+                <Text fontWeight="bold">
+                  AED{" "}
+                  {totalAmount +
+                    (totalAmount / 100) * 5 -
+                    data.quotesData.discount}
+                </Text>
               </HStack>
             </Flex>
           </Box>

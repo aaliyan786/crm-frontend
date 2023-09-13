@@ -19,7 +19,11 @@ import AdminPaymentModes from "./admin/pages/AdminPaymentModes";
 import AdminLossQuotesPage from "./admin/pages/AdminLossQuotesPage";
 import AdminAcceptedQuotesPage from "./admin/pages/AdminAcceptedQuotesPage";
 import SalesAssignedQuotes from "./admin/pages/SalesAssignedQuotes";
+<<<<<<< HEAD
 import NotFoundPage from "./admin/pages/NotFoundPage";
+=======
+import AdminLpuPage from "./admin/pages/AdminLpuPage";
+>>>>>>> 87bc93e3eb8c4d2f5e2b184e79c7ca667ff215be
 
 
 export default function App() {
@@ -49,11 +53,11 @@ export default function App() {
         {isLoggedIn && <Route path="/dashboard" element={<AdminDashboardPage />} />}
         {isLoggedIn && <Route path="/customers" element={<AdminCustomersPage />} />}
         {isLoggedIn && <Route path="/invoices" element={<AdminInvoicesPage />} />}
+        {isLoggedIn && <Route path="/lpu" element={<AdminLpuPage />} />}
         {isLoggedIn && <Route path="/quotes" element={<AdminQuotesPage />} />}
         {isLoggedIn && <Route path="/lossquotes" element={<AdminLossQuotesPage />} />}
         {isLoggedIn && <Route path="/acceptedquotes" element={<AdminAcceptedQuotesPage />} />}
         {isLoggedIn && <Route path="/assignedquotes" element={<SalesAssignedQuotes />} />}
-
         {isLoggedIn && <Route path="/employees" element={<AdminEmployeesPage />} />}
         {isLoggedIn && <Route path="/settings" element={<AdminSettingsPage />} />}
         {isLoggedIn && <Route path="/settings/paymentmodes" element={<AdminPaymentModes />} />}

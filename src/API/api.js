@@ -492,8 +492,10 @@ export async function addInvoiceItem(invoiceId, data) {
         },
       }
     );
+    console.log(response.data)
     return response.data;
   } catch (error) {
+    console.log(error)
     throw error;
   }
 }

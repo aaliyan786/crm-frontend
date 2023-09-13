@@ -55,6 +55,12 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
       price: "",
       dimensionX: "",
       dimensionY: "",
+      item_price: 0,
+      calculationType: 0,
+      totalPrice: 0,
+      item_quantity_disabled: true, // Initialize these properties
+      item_xdim_disabled: false,    // Initialize these properties
+      item_ydim_disabled: false,
     };
 
     setTableRows([...tableRows, newRow]);
@@ -75,7 +81,36 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
   const handleInputChange = (index, field, value) => {
     const updatedRows = [...tableRows];
     updatedRows[index][field] = value;
-
+    if (updatedRows[index].calculationType === 0) {
+      updatedRows[index].item_quantity = 1;
+      updatedRows[index].totalPrice = updatedRows[index].item_xdim * updatedRows[index].item_ydim * updatedRows[index].item_price;
+    }
+    else if (updatedRows[index].calculationType === 1) {
+      updatedRows[index].totalPrice = updatedRows[index].item_quantity * updatedRows[index].item_price;
+    }
+    // Update the disabled state based on the Calculation Type
+    if (field === 'calculationType') {
+      if (value === '0') {
+        updatedRows[index].calculationType = 0
+        updatedRows[index].totalPrice = updatedRows[index].item_xdim * updatedRows[index].item_ydim * updatedRows[index].item_price;
+        updatedRows[index].item_quantity_disabled = true;
+        updatedRows[index].item_xdim_disabled = false;
+        updatedRows[index].item_ydim_disabled = false;
+      } else if (value === '1') {
+        updatedRows[index].calculationType = 1
+        updatedRows[index].totalPrice = updatedRows[index].item_quantity * updatedRows[index].item_price;
+        updatedRows[index].item_quantity_disabled = false;
+        updatedRows[index].item_xdim_disabled = true;
+        updatedRows[index].item_ydim_disabled = true;
+      }
+    }
+    if (updatedRows[index].calculationType === 0) {
+      updatedRows[index].item_quantity = 1;
+      updatedRows[index].totalPrice = updatedRows[index].item_xdim * updatedRows[index].item_ydim * updatedRows[index].item_price;
+    }
+    else if (updatedRows[index].calculationType === 1) {
+      updatedRows[index].totalPrice = updatedRows[index].item_quantity * updatedRows[index].item_price;
+    }
     // Recalculate sub total for the edited row
     updatedRows[index].item_subtotal =
       updatedRows[index].item_quantity * updatedRows[index].item_price;
@@ -135,6 +170,7 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
 
   const [removedItems, setRemovedItems] = useState([]);
   const [hasAtLeastOneItem, setHasAtLeastOneItem] = useState(false);
+  const [discount, setDiscount] = useState(data.quotesData.discount);
 
   // useEffect to check if there's at least one item in the Quote items array
   useEffect(() => {
@@ -167,6 +203,7 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
       status: selectedStatus,
       employee_email: email, // emp ki email ayegi
       expiry_date: selectedExpiryDateISO,
+      discount: discount,
       terms_and_condition: termsAndConditions,
       payment_terms: paymentTerms,
       execution_time: executionTime,
@@ -276,9 +313,14 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
             />{" "}
             Cancel
           </Button>
-          <Button variant="solid" colorScheme="blue">
-            <AddIcon mr={4} /> Save Quote
-          </Button>
+          <Button
+          variant="solid"
+          colorScheme="blue"
+          onClick={handleSaveQuote}
+        >
+          <AddIcon mr={4} />
+          Save Quote
+        </Button>
         </HStack>
       </Flex>
       <Divider orientation="horizontal" my={4} />
@@ -327,6 +369,18 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
               style={inputStyles}
             ></Input>
           </Box>
+          <Box>
+            <FormLabel>Discount</FormLabel>
+           
+              <Input
+                value={discount} // Use selectedClientName as the value
+                onChange={(e) => setDiscount(e.target.value)}
+                bg={bgColor}
+                type="number"
+                placeholder="Enter Discount"
+              />
+            
+          </Box>
         </SimpleGrid>
       </FormControl>
       <Divider orientation="horizontal" borderColor="7F7F7F" my={6} />
@@ -340,8 +394,10 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
               <Th>Dimension X</Th>
               <Th>Dimension Y</Th>
               <Th>Quantity</Th>
+              <Th>Calculation Type</Th>
               <Th>Price</Th>
               <Th>Total</Th>
+              <Th>Action</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -360,7 +416,7 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
                   <Td>
                     <Input
                       style={inputStyles}
-                      value={row.item_description}
+                      value={row.description}
                       onChange={(e) =>
                         handleInputChange(
                           index,
@@ -373,8 +429,9 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
                   <Td>
                     <Input
                       style={inputStyles}
-                      value={row.item_xdim}
+                      value={row.dimensionX}
                       type="number"
+                      isDisabled={row.item_xdim_disabled}
                       onChange={(e) =>
                         handleInputChange(index, "item_xdim", e.target.value)
                       }
@@ -383,8 +440,9 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
                   <Td>
                     <Input
                       style={inputStyles}
-                      value={row.item_ydim}
+                      value={row.dimensionY}
                       type="number"
+                      isDisabled={row.item_ydim_disabled}
                       onChange={(e) =>
                         handleInputChange(index, "item_ydim", e.target.value)
                       }
@@ -395,6 +453,7 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
                       style={inputStyles}
                       value={row.item_quantity}
                       type="number"
+                      isDisabled={row.item_quantity_disabled}
                       onChange={(e) =>
                         handleInputChange(
                           index,
@@ -405,9 +464,20 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
                     />
                   </Td>
                   <Td>
+                  <Select
+                    value={row.calculationType}
+                    onChange={(e) => {
+                      handleInputChange(index, "calculationType", e.target.value);
+                    }}
+                  >
+                    <option value={0}>Dimensions</option>
+                    <option value={1}>Quantity</option>
+                  </Select>
+                </Td>
+                  <Td>
                     <Input
                       style={inputStyles}
-                      value={row.item_price}
+                      value={row.price}
                       type="number"
                       onChange={(e) =>
                         handleInputChange(index, "item_price", e.target.value)
@@ -415,7 +485,9 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
                     />
                   </Td>
 
-                  <Td>{row.item_quantity * row.item_price}</Td>
+                  <Td>
+                  {row.totalPrice}
+                </Td>
 
                   <Td>
                     <Button
@@ -502,16 +574,8 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
       <Divider orientation="horizontal" borderColor="7F7F7F" my={4} />
       <Divider orientation="horizontal" my={4} />
 
-      <SimpleGrid columns={2} spacing={10}>
-        <Button
-          size="lg"
-          variant="solid"
-          colorScheme="blue"
-          onClick={handleSaveQuote}
-        >
-          <AddIcon mr={4} />
-          Save Quote
-        </Button>
+      <SimpleGrid columns={1} spacing={10}>
+        
 
         <Flex
           direction="column"
@@ -529,8 +593,17 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
             <Text fontWeight="bold">AED {subtotalAmount*(5/100)}</Text>
           </HStack>
           <HStack>
+            <Text>Discount:</Text>
+            <Text fontWeight="bold">AED {data.quotesData.discount}</Text>
+          </HStack>
+          <HStack>
             <Text>Total Amount:</Text>
-            <Text fontWeight="bold">AED {(subtotalAmount)+(subtotalAmount*(5/100))}</Text>
+            <Text fontWeight="bold">
+              AED{" "}
+              {subtotalAmount +
+                (subtotalAmount / 100) * 5 -
+                data.quotesData.discount}
+            </Text>
           </HStack>
         </Flex>
       </SimpleGrid>

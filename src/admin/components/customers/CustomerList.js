@@ -22,12 +22,6 @@ import {
   InputGroup,
   InputLeftElement,
   TableContainer,
-  // AlertDialog,
-  // AlertDialogOverlay,
-  // AlertDialogContent,
-  // AlertDialogHeader,
-  // AlertDialogFooter,
-  // AlertDialogBody,
 } from "@chakra-ui/react";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { HiDotsVertical } from "react-icons/hi";
@@ -42,6 +36,9 @@ import EditCustomerDrawer from "./editDrawer";
 import AddCustomerDrawer from "./addCustomerDrawer";
 import { deleteCustomer } from "../../../API/api";
 import DeleteAlert from "../../../components/common/DeleteAlert";
+
+
+
 
 const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer }) => {
   const bgColor = useColorModeValue("white", "gray.700");
@@ -93,14 +90,13 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
   const handleDeleteClick = (customer) => {
     setCustomerToDelete(customer);
     setIsDeleteAlertOpen(true);
-    setDeleteErrorMessage(""); // Clear any previous error message
+    setDeleteErrorMessage(""); 
   };
 
   const toast = useToast();
   const handleConfirmDelete = async () => {
     if (customerToDelete) {
       try {
-        // Call API to delete customer
         await deleteCustomer(customerToDelete.id);
         toast({
           title: "Invoice Deleted",
@@ -109,12 +105,10 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
           duration: 3000,
           isClosable: true,
         });
-        onDeleteCustomer(customerToDelete.id); // Update the local state or fetch updated customer list
+        onDeleteCustomer(customerToDelete.id); 
 
-        // Close the delete alert after successful deletion
         setIsDeleteAlertOpen(false);
 
-        // Clear the customerToDelete state and error message
         setCustomerToDelete(null);
         setDeleteErrorMessage("");
 
@@ -128,11 +122,10 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
             isClosable: true,
           });
         }
-        // Display an error message if deletion fails
         console.error("Error deleting customer:", error);
       } finally {
-        setIsDeleteAlertOpen(false); // Close the delete confirmation dialog
-        setCustomerToDelete(null); // Reset the selected invoice ID
+        setIsDeleteAlertOpen(false);
+        setCustomerToDelete(null); 
       }
     }
   };
@@ -183,8 +176,8 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
           <Thead>
             <Tr>
               <Th>Company</Th>
-              <Th>Manager Surname</Th>
-              <Th>Manager Name</Th>
+              <Th>First Name</Th>
+              <Th>Last Name</Th>
               <Th>Email</Th>
               <Th>Phone</Th>
               <Th>Added by Employee</Th>
@@ -248,7 +241,6 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
         <AddCustomerDrawer
           isOpen={isAddCustomerDrawerOpen}
           onClose={() => setIsAddCustomerDrawerOpen(false)}
-          // onSave={handleAddCustomerSave}
           handleFetchUpdatedCustomer={handleFetchUpdatedCustomer}
         />
       )}
@@ -269,7 +261,6 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
           onClose={() => setIsEditDrawerOpen(false)}
           customerDetails={selectedEditCustomer}
           handleFetchUpdatedCustomer={handleFetchUpdatedCustomer}
-        // onSave={handleEditSave} // Implement handleEditSave function
         />
       )}
 

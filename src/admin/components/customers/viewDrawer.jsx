@@ -62,13 +62,13 @@ const CustomerDrawer = ({ isOpen, onClose, customerDetails, onDelete, onEdit }) 
                         </Box>
                         <Box>
                             <SimpleGrid templateColumns='repeat(2, 30% 70%)' spacing='24px'>
-                                <Text fontWeight='bold'>Manager Surname: </Text>
+                                <Text fontWeight='bold'>First Name: </Text>
                                 <Text>{customerDetails?.lname} </Text>
                             </SimpleGrid>
                         </Box>
                         <Box>
                             <SimpleGrid templateColumns='repeat(2, 30% 70%)' spacing='24px'>
-                                <Text fontWeight='bold'>Manager: </Text>
+                                <Text fontWeight='bold'>Last Name </Text>
                                 <Text>{customerDetails?.fname} </Text>
                             </SimpleGrid>
                         </Box>
@@ -82,6 +82,18 @@ const CustomerDrawer = ({ isOpen, onClose, customerDetails, onDelete, onEdit }) 
                             <SimpleGrid templateColumns='repeat(2, 30% 70%)' spacing='24px'>
                                 <Text fontWeight='bold'>Phone: </Text>
                                 <Text>{customerDetails?.phone}</Text>
+                            </SimpleGrid>
+                        </Box>
+                        <Box>
+                            <SimpleGrid templateColumns='repeat(2, 30% 70%)' spacing='24px'>
+                                <Text fontWeight='bold'>Address: </Text>
+                                <Text>{customerDetails?.address}</Text>
+                            </SimpleGrid>
+                        </Box>
+                        <Box>
+                            <SimpleGrid templateColumns='repeat(2, 30% 70%)' spacing='24px'>
+                                <Text fontWeight='bold'>VAT Number: </Text>
+                                <Text>{customerDetails?.vat}</Text>
                             </SimpleGrid>
                         </Box>
                         <Box>

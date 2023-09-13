@@ -17,7 +17,6 @@ import {
   FormControl,
   FormLabel,
 } from "@chakra-ui/react";
-// import { updateClientDetails } from "../../../API/api";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { updateClientDetails } from "../../../API/api";
 
@@ -25,7 +24,6 @@ const EditCustomerDrawer = ({
   isOpen,
   onClose,
   customerDetails,
-  onSave,
   handleFetchUpdatedCustomer,
 }) => {
   const bgColor = useColorModeValue("gray.100", "gray.700");
@@ -37,8 +35,8 @@ const EditCustomerDrawer = ({
     fname: customerDetails.fname,
     email: customerDetails.email,
     phone: customerDetails.phone,
-    // added_by_employee: customerDetails.added_by_employee,
-    // Other fields...
+    address: customerDetails.address,
+    vat: customerDetails.vat,
   });
 
   const [isFormValid, setIsFormValid] = useState(false);
@@ -48,8 +46,9 @@ const EditCustomerDrawer = ({
       editedCustomer.lname &&
       editedCustomer.fname &&
       editedCustomer.email &&
-      editedCustomer.phone;
-    // ... add more required fields here
+      editedCustomer.phone && 
+      editedCustomer.address &&
+      editedCustomer.vat ;
 
     setIsFormValid(requiredFieldsFilled);
   }, [editedCustomer]);
@@ -57,7 +56,6 @@ const EditCustomerDrawer = ({
   const handleInputChange = (event) => {
     const { name, value } = event.target;
 
-    // Basic validation
     let error = "";
     if (name === "email" && value && !validateEmail(value)) {
       error = "Invalid email format";
@@ -82,6 +80,8 @@ const EditCustomerDrawer = ({
     managerName: "",
     email: "",
     phone: "",
+    address:"",
+    vat:"",
   });
 
   const validateEmail = (email) => {
@@ -96,9 +96,6 @@ const EditCustomerDrawer = ({
 
   const toast = useToast();
   const handleSaveClick = async () => {
-    // const currentDate = new Date();
-    // const formattedDate = currentDate.toISOString().slice(0, 10);
-    // Check for validation errors
     const validationErrors = {};
     for (const field in editedCustomer) {
       if (!editedCustomer[field]) {
@@ -126,14 +123,12 @@ const EditCustomerDrawer = ({
         });
         handleFetchUpdatedCustomer();
         onClose(onClose);
-        // Pass the updated data to the onSave callback
       } catch (error) {
         if (
           error.response &&
           error.response.data &&
           error.response.data.error
         ) {
-          // Show the specific error message from the API response
           toast({
             title: "Error",
             description: error.response.data.error,
@@ -142,9 +137,7 @@ const EditCustomerDrawer = ({
             isClosable: true,
           });
         }
-        // Handle API error, show a message or take appropriate action
         console.error("Error editing client:", error);
-        // Handle API error, show a message or take appropriate action
       }
     }
   };
@@ -193,7 +186,7 @@ const EditCustomerDrawer = ({
               </Box>
               <Box>
                 <SimpleGrid templateColumns="repeat(2, 20% 80%)" spacing="24px">
-                  <FormLabel fontWeight="bold">Manager Surname:</FormLabel>
+                  <FormLabel fontWeight="bold">First Name:</FormLabel>
                   <Input
                     name="lname"
                     value={editedCustomer.lname}
@@ -209,7 +202,7 @@ const EditCustomerDrawer = ({
               </Box>
               <Box>
                 <SimpleGrid templateColumns="repeat(2, 20% 80%)" spacing="24px">
-                  <FormLabel fontWeight="bold">Manager Name:</FormLabel>
+                  <FormLabel fontWeight="bold">Last Name:</FormLabel>
                   <Input
                     name="fname"
                     value={editedCustomer.fname}
@@ -257,6 +250,38 @@ const EditCustomerDrawer = ({
               </Box>
               <Box>
                 <SimpleGrid templateColumns="repeat(2, 20% 80%)" spacing="24px">
+                  <FormLabel fontWeight="bold">Address:</FormLabel>
+                  <Input
+                    name="address"
+                    value={editedCustomer.address}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </SimpleGrid>
+                {errors.address && (
+                  <Text ml={150} color="red.500" fontSize="sm">
+                    {errors.address}
+                  </Text>
+                )}
+              </Box>
+              <Box>
+                <SimpleGrid templateColumns="repeat(2, 20% 80%)" spacing="24px">
+                  <FormLabel fontWeight="bold">VAT Number:</FormLabel>
+                  <Input
+                    name="vat"
+                    value={editedCustomer.vat}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </SimpleGrid>
+                {errors.vat && (
+                  <Text ml={150} color="red.500" fontSize="sm">
+                    {errors.vat}
+                  </Text>
+                )}
+              </Box>
+              <Box>
+                <SimpleGrid templateColumns="repeat(2, 20% 80%)" spacing="24px">
                   <Box fontWeight="bold">Added by:</Box>
                   <Box>{customerDetails.added_by_employee}</Box>
                 </SimpleGrid>
@@ -279,21 +304,6 @@ const EditCustomerDrawer = ({
           </Button>
         </DrawerFooter>
       </DrawerContent>
-      {/* Popup for success or error message */}
-      {/* {popupMessage && (
-        <Box
-          position="fixed"
-          bottom={10}
-          right={10}
-          zIndex="popover"
-          p={3}
-          borderRadius="md"
-          bgColor={popupType === "success" ? "green.500" : "red.500"}
-          color="white"
-        >
-          {popupMessage}
-        </Box>
-      )} */}
     </Drawer>
   );
 };

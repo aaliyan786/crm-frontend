@@ -126,6 +126,7 @@ let linkItems = [
   { name: "Dashboard", icon: FiHome, to: "/dashboard" },
   { name: "Customer", icon: FiUsers, to: "/customers" },
   { name: "Invoice", icon: FiFileText, to: "/invoices" },
+  { name: "LPU", icon: FiFileText, to: "/lpu" },
   { name: "Quote", icon: FiFile, to: "/quotes" },
   { name: "Lost Quotes", icon: FiFileMinus, to: "/lossquotes" },
   { name: "Quote Approval", icon: FiFileMinus, to: "/acceptedquotes" },
@@ -143,6 +144,7 @@ if (department === "admin") {
       item.name === "Dashboard" ||
       item.name === "Customer" ||
       item.name === "Invoice" ||
+      item.name === "LPU" ||
       item.name === "Quote" ||
       item.name === "Lost Quotes" ||
       item.name === "Quote Approval" ||
@@ -166,7 +168,8 @@ if (department === "admin") {
     (item) =>
       item.name === "Dashboard" ||
       item.name === "Customer" ||
-      item.name === "Invoice"
+      item.name === "Invoice"||
+      item.name === "LPU"
   );
 }
 

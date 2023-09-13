@@ -34,6 +34,8 @@ import {
 } from "@chakra-ui/icons";
 import { createQuoteApi, fetchCustomers } from "../../../API/api";
 
+
+
 function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
   const bgColor = useColorModeValue("gray.100", "gray.700");
   const borderColor = useColorModeValue("gray.200", "gray.600");
@@ -51,6 +53,11 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
       item_xdim: 0,
       item_ydim: 0,
       item_price: 0,
+      calculationType: 0,
+      totalPrice: 0,
+      item_quantity_disabled: true, // Initialize these properties
+      item_xdim_disabled: false,    // Initialize these properties
+      item_ydim_disabled: false,
     };
 
     setTableRows((prevRows) => [...prevRows, newRow]);
@@ -64,6 +71,40 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
   const handleInputChange = (index, field, value) => {
     const updatedRows = [...tableRows];
     updatedRows[index][field] = value;
+    console.log('tableRows[index].calculationType: ', tableRows[index].calculationType)
+    console.log('updatedRows[index].calculationType: ', updatedRows[index].calculationType)
+    if (updatedRows[index].calculationType === 0) {
+      updatedRows[index].item_quantity=1;
+      console.log('asfasfasfasfasfafas')
+      updatedRows[index].totalPrice = updatedRows[index].item_xdim * updatedRows[index].item_ydim * updatedRows[index].item_price;
+    }
+    else if (updatedRows[index].calculationType === 1) {
+      updatedRows[index].totalPrice = updatedRows[index].item_quantity * updatedRows[index].item_price;
+    }
+    // Update the disabled state based on the Calculation Type
+    if (field === 'calculationType') {
+      if (value === '0') {
+        updatedRows[index].calculationType = 0
+        updatedRows[index].totalPrice = updatedRows[index].item_xdim * updatedRows[index].item_ydim * updatedRows[index].item_price;
+        updatedRows[index].item_quantity_disabled = true;
+        updatedRows[index].item_xdim_disabled = false;
+        updatedRows[index].item_ydim_disabled = false;
+      } else if (value === '1') {
+        updatedRows[index].calculationType = 1
+        updatedRows[index].totalPrice = updatedRows[index].item_quantity * updatedRows[index].item_price;
+        updatedRows[index].item_quantity_disabled = false;
+        updatedRows[index].item_xdim_disabled = true;
+        updatedRows[index].item_ydim_disabled = true;
+      }
+    }
+    if (updatedRows[index].calculationType === 0) {
+      updatedRows[index].item_quantity=1;
+      console.log('asfasfasfasfasfafas')
+      updatedRows[index].totalPrice = updatedRows[index].item_xdim * updatedRows[index].item_ydim * updatedRows[index].item_price;
+    }
+    else if (updatedRows[index].calculationType === 1) {
+      updatedRows[index].totalPrice = updatedRows[index].item_quantity * updatedRows[index].item_price;
+    }
     setTableRows(updatedRows);
   };
 
@@ -79,21 +120,17 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
           .toISOString()
           .slice(0, 19)
           .replace("T", " ")
-      : null; // Set to null if selectedExpiryDate is not provided
-    // console.log(selectedExpiryDateISO);
-    // console.log(selectedExpiryDate);
-    // console.log('selectedClient',selectedClient)
+      : null; 
     let email=localStorage.getItem("email");
     const quoteData = {
       client_email: selectedClient,
       status: selectedStatus,
-      employee_email: email, //emp ki email ayegi
+      employee_email: email, 
       expiry_date: selectedExpiryDateISO,
       terms_and_condition: termsAndConditions,
       payment_terms: paymentTerms,
       execution_time: executionTime,
-      // isPerforma: selectedType === 2 ? 1 : 0,
-      // item_tax: 0,
+      discount: discount,
       bank_details: bankDetails,
       note: noteDetails,
     };
@@ -122,7 +159,6 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
       ); // Pass the storedToken as the second argument
       console.log(response);
 
-      console.log(response);
 
       if (response.success) {
         const newQuoteId = response.QuoteId;
@@ -177,6 +213,7 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
   const [executionTime, setExecutionTime] = useState("");
   const [bankDetails, setBankDetails] = useState("");
   const [noteDetails, setNoteDetails] = useState("");
+  const [discount, setDiscount] = useState("");
 
   useEffect(() => {
     // Fetch customer data when the component mounts
@@ -233,7 +270,6 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
   );
   const vatTax = 0.05 * subTotal; // 5% VAT tax
   const totalAmount = subTotal + vatTax;
-  // BAKI KRLENA PLIS
   return (
     <Box
       spacing={10}
@@ -247,8 +283,6 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
     >
       <Flex direction="row" justify="space-between">
         <HStack>
-          {/* <Text fontWeight='bold' fontSize='lg'>Quote # YAHAN WO (SHERJEEL RANDOM NUMBER AYEGA)</Text>
-                    <Badge colorScheme="red" variant='solid' fontSize='0.8rem'>(STATUS?)</Badge> */}
         </HStack>
         <HStack>
           <Button variant="ghost" onClick={onClose}>
@@ -331,25 +365,10 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
               <option value={3}>Sent</option>
               <option value={4}>Expired</option>
               <option value={5}>Declined</option>
-              {/* <option value={6}>Accepted</option> */}
               <option value={7}>Lost</option>
             </Select>
           </Box>
-          {/* <Box>
-            <FormLabel>Type</FormLabel>
-            <Select
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-            >
-              <option value={1}>Tax Quote</option>
-              <option value={2}>Performa Quote</option>
-            </Select>
-          </Box> */}
-          {/* <Box>
-            <FormLabel>Date</FormLabel>
-            <Input  value={executionTime}
-        onChange={(e) => setExecutionTime(e.target.value)} type="date" style={inputStyles}></Input>
-          </Box> */}
+          
           <Box>
             <FormLabel>Expiry Date</FormLabel>
             <Input
@@ -358,6 +377,18 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
               type="date"
               style={inputStyles}
             ></Input>
+          </Box>
+          <Box>
+            <FormLabel>Discount</FormLabel>
+            <InputGroup>
+              <Input
+                value={discount} // Use selectedClientName as the value
+                onChange={(e) => setDiscount(e.target.value)}
+                bg={bgColor}
+                type="number"
+                placeholder="Enter Discount"
+              />
+            </InputGroup>
           </Box>
         </SimpleGrid>
       </FormControl>
@@ -372,6 +403,7 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
               <Th>Dimension X</Th>
               <Th>Dimension Y</Th>
               <Th>Quantity</Th>
+              <Th>Calculation Type</Th>
               <Th>Price</Th>
               <Th>Total</Th>
             </Tr>
@@ -407,6 +439,7 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
                       style={inputStyles}
                       value={row.dimensionX}
                       type="number"
+                      isDisabled={row.item_xdim_disabled}
                       onChange={(e) =>
                         handleInputChange(index, "item_xdim", e.target.value)
                       }
@@ -417,6 +450,7 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
                       style={inputStyles}
                       value={row.dimensionY}
                       type="number"
+                      isDisabled={row.item_ydim_disabled}
                       onChange={(e) =>
                         handleInputChange(index, "item_ydim", e.target.value)
                       }
@@ -427,6 +461,7 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
                       style={inputStyles}
                       value={row.quantity}
                       type="number"
+                      isDisabled={row.item_quantity_disabled}
                       onChange={(e) =>
                         handleInputChange(
                           index,
@@ -436,6 +471,17 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
                       }
                     />
                   </Td>
+                  <Td>
+                  <Select
+                    value={row.calculationType}
+                    onChange={(e) => {
+                      handleInputChange(index, "calculationType", e.target.value);
+                    }}
+                  >
+                    <option value={0}>Dimensions</option>
+                    <option value={1}>Quantity</option>
+                  </Select>
+                </Td>
                   <Td>
                     <Input
                       style={inputStyles}
@@ -447,7 +493,9 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
                     />
                   </Td>
 
-                  <Td>{row.item_quantity * row.item_price}</Td>
+                  <Td>
+                  {row.totalPrice}
+                </Td>
 
                   <Td>
                     <Button
@@ -486,8 +534,6 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
             <Textarea
               value={noteDetails}
               onChange={(e) => setNoteDetails(e.target.value)}
-              // value={value}
-              // onChange={handleNoteInputChange}
               placeholder="Here is a sample placeholder"
               size="sm"
             />
@@ -553,9 +599,18 @@ function AddNewDrawer({ handleAddUpdateDeleteQuote, onClose }) {
           <Text fontWeight="bold">AED {vatTax.toFixed(2)}</Text>
         </HStack>
         <HStack>
-          <Text>Total Amount:</Text>
-          <Text fontWeight="bold">AED {totalAmount.toFixed(2)}</Text>
+          <Text>Discount:</Text>
+          <Text fontWeight="bold">AED {discount}</Text>
         </HStack>
+        <HStack>
+                <Text>Total Amount:</Text>
+                <Text fontWeight="bold">
+                  AED{" "}
+                  {totalAmount +
+                    (totalAmount / 100) * 5 -
+                    discount}
+                </Text>
+              </HStack>
       </Flex>
     </Box>
   );

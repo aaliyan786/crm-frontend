@@ -38,7 +38,6 @@ import { createInvoiceApi, fetchCustomers } from "../../../API/api";
 function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
   const bgColor = useColorModeValue("gray.100", "gray.700");
   const borderColor = useColorModeValue("gray.200", "gray.600");
-
   const [tableRows, setTableRows] = useState([]);
   const inputStyles = {
     border: "1px solid grey",
@@ -55,8 +54,8 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
       calculationType: 0,
       totalPrice: 0,
       item_quantity_disabled: true, // Initialize these properties
-      item_xdim_disabled: false,    // Initialize these properties
-      item_ydim_disabled: false,    // Initialize these properties
+      item_xdim_disabled: false, // Initialize these properties
+      item_ydim_disabled: false, // Initialize these properties
     };
 
     setTableRows((prevRows) => [...prevRows, newRow]);
@@ -70,39 +69,58 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
   const handleInputChange = (index, field, value) => {
     const updatedRows = [...tableRows];
     updatedRows[index][field] = value;
-    console.log('tableRows[index].calculationType: ', tableRows[index].calculationType)
-    console.log('updatedRows[index].calculationType: ', updatedRows[index].calculationType)
+    console.log(
+      "tableRows[index].calculationType: ",
+      tableRows[index].calculationType
+    );
+    console.log(
+      "updatedRows[index].calculationType: ",
+      updatedRows[index].calculationType
+    );
     if (updatedRows[index].calculationType === 0) {
-      updatedRows[index].item_quantity=1;
-      console.log('asfasfasfasfasfafas')
-      updatedRows[index].totalPrice = updatedRows[index].item_xdim * updatedRows[index].item_ydim * updatedRows[index].item_price;
-    }
-    else if (updatedRows[index].calculationType === 1) {
-      updatedRows[index].totalPrice = updatedRows[index].item_quantity * updatedRows[index].item_price;
+      updatedRows[index].item_quantity = 1;
+      updatedRows[index].item_total =
+        updatedRows[index].item_xdim *
+        updatedRows[index].item_ydim *
+        updatedRows[index].item_price;
+    } else if (updatedRows[index].calculationType === 1) {
+      updatedRows[index].item_total =
+        updatedRows[index].item_quantity * updatedRows[index].item_price;
     }
     // Update the disabled state based on the Calculation Type
-    if (field === 'calculationType') {
-      if (value === '0') {
-        updatedRows[index].calculationType = 0
-        updatedRows[index].totalPrice = updatedRows[index].item_xdim * updatedRows[index].item_ydim * updatedRows[index].item_price;
+    if (field === "calculationType") {
+      if (value === "0") {
+        updatedRows[index].item_quantity = 1;
+        updatedRows[index].calculationType = 0;
+        updatedRows[index].item_total =
+          updatedRows[index].item_xdim *
+          updatedRows[index].item_ydim *
+          updatedRows[index].item_price;
         updatedRows[index].item_quantity_disabled = true;
         updatedRows[index].item_xdim_disabled = false;
         updatedRows[index].item_ydim_disabled = false;
-      } else if (value === '1') {
-        updatedRows[index].calculationType = 1
-        updatedRows[index].totalPrice = updatedRows[index].item_quantity * updatedRows[index].item_price;
+      } else if (value === "1") {
+        updatedRows[index].item_xdim = 0;
+        updatedRows[index].item_ydim = 0;
+        updatedRows[index].calculationType = 1;
+        updatedRows[index].item_total =
+          updatedRows[index].item_quantity * updatedRows[index].item_price;
         updatedRows[index].item_quantity_disabled = false;
         updatedRows[index].item_xdim_disabled = true;
         updatedRows[index].item_ydim_disabled = true;
       }
     }
     if (updatedRows[index].calculationType === 0) {
-      updatedRows[index].item_quantity=1;
-      console.log('asfasfasfasfasfafas')
-      updatedRows[index].totalPrice = updatedRows[index].item_xdim * updatedRows[index].item_ydim * updatedRows[index].item_price;
-    }
-    else if (updatedRows[index].calculationType === 1) {
-      updatedRows[index].totalPrice = updatedRows[index].item_quantity * updatedRows[index].item_price;
+      updatedRows[index].item_quantity = 1;
+      updatedRows[index].item_total =
+        updatedRows[index].item_xdim *
+        updatedRows[index].item_ydim *
+        updatedRows[index].item_price;
+    } else if (updatedRows[index].calculationType === 1) {
+      updatedRows[index].item_total =
+        updatedRows[index].item_quantity * updatedRows[index].item_price;
+      updatedRows[index].item_xdim = 0;
+      updatedRows[index].item_ydim = 0;
     }
 
     setTableRows(updatedRows);
@@ -114,19 +132,9 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
   const handleSaveInvoice = async () => {
     setIsLoading(true);
 
-    // Prepare invoice data based on the form input\
-    // console.log(selectedClient);
-    // const selectedExpiryDateISO = selectedExpiryDate
-    //   ? new Date(selectedExpiryDate)
-    //     .toISOString()
-    //     .slice(0, 19)
-    //     .replace("T", " ")
-    //   : null; // Set to null if selectedExpiryDate is not provided
-    // // console.log(selectedExpiryDateISO);
-    // // console.log(selectedExpiryDate);
     let email = localStorage.getItem("email");
     const currentDate = new Date();
-    const todayISO = currentDate.toISOString().split('T')[0]; // Get the date part in ISO format
+    const todayISO = currentDate.toISOString().split("T")[0]; // Get the date part in ISO format
 
     const invoiceData = {
       client_email: selectedClient,
@@ -140,7 +148,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
       isPerforma: selectedType - 1,
       bank_details: bankDetails,
       note: noteDetails,
-      is_LPO: 0
+      is_LPO: 0,
     };
 
     // Prepare invoice items data based on the form input
@@ -152,13 +160,12 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
       item_xdim: row.item_xdim,
       item_ydim: row.item_ydim,
       item_price: row.item_price,
-      item_subtotal: row.item_quantity * row.item_price,
+      item_subtotal: row.totalPrice,
       item_tax: 0, // You can calculate tax here if needed
-      item_total: row.item_quantity * row.item_price, // This may need to include tax
+      item_total: row.totalPrice, // This may need to include tax
     }));
     const storedToken = localStorage.getItem("token");
     try {
-      
       const response = await createInvoiceApi(
         {
           invoiceData,
@@ -206,23 +213,19 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
   const [selectedStatus, setSelectedStatus] = useState(1);
   const [selectedType, setSelectedType] = useState(1);
 
-
-  const [selectedExpiryDate, setSelectedExpiryDate] = useState("");
   const [termsAndConditions, setTermsAndConditions] = useState("");
   const [paymentTerms, setPaymentTerms] = useState("");
   const [executionTime, setExecutionTime] = useState("");
   const [bankDetails, setBankDetails] = useState("");
   const [noteDetails, setNoteDetails] = useState("");
-  const [discount, setDiscount] = useState("");
+  const [discount, setDiscount] = useState(0);
 
   useEffect(() => {
-    // Fetch customer data when the component mounts
     async function fetchData() {
       try {
         const customerData = await fetchCustomers();
-        setCustomers(customerData.data); // Access the customer data inside the "data" array
+        setCustomers(customerData.data);
       } catch (error) {
-        // Handle the error here
         console.error("Error fetching customers:", error);
       }
     }
@@ -238,7 +241,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
     const query = e.target.value;
     setSearchQuery(query);
 
-    setSelectedClientName(query); // Update selectedClientName directly
+    setSelectedClientName(query);
 
     const filtered = customers.filter((customer) =>
       customer.company_name.toLowerCase().includes(query.toLowerCase())
@@ -264,10 +267,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
     setFilteredCustomers([]); // Clear the filtered customers
   };
   // Calculate sub-total, VAT tax, and total
-  const subTotal = tableRows.reduce(
-    (total, row) => total + row.totalPrice,
-    0
-  );
+  const subTotal = tableRows.reduce((total, row) => total + row.totalPrice, 0);
   const vatTax = 0.05 * subTotal; // 15% VAT tax
   const totalAmount = subTotal + vatTax;
 
@@ -283,10 +283,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
       width="100%"
     >
       <Flex direction="row" justify="space-between">
-        <HStack>
-          {/* <Text fontWeight='bold' fontSize='lg'>Invoice # YAHAN WO (SHERJEEL RANDOM NUMBER AYEGA)</Text>
-                    <Badge colorScheme="red" variant='solid' fontSize='0.8rem'>(STATUS?)</Badge> */}
-        </HStack>
+        <HStack></HStack>
         <HStack>
           <Button variant="ghost" onClick={onClose}>
             <SmallCloseIcon
@@ -352,7 +349,6 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
                   </Button>
                 ))}
               </Box>
-
             </VStack>
           </Box>
           <Box>
@@ -381,20 +377,6 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
               <option value={2}>Performa invoice</option>
             </Select>
           </Box>
-          {/* <Box>
-            <FormLabel>Date</FormLabel>
-            <Input  value={executionTime}
-        onChange={(e) => setExecutionTime(e.target.value)} type="date" style={inputStyles}></Input>
-          </Box> */}
-          {/* <Box>
-            <FormLabel>Expiry Date</FormLabel>
-            <Input
-              value={selectedExpiryDate}
-              onChange={(e) => setSelectedExpiryDate(e.target.value)}
-              type="date"
-              style={inputStyles}
-            ></Input>
-          </Box> */}
           <Box>
             <FormLabel>Discount</FormLabel>
             <InputGroup>
@@ -407,7 +389,6 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
               />
             </InputGroup>
           </Box>
-
         </SimpleGrid>
       </FormControl>
       <Divider orientation="horizontal" borderColor="7F7F7F" my={6} />
@@ -444,11 +425,14 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
                     style={inputStyles}
                     value={row.description}
                     onChange={(e) =>
-                      handleInputChange(index, "item_description", e.target.value)
+                      handleInputChange(
+                        index,
+                        "item_description",
+                        e.target.value
+                      )
                     }
                   />
                 </Td>
-
                 <Td>
                   <Input
                     style={inputStyles}
@@ -471,7 +455,6 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
                     }
                   />
                 </Td>
-
                 <Td>
                   <Input
                     style={inputStyles}
@@ -483,12 +466,15 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
                     }
                   />
                 </Td>
-
                 <Td>
                   <Select
                     value={row.calculationType}
                     onChange={(e) => {
-                      handleInputChange(index, "calculationType", e.target.value);
+                      handleInputChange(
+                        index,
+                        "calculationType",
+                        e.target.value
+                      );
                     }}
                   >
                     <option value={0}>Dimensions</option>
@@ -505,12 +491,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
                     }
                   />
                 </Td>
-
-                <Td>
-                  {row.totalPrice}
-                </Td>
-
-
+                <Td>{row.totalPrice}</Td>
                 <Td>
                   <Button
                     variant="ghost"
@@ -527,9 +508,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
         </Table>
       </TableContainer>
 
-
       <Divider orientation="horizontal" my={4} />
-
       <Flex justify="center" align="center">
         <Button
           variant="outline"
@@ -549,8 +528,6 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
             <Textarea
               value={noteDetails}
               onChange={(e) => setNoteDetails(e.target.value)}
-              // value={value}
-              // onChange={handleNoteInputChange}
               placeholder="Here is a sample placeholder"
               size="sm"
             />
@@ -616,8 +593,14 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
           <Text fontWeight="bold">AED {vatTax.toFixed(2)}</Text>
         </HStack>
         <HStack>
+          <Text>Discount:</Text>
+          <Text fontWeight="bold">AED {discount}</Text>
+        </HStack>
+        <HStack>
           <Text>Total Amount:</Text>
-          <Text fontWeight="bold">AED {totalAmount.toFixed(2)}</Text>
+          <Text fontWeight="bold">
+            AED {totalAmount + (totalAmount / 100) * 5 - discount}
+          </Text>
         </HStack>
       </Flex>
     </Box>
