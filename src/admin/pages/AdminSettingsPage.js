@@ -13,6 +13,7 @@ import {
   Image,
   Input,
   SimpleGrid,
+  Stack,
   Textarea,
   useColorModeValue,
   useToast,
@@ -332,7 +333,7 @@ const AdminSettingsPage = () => {
               </SimpleGrid>
               <Divider orientation="horizontal" my={4} />
               <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
-                <HStack align="center" justify="space-between" bg={bgColorCard} borderRadius={10} p={5}>
+                <Stack align="center" justify="space-between" direction={{base:"column", md:"row"}} bg={bgColorCard} borderRadius={10} p={5}>
                   <Box>
                     <FormLabel>Name</FormLabel>
                     <Input
@@ -345,8 +346,8 @@ const AdminSettingsPage = () => {
                   <Button variant="solid" colorScheme="blue" onClick={handleNameUpdate}>
                     Update
                   </Button>
-                </HStack>
-                <HStack align="center" justify="space-between" bg={bgColorCard} borderRadius={10} p={5}>
+                </Stack>
+                <Stack align="center" justify="space-between" direction={{base:"column", md:"row"}} bg={bgColorCard} borderRadius={10} p={5}>
                   <Box>
                     <FormLabel>Address</FormLabel>
                     <Textarea
@@ -360,8 +361,8 @@ const AdminSettingsPage = () => {
                   <Button variant="solid" colorScheme="blue" onClick={handleAddressUpdate}>
                     Update
                   </Button>
-                </HStack>
-                <HStack align="center" justify="space-between" bg={bgColorCard} borderRadius={10} p={5}>
+                </Stack>
+                <Stack align="center" justify="space-between" direction={{base:"column", md:"row"}} bg={bgColorCard} borderRadius={10} p={5}>
                   <Box>
                     <FormLabel>VAT Number</FormLabel>
                     <Input
@@ -374,7 +375,7 @@ const AdminSettingsPage = () => {
                   <Button variant="solid" colorScheme="blue" onClick={handleVatNumberUpdate}>
                     Update
                   </Button>
-                </HStack>
+                </Stack>
               </SimpleGrid>
             </React.Fragment>
           )}

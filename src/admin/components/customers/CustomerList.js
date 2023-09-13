@@ -167,7 +167,7 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
             />
           </InputGroup>
         </Flex>
-        <Button size={{base:"sm", md:"md"}} colorScheme="blue" borderRadius="0.5rem" px={8} py={3} fontSize="md" onClick={handleAddCustomerClick}>
+        <Button size={{base:"sm", md:"md"}} w={{ base: "xs", md: "auto" }} colorScheme="blue" borderRadius="0.5rem" px={8} py={3} fontSize={{base:"xs", md:"md"}} onClick={handleAddCustomerClick}>
           Add New Customer
         </Button>
       </Flex>

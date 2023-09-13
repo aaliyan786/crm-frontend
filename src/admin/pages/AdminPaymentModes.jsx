@@ -152,12 +152,15 @@ function AdminPaymentModes() {
                 <Button
                   onClick={() => window.location.reload()}
                   variant="outline"
+                  size={{base:"sm", md:"md"}}
+
                 >
                   Refresh
                 </Button>
                 <Button
                   variant="solid"
                   colorScheme="blue"
+                  size={{base:"sm", md:"md"}}
                   onClick={() => handleOptionClick("addNew", null)}
                 >
                   {" "}

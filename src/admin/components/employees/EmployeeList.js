@@ -139,7 +139,8 @@ const EmployeeList = ({ employees, handleAddOrUpdateEmployee }) => {
           borderRadius="0.5rem"
           px={8}
           py={3}
-          fontSize="md"
+          // size={{base:"sm", md:"md"}}
+          fontSize={{base:"sm", md:"md"}}
           onClick={() => openDrawer("addNew", null)}
         >
           Add New Employee
