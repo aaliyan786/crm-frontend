@@ -36,7 +36,7 @@ import {
   editInvoiceItem,
   updateInvoiceData,
 } from "../../../API/api";
-function EditDrawer({ data, handleUpdateInvoice, onClose }) {
+function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
   const bgColor = useColorModeValue("gray.100", "gray.700");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const [tableRows, setTableRows] = useState(data.InvoiceItemsData);
@@ -240,7 +240,7 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
       terms_and_condition: termsAndConditions,
       payment_terms: paymentTerms,
       execution_time: executionTime,
-      isPerforma: selectedType - 1,
+      isPerforma: 0,
       bank_details: bankDetails,
       note: noteDetails,
       // ... (other fields)
@@ -359,7 +359,7 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
             colorScheme="blue"
             onClick={handleSaveInvoice}
           >
-            <AddIcon mr={4} /> Save Invoice
+            <AddIcon mr={4} /> Save LPO
           </Button>
         </HStack>
       </Flex>
@@ -397,16 +397,6 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
               <option value={5}>Declined</option>
               <option value={6}>Accepted</option>
               <option value={7}>Lost</option>
-            </Select>
-          </Box>
-          <Box>
-            <FormLabel>Type</FormLabel>
-            <Select
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-            >
-              <option value={1}>Tax invoice</option>
-              <option value={2}>Performa invoice</option>
             </Select>
           </Box>
           <Box>
@@ -642,4 +632,4 @@ function EditDrawer({ data, handleUpdateInvoice, onClose }) {
   );
 }
 
-export default EditDrawer;
+export default LpoEditDrawer;

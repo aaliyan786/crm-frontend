@@ -1,4 +1,4 @@
-// src\admin\components\invoices\showDrawer.jsx
+// src\admin\components\invoices\LposhowDrawer.jsx
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -23,9 +23,9 @@ import {
 } from "@chakra-ui/react";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { getPaymentsByInvoiceId } from "../../../API/api";
-import EditDrawer from "./editDrawer";
-import PdfDrawer from "./pdfDrawer";
-import EditRecordPaymentDrawer from "./editRecordPaymentDrawer";
+import EditDrawer from "./LpoeditDrawer";
+import PdfDrawer from "./LpoPdfDrawer";
+import EditRecordPaymentDrawer from "./LpoeditRecordPaymentDrawer";
 import { getInvoiceById } from "../../../API/api";
 import DeleteAlert from "../../../components/common/DeleteAlert";
 import { deletePayment } from "../../../API/api";
@@ -64,7 +64,7 @@ const paymentColors = {
   UNPAID: "red",
 };
 
-const ShowDrawer = ({ data, handleUpdateInvoice }) => {
+const LpoShowDrawer = ({ data, handleUpdateInvoice }) => {
   const bgColor = useColorModeValue("gray.100", "gray.700");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const totalAmount = data.InvoiceItemsData.reduce(
@@ -226,7 +226,7 @@ const ShowDrawer = ({ data, handleUpdateInvoice }) => {
           <SimpleGrid columns={{ base: 1, md: 2 }}>
             <HStack>
               <Text fontWeight="bold" fontSize="lg">
-                Invoice # {data.InvoiceData.number}
+                LPO # {data.InvoiceData.number}
               </Text>
               <Badge
                 colorScheme={paymentColors[data.InvoiceData.payment_status]}
@@ -310,7 +310,7 @@ const ShowDrawer = ({ data, handleUpdateInvoice }) => {
           </Stack>
 
           <Divider orientation="horizontal" borderColor="0000" my={8} />
-          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
             <HStack spacing={2}>
               <Text>Email:</Text>
               <Text>{data.InvoiceData.client_email}</Text>
@@ -318,6 +318,14 @@ const ShowDrawer = ({ data, handleUpdateInvoice }) => {
             <HStack spacing={2}>
               <Text>Phone:</Text>
               <Text>{data.InvoiceData.client_phone}</Text>
+            </HStack>
+            <HStack spacing={2}>
+              <Text>Delivery Location:</Text>
+              {/* <Text>{data.InvoiceData.location}</Text> */}
+            </HStack>
+            <HStack spacing={2}>
+              <Text>Project Name</Text>
+              {/* <Text>{data.InvoiceData.pname}</Text> */}
             </HStack>
           </SimpleGrid>
           <Divider orientation="horizontal" borderColor="0000" my={4} />
@@ -441,4 +449,4 @@ const ShowDrawer = ({ data, handleUpdateInvoice }) => {
   );
 };
 
-export default ShowDrawer;
+export default LpoShowDrawer;

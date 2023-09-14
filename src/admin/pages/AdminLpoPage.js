@@ -8,8 +8,9 @@ import {
 } from "@chakra-ui/react";
 import InvoiceList from "../components/invoices/InvoiceList";
 import { fetchAllInvoices, getInvoiceById } from "../../API/api";
+import LpoList from "../components/lpo/LpoList";
 
-const AdminLpuPage = () => {
+const AdminLpoPage = () => {
   const bgColor = useColorModeValue("gray.100", "gray.700");
   const [invoices, setInvoices] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -60,7 +61,7 @@ console.log(invoices)
     <Box bg={bgColor} py={8} minH="100vh">
       <Container maxW="container.xl" marginRight="0">
         <Heading as="h1" size="xl" mb={4}>
-          Invoice Management
+          LPO Management
         </Heading>
         {isLoading ? ( // Display loader when isLoading is true
           <Center>
@@ -69,11 +70,11 @@ console.log(invoices)
             </div>
           </Center>
         ) : (
-          <InvoiceList invoices={invoices} handleUpdateInvoice={handleUpdateInvoice} onDeleteInvoice={handleDeleteInvoice} onAddNewInvoice={handleAddNewInvoice} />
+          <LpoList invoices={invoices} handleUpdateInvoice={handleUpdateInvoice} onDeleteInvoice={handleDeleteInvoice} onAddNewInvoice={handleAddNewInvoice} />
         )}
       </Container>
     </Box>
   );
 };
 
-export default AdminLpuPage;
+export default AdminLpoPage;

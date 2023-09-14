@@ -1,4 +1,4 @@
-// PdfDrawer.js
+// LpoPdfDrawer.js
 import CryptoJS from "crypto-js";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -28,7 +28,6 @@ import { getInvoicePdfById } from "../../../API/api";
 import { sendPdfByEmail, BASE_URL } from "../../../API/api";
 import ConfirmationAlert from "../../../components/common/ConfirmationAlert";
 import { Link } from "react-router-dom";
-import QRcode from 'qrcode.react'
 
 function addTextWithMaxWidth(doc, title, text, maxWidth, startY, lineHeight) {
   doc.setFont("helvetica", "bold");
@@ -48,12 +47,11 @@ function addTextWithMaxWidth(doc, title, text, maxWidth, startY, lineHeight) {
   return startY + textLines.length * lineHeight + 10; // Adjust spacing as needed
 }
 
-const PdfDrawer = ({ data, onClose }) => {
+const LpoPdfDrawer = ({ data, onClose }) => {
   const [pdfData, setPdfData] = useState(null);
   const [Items, setItems] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
 
   useEffect(() => {
     const fetchInvoiceData = async () => {
@@ -91,7 +89,6 @@ const PdfDrawer = ({ data, onClose }) => {
     const doc = new jsPDF();
     const logoURL = `${BASE_URL}/uploads/logo/${pdfData.data.settings.logo_img}`;
     const logoStamp = `${BASE_URL}/uploads/stamp/${pdfData.data.settings.stamp_img}`;
-    let base64Image = document.getElementById('qrcode').toDataURL();
 
     doc.addImage(logoURL, "JPEG", 15, 10, 80, 20);
     doc.setFontSize(10);
@@ -339,8 +336,6 @@ const PdfDrawer = ({ data, onClose }) => {
     );
     doc.text("Authorised Signature", 15, startY + 5); // X: 15, Y: 85
     doc.addImage(logoStamp, "JPEG", 15, startY + 7, 20, 20);
-    doc.addImage(base64Image, 'JPEG', 15, startY + 30, 20, 20)
-
 
     // Save the complete PDF
     return doc;
@@ -460,9 +455,17 @@ const PdfDrawer = ({ data, onClose }) => {
                 mb={50}
               />
               {/* <Image src={Logo} width="400px" mb={50} /> */}
-              <Text fontWeight="bold">{pdfData.data.settings.name}</Text>
+              <Text fontWeight="bold">From:</Text>
+              <Text >{pdfData.data.settings.name}</Text>
+              <Text >Tel No: {pdfData.data.settings.tellno}</Text>
               <Text>Address: {pdfData.data.settings.address}</Text>
-              <Text>Vat Number: {pdfData.data.settings.vat_no}</Text>
+              {/* <Text>Email: <a href="mailto:info@fourseason.ae" >info@fourseason.ae</a></Text> */}
+              <Text fontWeight="bold">To:</Text>
+              <Text>{data.InvoiceData.client_fname} {data.InvoiceData.client_lname}</Text>
+              <Text>Tel No: {data.InvoiceData.client_phone}</Text>
+              <Text>Email: {data.InvoiceData.client_email}</Text>
+              <Text>Address: {data.InvoiceData.client_address}</Text>
+              <Text fontWeight="bold">ATTN: naam dedo</Text>
             </VStack>
             <VStack align="end">
               <Text
@@ -470,7 +473,7 @@ const PdfDrawer = ({ data, onClose }) => {
                 fontWeight="bold"
                 align="end"
               >
-                {data.InvoiceData.isPerforma}
+                Purchase Order
               </Text>
               <Text fontSize={15}>{data.InvoiceData.number}</Text>
               <Text
@@ -492,7 +495,7 @@ const PdfDrawer = ({ data, onClose }) => {
               <Divider orientation="horizontal" height={10} />
               {/* <Text>Expiry Date: {data.InvoiceData.expiry_date}</Text> */}
               <Text>
-                Sales Agent: {data.InvoiceData.employee_name}{" "}
+                Contact Person: {data.InvoiceData.employee_name}{" "}
                 {data.InvoiceData.employee_surname}
               </Text>
               <Text>{data.InvoiceData.employee_email}</Text>
@@ -506,7 +509,6 @@ const PdfDrawer = ({ data, onClose }) => {
                 <Tr bg="#b81e74">
                   <Th color="white">#</Th>
                   <Th color="white">Item</Th>
-                  <Th color="white">Description</Th>
                   <Th color="white">Dimension</Th>
                   <Th color="white">Unit</Th>
                   <Th color="white">Qty</Th>
@@ -518,7 +520,6 @@ const PdfDrawer = ({ data, onClose }) => {
                 {Items.map((item) => (
                   <Tr key={item.id}>
                     <Td>{item.id}</Td>
-                    <Td>{item.item_name}</Td>
                     <Td style={{ whiteSpace: "normal" }}>
                       <VStack align="start">
                         {/* <Text fontWeight="bold">{item.item_name}</Text> */}
@@ -611,7 +612,6 @@ const PdfDrawer = ({ data, onClose }) => {
             width="200px"
             mb={50}
           />
-          <QRcode value={'https://www.youtube.com/watch?v=ttkGoP_M230&pp=ygURbW90aGVycyBpbnRlcmx1ZGU%3D'} id='qrcode' />
           {/* <HStack>
             <Image
               src={`${BASE_URL}/uploads/stamp/${pdfData.data.settings.stamp_img}`}
@@ -637,4 +637,4 @@ const PdfDrawer = ({ data, onClose }) => {
   );
 };
 
-export default PdfDrawer;
+export default LpoPdfDrawer;

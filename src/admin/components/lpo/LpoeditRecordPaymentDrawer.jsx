@@ -20,32 +20,66 @@ import {
 import { AddIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import { BiFileBlank } from "react-icons/bi";
 import { fetchPaymentModes, makePayment } from "../../../API/api";
-import ShowDrawer from "./showDrawer";
+import ShowDrawer from "./LpoShowDrawer";
+import { updatePayment } from "../../../API/api";
 
-const RecordPaymentDrawer = ({ data, onClose, handleUpdateInvoice }) => {
+const LpoEditRecordPaymentDrawer = ({
+  data,
+  paymentData,
+  onClose,
+  fetchPaymentRecords,
+}) => {
+  console.log("paymentData", paymentData);
   const bgColor = useColorModeValue("gray.100", "gray.700");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const inputStyles = {
     border: "1px solid grey",
   };
 
-  //   const [tableRows, setTableRows] = useState([]);
+  // Initialize state variables with the values from paymentData, if available
+
+  const [paymentDate, setPaymentDate] = useState(
+    new Date(paymentData.date).toISOString().split("T")[0]
+  );
+
+  const [paymentAmount, setPaymentAmount] = useState(paymentData.amount || 0);
+  const [paymentReference, setPaymentReference] = useState(
+    paymentData.reference || ""
+  );
+  const [paymentDescription, setPaymentDescription] = useState(
+    paymentData.description || ""
+  );
+  const [isViewOpen, setIsViewOpen] = useState(false);
+
+  // Use paymentData's payment_mode_id if available, or set an initial value
+  const initialSelectedPaymentMode = paymentData.payment_mode_id || "";
+
   const [paymentModes, setPaymentModes] = useState([]);
-  const [selectedPaymentMode, setSelectedPaymentMode] = useState("");
+  const [selectedPaymentMode, setSelectedPaymentMode] = useState(
+    initialSelectedPaymentMode
+  );
 
   useEffect(() => {
     // Fetch payment modes when the component mounts
     async function fetchPaymentModesData() {
       try {
         const response = await fetchPaymentModes();
-        const enabledPaymentModes = response.paymentModes.filter(mode => mode.is_enabled === 1);
-  
+        const enabledPaymentModes = response.paymentModes.filter(
+          (mode) => mode.is_enabled === 1
+        );
+
         // Find the default payment mode
-        const defaultPaymentMode = enabledPaymentModes.find(mode => mode.is_default === 1);
-  
+        const defaultPaymentMode = enabledPaymentModes.find(
+          (mode) => mode.is_default === 1
+        );
+
         // If no default mode, choose a random mode
-        const selectedMode = defaultPaymentMode || enabledPaymentModes[Math.floor(Math.random() * enabledPaymentModes.length)];
-  
+        const selectedMode =
+          defaultPaymentMode ||
+          enabledPaymentModes[
+            Math.floor(Math.random() * enabledPaymentModes.length)
+          ];
+
         setPaymentModes(enabledPaymentModes);
         setSelectedPaymentMode(selectedMode.id);
         console.log(enabledPaymentModes);
@@ -53,21 +87,15 @@ const RecordPaymentDrawer = ({ data, onClose, handleUpdateInvoice }) => {
         console.error("Error fetching payment modes:", error);
       }
     }
-  
+
     fetchPaymentModesData();
   }, []); // Empty dependency array ensures this runs only once after mounting
-  
 
   const paymentColors = {
     PAID: "green",
     "PARTIALLY PAID": "yellow",
     UNPAID: "red",
   };
-  const [paymentDate, setPaymentDate] = useState("");
-  const [paymentAmount, setPaymentAmount] = useState(0);
-  const [paymentReference, setPaymentReference] = useState("");
-  const [paymentDescription, setPaymentDescription] = useState("");
-  const [isViewOpen, setIsViewOpen] = useState(false);
 
   const openViewDrawer = () => {
     setIsViewOpen(true);
@@ -75,7 +103,7 @@ const RecordPaymentDrawer = ({ data, onClose, handleUpdateInvoice }) => {
 
   const toast = useToast();
   const handleRecordPayment = async () => {
-    const paymentData = {
+    const updatedPaymentData = {
       invoice_id: data.InvoiceData.id,
       date: paymentDate,
       amount: paymentAmount,
@@ -83,22 +111,28 @@ const RecordPaymentDrawer = ({ data, onClose, handleUpdateInvoice }) => {
       reference: paymentReference,
       description: paymentDescription,
     };
-    console.log("555555555555555555555555555   : ", selectedPaymentMode);
+
     try {
-      const response = await makePayment(paymentData);
+      // Assuming you have access to the payment ID in paymentData
+      const paymentId = paymentData.id;
+
+      // Call the updatePayment function with the payment ID and updated data
+      const response = await updatePayment(paymentId, updatedPaymentData);
+
       toast({
         title: "Payment Recorded",
-        description: "payment recorded successfully",
+        description: "Payment recorded successfully",
         status: "success",
         position:'top-right',
         duration: 3000,
         isClosable: true,
       });
-      handleUpdateInvoice();
-      onClose(onClose);
 
-      console.log("Payment made:", response);
-      // Perform any necessary actions after successful payment
+      fetchPaymentRecords();
+      onClose();
+
+      console.log("Payment record updated:", response);
+      // Perform any necessary actions after successful payment update
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {
         toast({
@@ -110,7 +144,7 @@ const RecordPaymentDrawer = ({ data, onClose, handleUpdateInvoice }) => {
           isClosable: true,
         });
       } else {
-        console.error("Error making payment:", error);
+        console.error("Error updating payment:", error);
       }
     }
   };
@@ -240,50 +274,32 @@ const RecordPaymentDrawer = ({ data, onClose, handleUpdateInvoice }) => {
               </Box>
               <Box>
                 <HStack fontWeight="thin" justify="space-between">
-                  <Text>Address: </Text>
-                  <Text>{data.InvoiceData.client_address}</Text>
-                </HStack>
-              </Box>
-              <Box>
-                <HStack fontWeight="thin" justify="space-between">
-                  <Text>VAT Number: </Text>
-                  <Text>{data.InvoiceData.client_vat}</Text>
-                </HStack>
-              </Box>
-              <Box>
-                <HStack fontWeight="thin" justify="space-between">
                   <Text>Phone: </Text>
                   <Text>{data.InvoiceData.client_phone}</Text>
                 </HStack>
               </Box>
               <Box>
                 <HStack fontWeight="thin" justify="space-between">
-                  <Text>Payment Status: </Text>
+                  <Text>Payment Stauts: </Text>
                   <Text>{data.InvoiceData.payment_status}</Text>
                 </HStack>
               </Box>
               <Box>
                 <HStack fontWeight="thin" justify="space-between">
                   <Text>Sub Total: </Text>
-                  <Text>AED {data.InvoiceData.total_amount}</Text>
+                  <Text>{data.InvoiceData.total_amount}</Text>
                 </HStack>
               </Box>
               <Box>
                 <HStack fontWeight="thin" justify="space-between">
-                  <Text>Vat(5%):</Text>
-                  <Text>AED {(data.InvoiceData.total_amount*(5/100)).toFixed(2)}</Text>
-                </HStack>
-              </Box>
-              <Box>
-                <HStack fontWeight="thin" justify="space-between">
-                  <Text>Discount:</Text>
-                  <Text>AED {data.InvoiceData.discount} AED</Text>
+                  <Text>Vat(5%):</Text>                  
+                  <Text>{data.InvoiceData.total_amount*(5/100)}</Text>
                 </HStack>
               </Box>
               <Box>
                 <HStack fontWeight="thin" justify="space-between">
                   <Text>Total: </Text>
-                  <Text>AED {((data.InvoiceData.total_amount+data.InvoiceData.total_amount*(5/100))-(data.InvoiceData.discount)).toFixed(2)}</Text>
+                  <Text>{data.InvoiceData.total_amount+data.InvoiceData.total_amount*(5/100)}</Text>
                 </HStack>
               </Box>
               <Box>
@@ -296,7 +312,9 @@ const RecordPaymentDrawer = ({ data, onClose, handleUpdateInvoice }) => {
                 <HStack fontWeight="thin" justify="space-between">
                   <Text>Balance: </Text>
                   <Text>
-                    AED {((data.InvoiceData.total_amount+data.InvoiceData.total_amount*(5/100))-(data.InvoiceData.discount) - data.InvoiceData.total_amount_paid).toFixed(2)}
+                    AED{" "}
+                    {data.InvoiceData.total_amount -
+                      data.InvoiceData.total_amount_paid}
                   </Text>
                 </HStack>
               </Box>
@@ -316,4 +334,4 @@ const RecordPaymentDrawer = ({ data, onClose, handleUpdateInvoice }) => {
   );
 };
 
-export default RecordPaymentDrawer;
+export default LpoEditRecordPaymentDrawer;
