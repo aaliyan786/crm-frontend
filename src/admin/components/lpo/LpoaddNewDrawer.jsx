@@ -79,12 +79,12 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
     );
     if (updatedRows[index].calculationType === 0) {
       updatedRows[index].item_quantity = 1;
-      updatedRows[index].item_total =
+      updatedRows[index].totalPrice =
         updatedRows[index].item_xdim *
         updatedRows[index].item_ydim *
-        updatedRows[index].item_price;
+        updatedRows[index].item_total;
     } else if (updatedRows[index].calculationType === 1) {
-      updatedRows[index].item_total =
+      updatedRows[index].totalPrice =
         updatedRows[index].item_quantity * updatedRows[index].item_price;
     }
     // Update the disabled state based on the Calculation Type
@@ -92,7 +92,7 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
       if (value === "0") {
         updatedRows[index].item_quantity = 1;
         updatedRows[index].calculationType = 0;
-        updatedRows[index].item_total =
+        updatedRows[index].totalPrice =
           updatedRows[index].item_xdim *
           updatedRows[index].item_ydim *
           updatedRows[index].item_price;
@@ -103,7 +103,7 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
         updatedRows[index].item_xdim = 0;
         updatedRows[index].item_ydim = 0;
         updatedRows[index].calculationType = 1;
-        updatedRows[index].item_total =
+        updatedRows[index].totalPrice =
           updatedRows[index].item_quantity * updatedRows[index].item_price;
         updatedRows[index].item_quantity_disabled = false;
         updatedRows[index].item_xdim_disabled = true;
@@ -112,12 +112,12 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
     }
     if (updatedRows[index].calculationType === 0) {
       updatedRows[index].item_quantity = 1;
-      updatedRows[index].item_total =
+      updatedRows[index].totalPrice =
         updatedRows[index].item_xdim *
         updatedRows[index].item_ydim *
         updatedRows[index].item_price;
     } else if (updatedRows[index].calculationType === 1) {
-      updatedRows[index].item_total =
+      updatedRows[index].totalPrice =
         updatedRows[index].item_quantity * updatedRows[index].item_price;
       updatedRows[index].item_xdim = 0;
       updatedRows[index].item_ydim = 0;
@@ -450,7 +450,7 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
                 <Td>
                   <Input
                     style={inputStyles}
-                    value={row.dimensionX}
+                    value={row.item_xdim}
                     type="number"
                     isDisabled={row.item_xdim_disabled} // Use isDisabled prop
                     onChange={(e) =>
@@ -461,7 +461,7 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
                 <Td>
                   <Input
                     style={inputStyles}
-                    value={row.dimensionY}
+                    value={row.item_ydim}
                     type="number"
                     isDisabled={row.item_ydim_disabled} // Use isDisabled prop
                     onChange={(e) =>
