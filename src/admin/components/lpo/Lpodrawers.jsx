@@ -75,7 +75,7 @@ const LpoDrawers = ({
             alignItems="center"
             justifyContent="center"
           />
-          {drawerType === "addNew" && "Add New Invoice"}
+          {drawerType === "addNew" && "Add New LPO"}
           {drawerType === "show" && "Show Details"}
           {drawerType === "edit" && "Edit Details"}
           {drawerType === "recordPayment" && "Record Payment"}

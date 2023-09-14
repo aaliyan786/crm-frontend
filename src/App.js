@@ -20,7 +20,7 @@ import AdminLossQuotesPage from "./admin/pages/AdminLossQuotesPage";
 import AdminAcceptedQuotesPage from "./admin/pages/AdminAcceptedQuotesPage";
 import SalesAssignedQuotes from "./admin/pages/SalesAssignedQuotes";
 import NotFoundPage from "./admin/pages/NotFoundPage";
-import AdminLpuPage from "./admin/pages/AdminLpuPage";
+import AdminLpoPage from "./admin/pages/AdminLpoPage";
 
 
 export default function App() {
@@ -50,7 +50,7 @@ export default function App() {
         {isLoggedIn && <Route path="/dashboard" element={<AdminDashboardPage />} />}
         {isLoggedIn && <Route path="/customers" element={<AdminCustomersPage />} />}
         {isLoggedIn && <Route path="/invoices" element={<AdminInvoicesPage />} />}
-        {isLoggedIn && <Route path="/lpu" element={<AdminLpuPage />} />}
+        {isLoggedIn && <Route path="/lpo" element={<AdminLpoPage />} />}
         {isLoggedIn && <Route path="/quotes" element={<AdminQuotesPage />} />}
         {isLoggedIn && <Route path="/lossquotes" element={<AdminLossQuotesPage />} />}
         {isLoggedIn && <Route path="/acceptedquotes" element={<AdminAcceptedQuotesPage />} />}

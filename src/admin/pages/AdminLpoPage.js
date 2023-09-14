@@ -10,7 +10,7 @@ import InvoiceList from "../components/invoices/InvoiceList";
 import { fetchAllInvoices, getInvoiceById } from "../../API/api";
 import LpoList from "../components/lpo/LpoList";
 
-const AdminLpuPage = () => {
+const AdminLpoPage = () => {
   const bgColor = useColorModeValue("gray.100", "gray.700");
   const [invoices, setInvoices] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -77,4 +77,4 @@ console.log(invoices)
   );
 };
 
-export default AdminLpuPage;
+export default AdminLpoPage;
