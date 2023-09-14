@@ -231,7 +231,7 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
             />
           </InputGroup >
         </Flex>
-        <Box mx={2}>
+        {/* <Box mx={2}>
           <Select size={'sm'}
             value={selectedStatusFilter}
             onChange={(e) => handleStatusFilterChange(e.target.value)}
@@ -247,7 +247,7 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
             <option value="LOST">Lost</option>
           </Select>
 
-        </Box>
+        </Box> */}
         <Box mx={2} >
           <Select size={'sm'}
             value={selectedPaymentFilter}
@@ -281,7 +281,7 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
                 {department == "admin" ? (<Th >Added by</Th>) : null}
                 <Th>Total</Th>
                 <Th>Balance</Th>
-                <Th>Status</Th>
+                {/* <Th>Status</Th> */}
                 <Th>Type</Th>
                 <Th>Payment</Th>
                 <Th>Actions</Th>
@@ -310,7 +310,7 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
                         - invoice.InvoiceData.total_amount_paid
                       }
                     </Td>
-                    <Td>
+                    {/* <Td>
                       <Badge
                         px={2}
                         py={1}
@@ -320,7 +320,7 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
                       >
                         {invoice.InvoiceData.status}
                       </Badge>
-                    </Td>
+                    </Td> */}
                     <Td>
                       <Badge
                         px={2}

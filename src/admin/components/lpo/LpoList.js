@@ -212,6 +212,7 @@ const LpoList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateInvoi
             </InputLeftElement>
             <Input
               placeholder="Search by name or email"
+              mr={2}
               value={searchTerm}
               onChange={handleSearchChange}
               borderRadius="0.3rem"
@@ -223,7 +224,7 @@ const LpoList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateInvoi
             />
           </InputGroup >
         </Flex>
-        <Box mx={2}>
+        {/* <Box mx={2}>
           <Select size={'sm'}
             value={selectedStatusFilter}
             onChange={(e) => handleStatusFilterChange(e.target.value)}
@@ -239,8 +240,8 @@ const LpoList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateInvoi
             <option value="LOST">Lost</option>
           </Select>
 
-        </Box>
-        <Box mx={2} >
+        </Box> */}
+        {/* <Box mx={2} >
           <Select size={'sm'}
             value={selectedPaymentFilter}
             onChange={(e) => handlePaymentFilterChange(e.target.value)}
@@ -252,7 +253,7 @@ const LpoList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateInvoi
             <option value="PARTIALLY PAID">Partially Paid</option>
 
           </Select>
-        </Box>
+        </Box> */}
         <Button colorScheme="blue" borderRadius="0.3rem" px={8} py={3} fontSize="md" onClick={() =>
           openDrawer("addNew")} size={'sm'}>
           Add New LPO
