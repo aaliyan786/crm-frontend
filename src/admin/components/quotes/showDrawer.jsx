@@ -222,7 +222,7 @@ const ShowDrawer = ({ data }) => {
             <Flex direction="column" align="flex-end" justify="flex-end" mt={2}>
               <HStack>
                 <Text>Sub Total:</Text>
-                <Text fontWeight="bold">AED {totalAmount}</Text>
+                <Text fontWeight="bold">AED {data.quotesData.total_amount}</Text>
               </HStack>
               <HStack>
                 <Text>VAT (5%):</Text>

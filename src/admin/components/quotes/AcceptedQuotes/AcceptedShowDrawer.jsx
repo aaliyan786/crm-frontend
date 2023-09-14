@@ -128,7 +128,7 @@ const AcceptedShowDrawer = ({ data }) => {
             Total
           </Text>
           <Text fontWeight="bold" fontSize="2xl">
-            {data.total_amount}
+            {data.total_amount + (data.total_amount * 5) / 100 - data.discount}
           </Text>
         </SimpleGrid>
         {/* <SimpleGrid row={2} spacing={2}>
@@ -193,15 +193,24 @@ const AcceptedShowDrawer = ({ data }) => {
         <Flex direction="column" align="flex-end" justify="flex-end" mt={2}>
           <HStack>
             <Text>Sub Total:</Text>
-            <Text fontWeight="bold">AED {totalAmount}</Text>
+            <Text fontWeight="bold">AED {data.total_amount}</Text>
           </HStack>
           <HStack>
-            <Text>VAT(0%):</Text>
-            <Text fontWeight="bold">AED {totalAmount}</Text>
+            <Text>VAT(5%):</Text>
+            <Text fontWeight="bold">AED {(data.total_amount / 100) * 5}</Text>
+          </HStack>
+          <HStack>
+            <Text>Discount:</Text>
+            <Text fontWeight="bold">AED {data.discount}</Text>
           </HStack>
           <HStack>
             <Text>Total Amount:</Text>
-            <Text fontWeight="bold">AED {totalAmount}</Text>
+            <Text fontWeight="bold">
+              AED{" "}
+              {data.total_amount +
+                (data.total_amount / 100) * 5 -
+                data.discount}
+            </Text>
           </HStack>
         </Flex>
       </Box>

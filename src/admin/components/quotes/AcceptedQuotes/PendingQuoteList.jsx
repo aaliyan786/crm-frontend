@@ -153,14 +153,14 @@ const PendingQuoteList = ({ quotes, handleAddUpdateDeleteQuote }) => {
     setSelectedQuoteId(quoteId); // Store the ID of the invoice to be deleted
     setIsRejectAlertOpen(true); // Open the delete confirmation dialog
   };
- 
+
   const handleAcceptQuote = async () => {
     try {
       await acceptRejectQuote(selectedQuoteId, true); // Call the API to accept the quote
-      const updatedQuoteData = {
-        status: 6,
-      };
-      await updateQuoteData(selectedQuoteId, updatedQuoteData);
+      // const updatedQuoteData = {
+      //   status: 6,
+      // };
+      // await updateQuoteData(selectedQuoteId, updatedQuoteData);
       toast({
         title: "Quote Accepted",
         description: "The Quote has been accepted successfully.",
@@ -169,9 +169,7 @@ const PendingQuoteList = ({ quotes, handleAddUpdateDeleteQuote }) => {
         duration: 3000,
         isClosable: true,
       });
-     
 
-      
       handleAddUpdateDeleteQuote();
 
       // Handle any necessary state updates or notifications here
