@@ -163,7 +163,7 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
     setSubtotalotalAmount(newTotalAmount);
   };
 
-  // TEXT AREA INPUT HANDLES(NOTE, T&CS, PAYMENT TERMS, EXECUTION TIME, BANK DETAILS )
+  // TEXT AREA INPUT HANDLES(NOTE, Terms and ConditionsS, PAYMENT TERMS, EXECUTION TIME, BANK DETAILS )
   const statusColors = {
     DRAFT: "blue",
     PENDING: "yellow",
@@ -569,7 +569,7 @@ function EditDrawer({ data, handleAddUpdateDeleteQuote, onClose }) {
           />
         </VStack>
         <VStack align="start">
-          <Text>T&C</Text>
+          <Text>Terms and Conditions</Text>
           <Textarea
             value={termsAndConditions}
             onChange={(e) => setTermsAndConditions(e.target.value)}
