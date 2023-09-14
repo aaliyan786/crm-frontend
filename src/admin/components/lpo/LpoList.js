@@ -255,7 +255,7 @@ const LpoList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateInvoi
         </Box>
         <Button colorScheme="blue" borderRadius="0.3rem" px={8} py={3} fontSize="md" onClick={() =>
           openDrawer("addNew")} size={'sm'}>
-          Add New Invoice
+          Add New LPO
         </Button>
       </Flex>
 
@@ -266,7 +266,7 @@ const LpoList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateInvoi
           <Table variant="simple" size={'sm'}>
             <Thead>
               <Tr>
-                <Th>Invoice  Number</Th>
+                <Th>LPO  Number</Th>
                 <Th>Client</Th>
                 <Th >Date</Th>
                 {/* <Th >Due Date</Th> */}

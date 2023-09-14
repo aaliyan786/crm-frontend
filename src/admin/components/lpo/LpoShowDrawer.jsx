@@ -226,7 +226,7 @@ const LpoShowDrawer = ({ data, handleUpdateInvoice }) => {
           <SimpleGrid columns={{ base: 1, md: 2 }}>
             <HStack>
               <Text fontWeight="bold" fontSize="lg">
-                Invoice # {data.InvoiceData.number}
+                LPO # {data.InvoiceData.number}
               </Text>
               <Badge
                 colorScheme={paymentColors[data.InvoiceData.payment_status]}

@@ -531,6 +531,7 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
                 <Tr bg="#b81e74">
                   <Th color="white">#</Th>
                   <Th color="white">Item</Th>
+                  <Th color="white">Description</Th>
                   <Th color="white">Dimension</Th>
                   <Th color="white">Unit</Th>
                   <Th color="white">Qty</Th>
@@ -542,6 +543,7 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
                 {Items.map((item) => (
                   <Tr key={item.id}>
                     <Td>{item.id}</Td>
+                    <Td>{item.item_name}</Td>
                     <Td>{item.item_description}</Td>
                     <Td>{item.item_xdim + "x" + item.item_ydim}</Td>
                     <Td>{"Sqm"}</Td>

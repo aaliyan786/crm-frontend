@@ -506,6 +506,7 @@ const PdfDrawer = ({ data, onClose }) => {
                 <Tr bg="#b81e74">
                   <Th color="white">#</Th>
                   <Th color="white">Item</Th>
+                  <Th color="white">Description</Th>
                   <Th color="white">Dimension</Th>
                   <Th color="white">Unit</Th>
                   <Th color="white">Qty</Th>
@@ -517,6 +518,7 @@ const PdfDrawer = ({ data, onClose }) => {
                 {Items.map((item) => (
                   <Tr key={item.id}>
                     <Td>{item.id}</Td>
+                    <Td>{item.item_name}</Td>
                     <Td style={{ whiteSpace: "normal" }}>
                       <VStack align="start">
                         {/* <Text fontWeight="bold">{item.item_name}</Text> */}

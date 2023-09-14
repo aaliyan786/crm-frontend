@@ -455,9 +455,17 @@ const LpoPdfDrawer = ({ data, onClose }) => {
                 mb={50}
               />
               {/* <Image src={Logo} width="400px" mb={50} /> */}
-              <Text fontWeight="bold">{pdfData.data.settings.name}</Text>
+              <Text fontWeight="bold">From:</Text>
+              <Text >{pdfData.data.settings.name}</Text>
+              <Text >Tel No: {pdfData.data.settings.tellno}</Text>
               <Text>Address: {pdfData.data.settings.address}</Text>
-              <Text>Vat Number: {pdfData.data.settings.vat_no}</Text>
+              {/* <Text>Email: <a href="mailto:info@fourseason.ae" >info@fourseason.ae</a></Text> */}
+              <Text fontWeight="bold">To:</Text>
+              <Text>{data.InvoiceData.client_fname} {data.InvoiceData.client_lname}</Text>
+              <Text>Tel No: {data.InvoiceData.client_phone}</Text>
+              <Text>Email: {data.InvoiceData.client_email}</Text>
+              <Text>Address: {data.InvoiceData.client_address}</Text>
+              <Text fontWeight="bold">ATTN: naam dedo</Text>
             </VStack>
             <VStack align="end">
               <Text
@@ -465,7 +473,7 @@ const LpoPdfDrawer = ({ data, onClose }) => {
                 fontWeight="bold"
                 align="end"
               >
-                {data.InvoiceData.isPerforma}
+                Purchase Order
               </Text>
               <Text fontSize={15}>{data.InvoiceData.number}</Text>
               <Text
@@ -487,7 +495,7 @@ const LpoPdfDrawer = ({ data, onClose }) => {
               <Divider orientation="horizontal" height={10} />
               {/* <Text>Expiry Date: {data.InvoiceData.expiry_date}</Text> */}
               <Text>
-                Sales Agent: {data.InvoiceData.employee_name}{" "}
+                Contact Person: {data.InvoiceData.employee_name}{" "}
                 {data.InvoiceData.employee_surname}
               </Text>
               <Text>{data.InvoiceData.employee_email}</Text>
