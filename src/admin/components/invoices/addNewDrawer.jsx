@@ -69,22 +69,15 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
   const handleInputChange = (index, field, value) => {
     const updatedRows = [...tableRows];
     updatedRows[index][field] = value;
-    console.log(
-      "tableRows[index].calculationType: ",
-      tableRows[index].calculationType
-    );
-    console.log(
-      "updatedRows[index].calculationType: ",
-      updatedRows[index].calculationType
-    );
+
     if (updatedRows[index].calculationType === 0) {
       updatedRows[index].item_quantity = 1;
-      updatedRows[index].item_total =
+      updatedRows[index].totalPrice =
         updatedRows[index].item_xdim *
         updatedRows[index].item_ydim *
         updatedRows[index].item_price;
     } else if (updatedRows[index].calculationType === 1) {
-      updatedRows[index].item_total =
+      updatedRows[index].totalPrice =
         updatedRows[index].item_quantity * updatedRows[index].item_price;
     }
     // Update the disabled state based on the Calculation Type
@@ -92,7 +85,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
       if (value === "0") {
         updatedRows[index].item_quantity = 1;
         updatedRows[index].calculationType = 0;
-        updatedRows[index].item_total =
+        updatedRows[index].totalPrice =
           updatedRows[index].item_xdim *
           updatedRows[index].item_ydim *
           updatedRows[index].item_price;
@@ -103,7 +96,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
         updatedRows[index].item_xdim = 0;
         updatedRows[index].item_ydim = 0;
         updatedRows[index].calculationType = 1;
-        updatedRows[index].item_total =
+        updatedRows[index].totalPrice =
           updatedRows[index].item_quantity * updatedRows[index].item_price;
         updatedRows[index].item_quantity_disabled = false;
         updatedRows[index].item_xdim_disabled = true;
@@ -111,13 +104,18 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
       }
     }
     if (updatedRows[index].calculationType === 0) {
+      console.log("dim");
       updatedRows[index].item_quantity = 1;
-      updatedRows[index].item_total =
+      updatedRows[index].totalPrice =
         updatedRows[index].item_xdim *
         updatedRows[index].item_ydim *
         updatedRows[index].item_price;
+      console.log("Price: ", updatedRows[index].totalPrice);
+      console.log("item_xdim: ", updatedRows[index].item_xdim);
+      console.log("item_ydim: ", updatedRows[index].item_ydim);
+      
     } else if (updatedRows[index].calculationType === 1) {
-      updatedRows[index].item_total =
+      updatedRows[index].totalPrice =
         updatedRows[index].item_quantity * updatedRows[index].item_price;
       updatedRows[index].item_xdim = 0;
       updatedRows[index].item_ydim = 0;
@@ -436,7 +434,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
                 <Td>
                   <Input
                     style={inputStyles}
-                    value={row.dimensionX}
+                    value={row.item_xdim}
                     type="number"
                     isDisabled={row.item_xdim_disabled} // Use isDisabled prop
                     onChange={(e) =>
@@ -447,7 +445,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
                 <Td>
                   <Input
                     style={inputStyles}
-                    value={row.dimensionY}
+                    value={row.item_ydim}
                     type="number"
                     isDisabled={row.item_ydim_disabled} // Use isDisabled prop
                     onChange={(e) =>
@@ -533,7 +531,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
             />
           </VStack>
           <VStack align="start">
-            <FormLabel>T&C</FormLabel>
+            <FormLabel>Terms and Conditions</FormLabel>
             <Textarea
               value={termsAndConditions}
               onChange={(e) => setTermsAndConditions(e.target.value)}

@@ -13,7 +13,6 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  VStack,
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
@@ -137,7 +136,7 @@ const LpoRecordPaymentDrawer = ({ data, onClose, handleUpdateInvoice }) => {
           >
             <HStack>
               <Text fontWeight="bold" fontSize="lg">
-                Invoice # {data.InvoiceData.number}
+                LPO # {data.InvoiceData.number}
               </Text>
               <Badge
                 colorScheme={paymentColors[data.InvoiceData.payment_status]}
@@ -161,7 +160,7 @@ const LpoRecordPaymentDrawer = ({ data, onClose, handleUpdateInvoice }) => {
                   style={{ marginRight: "4px" }}
                   onClick={openViewDrawer}
                 />{" "}
-                Show Invoice
+                Show LPO
               </Button>
             </HStack>
           </Flex>

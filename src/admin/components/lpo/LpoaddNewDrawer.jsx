@@ -79,12 +79,12 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
     );
     if (updatedRows[index].calculationType === 0) {
       updatedRows[index].item_quantity = 1;
-      updatedRows[index].item_total =
+      updatedRows[index].totalPrice =
         updatedRows[index].item_xdim *
         updatedRows[index].item_ydim *
-        updatedRows[index].item_price;
+        updatedRows[index].item_total;
     } else if (updatedRows[index].calculationType === 1) {
-      updatedRows[index].item_total =
+      updatedRows[index].totalPrice =
         updatedRows[index].item_quantity * updatedRows[index].item_price;
     }
     // Update the disabled state based on the Calculation Type
@@ -92,7 +92,7 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
       if (value === "0") {
         updatedRows[index].item_quantity = 1;
         updatedRows[index].calculationType = 0;
-        updatedRows[index].item_total =
+        updatedRows[index].totalPrice =
           updatedRows[index].item_xdim *
           updatedRows[index].item_ydim *
           updatedRows[index].item_price;
@@ -103,7 +103,7 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
         updatedRows[index].item_xdim = 0;
         updatedRows[index].item_ydim = 0;
         updatedRows[index].calculationType = 1;
-        updatedRows[index].item_total =
+        updatedRows[index].totalPrice =
           updatedRows[index].item_quantity * updatedRows[index].item_price;
         updatedRows[index].item_quantity_disabled = false;
         updatedRows[index].item_xdim_disabled = true;
@@ -112,12 +112,12 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
     }
     if (updatedRows[index].calculationType === 0) {
       updatedRows[index].item_quantity = 1;
-      updatedRows[index].item_total =
+      updatedRows[index].totalPrice =
         updatedRows[index].item_xdim *
         updatedRows[index].item_ydim *
         updatedRows[index].item_price;
     } else if (updatedRows[index].calculationType === 1) {
-      updatedRows[index].item_total =
+      updatedRows[index].totalPrice =
         updatedRows[index].item_quantity * updatedRows[index].item_price;
       updatedRows[index].item_xdim = 0;
       updatedRows[index].item_ydim = 0;
@@ -145,10 +145,12 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
       terms_and_condition: termsAndConditions,
       payment_terms: paymentTerms,
       execution_time: executionTime,
-      isPerforma: selectedType - 1,
+      isPerforma: 0,
       bank_details: bankDetails,
       note: noteDetails,
-      is_LPO: 0,
+      is_LPO: 1,
+      // pname,
+      // location,
     };
 
     // Prepare invoice items data based on the form input
@@ -183,8 +185,8 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
       setIsLoading(false);
       // Show success toast
       toast({
-        title: "Invoice Created",
-        description: "The invoice has been created successfully.",
+        title: "LPO Created",
+        description: "The LPO has been created successfully.",
         status: "success",
         duration: 3000,
         position: "top-right",
@@ -204,14 +206,13 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
           position: "top-right",
           isClosable: true,
         });
-      } else console.error("Error creating invoice:", error);
+      } else console.error("Error creating LPO:", error);
     }
   };
 
   const [customers, setCustomers] = useState([]);
   const [selectedClient, setSelectedClient] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(1);
-  const [selectedType, setSelectedType] = useState(1);
 
   const [termsAndConditions, setTermsAndConditions] = useState("");
   const [paymentTerms, setPaymentTerms] = useState("");
@@ -219,6 +220,8 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
   const [bankDetails, setBankDetails] = useState("");
   const [noteDetails, setNoteDetails] = useState("");
   const [discount, setDiscount] = useState(0);
+  const [location, setLocation] = useState("");
+  const [pname, setPname] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -257,7 +260,6 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
     setSearchQuery(""); // Clear the search query when selecting an option
     setFilteredCustomers([]); // Clear the filtered customers
 
-    // Set the selected company name directly to the input value using the ref
     inputRef.current.value = selectedCustomer.company_name;
   };
 
@@ -299,7 +301,7 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
             isLoading={isLoading}
             onClick={handleSaveInvoice}
           >
-            <AddIcon mr={4} /> Save Invoice
+            <AddIcon mr={4} /> Save LPO
           </Button>
         </HStack>
       </Flex>
@@ -360,23 +362,11 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
               <option value={1}>Draft</option>
               <option value={2}>Pending</option>
               <option value={3}>Sent</option>
-              {/* <option value={4}>Expired</option> */}
-              {/* <option value={5}>Declined</option> */}
               <option value={6}>Accepted</option>
-              {/* <option value={7}>Lost</option> */}
             </Select>
           </Box>
 
-          <Box>
-            <FormLabel>Type</FormLabel>
-            <Select
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-            >
-              <option value={1}>Tax invoice</option>
-              <option value={2}>Performa invoice</option>
-            </Select>
-          </Box>
+
           <Box>
             <FormLabel>Discount</FormLabel>
             <InputGroup>
@@ -386,6 +376,30 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
                 bg={bgColor}
                 type="number"
                 placeholder="Enter Discount"
+              />
+            </InputGroup>
+          </Box>
+          <Box>
+            <FormLabel>Delivery Location</FormLabel>
+            <InputGroup>
+              <Input
+                value={location} // Use selectedClientName as the value
+                onChange={(e) => setLocation(e.target.value)}
+                bg={bgColor}
+                type="text"
+                placeholder="Enter Delivery Location"
+              />
+            </InputGroup>
+          </Box>
+          <Box>
+            <FormLabel>Project Name</FormLabel>
+            <InputGroup>
+              <Input
+                value={pname} // Use selectedClientName as the value
+                onChange={(e) => setPname(e.target.value)}
+                bg={bgColor}
+                type="text"
+                placeholder="Enter Project Name"
               />
             </InputGroup>
           </Box>
@@ -436,7 +450,7 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
                 <Td>
                   <Input
                     style={inputStyles}
-                    value={row.dimensionX}
+                    value={row.item_xdim}
                     type="number"
                     isDisabled={row.item_xdim_disabled} // Use isDisabled prop
                     onChange={(e) =>
@@ -447,7 +461,7 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
                 <Td>
                   <Input
                     style={inputStyles}
-                    value={row.dimensionY}
+                    value={row.item_ydim}
                     type="number"
                     isDisabled={row.item_ydim_disabled} // Use isDisabled prop
                     onChange={(e) =>
@@ -533,7 +547,7 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
             />
           </VStack>
           <VStack align="start">
-            <FormLabel>T&C</FormLabel>
+            <FormLabel>Terms and Conditions</FormLabel>
             <Textarea
               value={termsAndConditions}
               onChange={(e) => setTermsAndConditions(e.target.value)}
@@ -564,7 +578,7 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
             />
           </VStack>
           <VStack align="start">
-            <FormLabel>Bank Details</FormLabel>
+            <FormLabel>Warranties</FormLabel>
             <Textarea
               value={bankDetails}
               onChange={(e) => setBankDetails(e.target.value)}

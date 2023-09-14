@@ -23,6 +23,7 @@ import {
   VStack,
   useColorModeValue,
   useToast,
+  InputGroup,
 } from "@chakra-ui/react";
 import {
   AddIcon,
@@ -66,7 +67,6 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
       item_name: row.item_name,
       item_description: row.item_description,
       item_quantity: row.item_quantity,
-      // price: row.price,
       item_xdim: row.item_xdim,
       item_ydim: row.item_ydim,
       item_price: row.item_price,
@@ -161,7 +161,7 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
     setSubtotalotalAmount(newTotalAmount);
   };
 
-  // TEXT AREA INPUT HANDLES(NOTE, T&CS, PAYMENT TERMS, EXECUTION TIME, BANK DETAILS )
+  // TEXT AREA INPUT HANDLES(NOTE, Terms and ConditionsS, PAYMENT TERMS, EXECUTION TIME, BANK DETAILS )
   const statusColors = {
     DRAFT: "blue",
     PENDING: "yellow",
@@ -206,6 +206,9 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
   const [bankDetails, setBankDetails] = useState(data.InvoiceData.bank_details);
   const [noteDetails, setNoteDetails] = useState(data.InvoiceData.note);
   const [discount, setDiscount] = useState(data.InvoiceData.discount);
+   const [location, setLocation] = useState("");
+  const [pname, setPname] = useState("");
+
 
   const [removedItems, setRemovedItems] = useState([]);
   const [hasAtLeastOneItem, setHasAtLeastOneItem] = useState(false);
@@ -240,9 +243,12 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
       terms_and_condition: termsAndConditions,
       payment_terms: paymentTerms,
       execution_time: executionTime,
-      isPerforma: selectedType - 1,
+      isPerforma: 0,
       bank_details: bankDetails,
       note: noteDetails,
+      is_LPO: 1,
+      // pname,
+      // location,
       // ... (other fields)
     };
     console.log("data", updatedInvoiceData);
@@ -295,8 +301,8 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
 
       // Handle success
       toast({
-        title: "Invoice Updated",
-        item_description: "The invoice has been updated successfully.",
+        title: "LPO Updated",
+        item_description: "The LPO has been updated successfully.",
         status: "success",
         duration: 3000,
         position: "top-right",
@@ -316,7 +322,7 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
           position: "top-right",
           isClosable: true,
         });
-      } else console.error("Error saving invoice:", error);
+      } else console.error("Error saving LPO:", error);
       // Handle error state or display an error message
     }
   };
@@ -359,7 +365,7 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
             colorScheme="blue"
             onClick={handleSaveInvoice}
           >
-            <AddIcon mr={4} /> Save Invoice
+            <AddIcon mr={4} /> Save LPO
           </Button>
         </HStack>
       </Flex>
@@ -384,7 +390,7 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
             />
           </Box>
 
-          <Box>
+          {/* <Box>
             <FormLabel>Status</FormLabel>
             <Select
               value={selectedStatus}
@@ -398,17 +404,7 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
               <option value={6}>Accepted</option>
               <option value={7}>Lost</option>
             </Select>
-          </Box>
-          <Box>
-            <FormLabel>Type</FormLabel>
-            <Select
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-            >
-              <option value={1}>Tax invoice</option>
-              <option value={2}>Performa invoice</option>
-            </Select>
-          </Box>
+          </Box> */}
           <Box>
             <FormLabel>Discount</FormLabel>
 
@@ -419,6 +415,30 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
               type="number"
               placeholder="Enter Discount"
             />
+          </Box>
+          <Box>
+            <FormLabel>Delivery Location</FormLabel>
+            <InputGroup>
+              <Input
+                value={location} // Use selectedClientName as the value
+                onChange={(e) => setLocation(e.target.value)}
+                bg={bgColor}
+                type="text"
+                placeholder="Enter Delivery Location"
+              />
+            </InputGroup>
+          </Box>
+          <Box>
+            <FormLabel>Project Name</FormLabel>
+            <InputGroup>
+              <Input
+                value={pname} // Use selectedClientName as the value
+                onChange={(e) => setPname(e.target.value)}
+                bg={bgColor}
+                type="text"
+                placeholder="Enter Project Name"
+              />
+            </InputGroup>
           </Box>
         </SimpleGrid>
       </FormControl>
@@ -564,7 +584,7 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
           />
         </VStack>
         <VStack align="start">
-          <Text>T&C</Text>
+          <Text>Terms and Conditions</Text>
           <Textarea
             value={termsAndConditions}
             onChange={(e) => setTermsAndConditions(e.target.value)}
@@ -595,7 +615,7 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
           />
         </VStack>
         <VStack align="start">
-          <Text>Bank Details</Text>
+          <Text>Warranties</Text>
           <Textarea
             value={bankDetails}
             onChange={(e) => setBankDetails(e.target.value)}

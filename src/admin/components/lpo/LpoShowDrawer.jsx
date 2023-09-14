@@ -310,7 +310,7 @@ const LpoShowDrawer = ({ data, handleUpdateInvoice }) => {
           </Stack>
 
           <Divider orientation="horizontal" borderColor="0000" my={8} />
-          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
             <HStack spacing={2}>
               <Text>Email:</Text>
               <Text>{data.InvoiceData.client_email}</Text>
@@ -318,6 +318,14 @@ const LpoShowDrawer = ({ data, handleUpdateInvoice }) => {
             <HStack spacing={2}>
               <Text>Phone:</Text>
               <Text>{data.InvoiceData.client_phone}</Text>
+            </HStack>
+            <HStack spacing={2}>
+              <Text>Delivery Location:</Text>
+              {/* <Text>{data.InvoiceData.location}</Text> */}
+            </HStack>
+            <HStack spacing={2}>
+              <Text>Project Name</Text>
+              {/* <Text>{data.InvoiceData.pname}</Text> */}
             </HStack>
           </SimpleGrid>
           <Divider orientation="horizontal" borderColor="0000" my={4} />

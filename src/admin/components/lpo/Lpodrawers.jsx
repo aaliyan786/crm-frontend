@@ -11,7 +11,7 @@ import { ArrowBackIcon } from "@chakra-ui/icons";
 import AddNewDrawer from "./LpoaddNewDrawer";
 import ShowDrawer from "./LpoShowDrawer";
 import EditDrawer from "./LpoeditDrawer";
-import RecordPaymentDrawer from "./LporRcordPaymentDrawer";
+import RecordPaymentDrawer from "./LpoRecordPaymentDrawer";
 import PdfDrawer from "./LpoPdfDrawer";
 
 const LpoDrawers = ({
@@ -75,7 +75,7 @@ const LpoDrawers = ({
             alignItems="center"
             justifyContent="center"
           />
-          {drawerType === "addNew" && "Add New Invoice"}
+          {drawerType === "addNew" && "Add New LPO"}
           {drawerType === "show" && "Show Details"}
           {drawerType === "edit" && "Edit Details"}
           {drawerType === "recordPayment" && "Record Payment"}
