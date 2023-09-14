@@ -28,7 +28,7 @@ import { getInvoicePdfById } from "../../../API/api";
 import { sendPdfByEmail, BASE_URL } from "../../../API/api";
 import ConfirmationAlert from "../../../components/common/ConfirmationAlert";
 import { Link } from "react-router-dom";
-import QRCode from "react-qr-code";
+import QRcode from 'qrcode.react'
 
 function addTextWithMaxWidth(doc, title, text, maxWidth, startY, lineHeight) {
   doc.setFont("helvetica", "bold");
@@ -53,7 +53,7 @@ const PdfDrawer = ({ data, onClose }) => {
   const [Items, setItems] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  
+
 
   useEffect(() => {
     const fetchInvoiceData = async () => {
@@ -91,6 +91,7 @@ const PdfDrawer = ({ data, onClose }) => {
     const doc = new jsPDF();
     const logoURL = `${BASE_URL}/uploads/logo/${pdfData.data.settings.logo_img}`;
     const logoStamp = `${BASE_URL}/uploads/stamp/${pdfData.data.settings.stamp_img}`;
+    let base64Image = document.getElementById('qrcode').toDataURL();
 
     doc.addImage(logoURL, "JPEG", 15, 10, 80, 20);
     doc.setFontSize(10);
@@ -338,6 +339,8 @@ const PdfDrawer = ({ data, onClose }) => {
     );
     doc.text("Authorised Signature", 15, startY + 5); // X: 15, Y: 85
     doc.addImage(logoStamp, "JPEG", 15, startY + 7, 20, 20);
+    doc.addImage(base64Image, 'JPEG', 15, startY + 30, 20, 20)
+
 
     // Save the complete PDF
     return doc;
@@ -606,13 +609,7 @@ const PdfDrawer = ({ data, onClose }) => {
             width="200px"
             mb={50}
           />
-          <QRCode
-            title={data.InvoiceData.number}
-            value="http://localhost:3001/invoices"
-            bgColor="white"
-            fgColor="black"
-            size="128"
-          />
+          <QRcode value={'https://www.youtube.com/watch?v=ttkGoP_M230&pp=ygURbW90aGVycyBpbnRlcmx1ZGU%3D'} id='qrcode' />
           {/* <HStack>
             <Image
               src={`${BASE_URL}/uploads/stamp/${pdfData.data.settings.stamp_img}`}

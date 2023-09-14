@@ -32,6 +32,7 @@ import { getQuotePdfById } from "../../../API/api";
 import { updateQuoteData } from "../../../API/api";
 import ConfirmationAlert from "../../../components/common/ConfirmationAlert";
 import { sendPdfByEmail, BASE_URL } from "../../../API/api";
+import QRCode from "qrcode.react";
 
 function addTextWithMaxWidth(doc, title, text, maxWidth, startY, lineHeight) {
   doc.setFont("helvetica", "bold");
@@ -196,6 +197,9 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     const doc = new jsPDF();
     const logoURL = `${BASE_URL}/uploads/logo/${pdfData.data.settings.logo_img}`;
     const logoStamp = `${BASE_URL}/uploads/stamp/${pdfData.data.settings.stamp_img}`;
+    let base64Image = document.getElementById('qrcode').toDataURL();
+
+
     doc.addImage(logoURL, "JPEG", 15, 10, 80, 20);
     // doc.addImage(Logo, "JPEG", 15, 10, 80, 20);
     doc.setFontSize(10);
@@ -421,6 +425,8 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     );
     doc.text("Authorised Signature", 15, startY + 5); // X: 15, Y: 85
     doc.addImage(logoStamp, "JPEG", 15, startY + 7, 20, 20);
+    doc.addImage(base64Image, 'JPEG', 15, startY + 30, 20, 20)
+
 
     // Save the complete PDF
     return doc;
@@ -604,6 +610,8 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
             width="200px"
             mb={50}
           />
+          <QRCode value={'https://www.youtube.com/watch?v=ttkGoP_M230&pp=ygURbW90aGVycyBpbnRlcmx1ZGU%3D'} id='qrcode' />
+
         </div>
       )}
       <ConfirmationAlert
