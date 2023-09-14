@@ -94,15 +94,29 @@ const LpoPdfDrawer = ({ data, onClose }) => {
     doc.setFontSize(10);
 
     // Place "Four Seasons" text below the image, aligned with the left edge
+    // doc.setFont("helvetica", "bold");
     doc.setFont("helvetica", "bold");
-    doc.text(`${pdfData.data.settings.name}`, 15, 40); // X: 15, Y: 85
-
+    doc.text("From", 15, 40); // X: 15, Y: 85
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(8);
+    doc.text(`${pdfData.data.settings.name}`, 15, 45); // X: 15, Y: 85
+    doc.text("Tel No: " + `${pdfData.data.settings.name}`, 15, 50); // X: 15, Y: 85
+    doc.text("Address: " + `${pdfData.data.settings.address}`, 15, 55); // X: 15, Y: 85
+
+    doc.setFont("helvetica", "bold");
+    doc.text("To", 15, 65);
+    doc.setFont("helvetica", "normal");
+    doc.text(`${data.InvoiceData.client_fname + " " + data.InvoiceData.client_lname}`, 15, 70); // X: 15, Y: 85
+    doc.text("Tel No: " + `${data.InvoiceData.client_phone}`, 15, 75); // X: 15, Y: 85
+    doc.text("Email: " + `${data.InvoiceData.client_email}`, 15, 80); // X: 15, Y: 85
+    doc.text("Address: " + `${data.InvoiceData.client_address}`, 15, 85); // X: 15, Y: 85
+    doc.setFont("helvetica", "bold");
+    doc.text("ATTN: " + "yahan pr naam ayega", 15, 90); // X: 15, Y: 85
+
+    // doc.setFontSize(8);
     // Place address lines below the "Four Seasons" text, aligned with the left edge
-    doc.text(`${pdfData.data.settings.address}`, 15, 45); // X: 15, Y: 95
+    // doc.text(`${pdfData.data.settings.address}`, 15, 40); // X: 15, Y: 95
     // doc.text("United Arab Emirates 37613", 15, 50); // X: 15, Y: 105
-    doc.text("Vat Number: " + `${pdfData.data.settings.vat_no}`, 15, 50); // X: 15, Y: 115
+    // doc.text("Vat Number: " + `${pdfData.data.settings.vat_no}`, 15, 45); // X: 15, Y: 115
 
     const pageWidth = doc.internal.pageSize.width;
     const textWidth = doc.getTextWidth(
@@ -113,83 +127,53 @@ const LpoPdfDrawer = ({ data, onClose }) => {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(18);
     doc.text(
-      data.InvoiceData.isPerforma,
-      pageWidth - doc.getTextWidth(data.InvoiceData.isPerforma) - 15,
+      "Purchase Order",
+      pageWidth - doc.getTextWidth("Purchase Order") - 15,
       20
     );
 
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(8);
-    doc.text(
-      data.InvoiceData.number,
-      pageWidth - doc.getTextWidth(data.InvoiceData.number) - 15,
-      25
-    );
-    doc.text(
-      data.InvoiceData.status,
-      pageWidth - doc.getTextWidth(data.InvoiceData.status) - 15,
-      30
-    );
-
-    doc.setFont("helvetica", "bold");
     doc.setFontSize(10);
-    doc.text("To", pageWidth - doc.getTextWidth("To") - 15, 40);
     doc.text(
-      data.InvoiceData.client_fname + " " + data.InvoiceData.client_lname,
+      "DELIVERY LOCATION: " + "yahan pr locaiton ayegi",
       pageWidth -
       doc.getTextWidth(
-        data.InvoiceData.client_fname + " " + data.InvoiceData.client_lname
+        "DELIVERY LOCATION: " + "yahan pr locaiton ayegi"
       ) -
       15,
+      40
+    );
+    doc.text(
+      "PROJECT NAME: " + "yahn pr project name ayega",
+      pageWidth - doc.getTextWidth("PROJECT NAME: " + "yahn pr project name ayega") - 15,
       45
     );
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(8);
     doc.text(
-      data.InvoiceData.client_phone,
-      pageWidth - doc.getTextWidth(data.InvoiceData.client_phone) - 15,
+      "Contant Person: " + "hello",
+      pageWidth - doc.getTextWidth("Contant Person: " + "hello") - 15,
       50
     );
     doc.text(
-      data.InvoiceData.client_address,
-      pageWidth - doc.getTextWidth(data.InvoiceData.client_address) - 15,
+      "Tel No: " + "yahan pr telno ayega",
+      pageWidth - doc.getTextWidth("Tel No: " + "yahan pr telno ayega") - 15,
       55
     );
-    doc.text(
-      data.InvoiceData.client_vat,
-      pageWidth - doc.getTextWidth(data.InvoiceData.client_vat) - 15,
-      60
-    );
-    const timestamp = data.InvoiceData.expiry_date;
-    const date = new Date(timestamp);
-    const formattedDate = date.toISOString().split("T")[0];
-    // doc.text(
-    //   "Expiry Date: " + formattedDate,
-    //   pageWidth - doc.getTextWidth("Expiry Date: " + formattedDate) - 15,
-    //   55
-    // );
-    doc.text(
-      "Sales Agent: " +
-      data.InvoiceData.employee_name +
-      " " +
-      data.InvoiceData.employee_surname,
-      pageWidth -
-      doc.getTextWidth(
-        "Sales Agent: " +
-        data.InvoiceData.employee_name +
-        " " +
-        data.InvoiceData.employee_surname
-      ) -
-      15,
-      65
-    );
 
-    const tableStartY = 70; // Starting Y-coordinate for the table
+    doc.setFont("helvetica", "bold");
+    doc.text("L.P.O DATE",50,105)
+    doc.text("L.P.O NO",140,105)
+
+    doc.setFont("helvetica", "normal");
+    doc.text("15-Aug-23",50,110)
+    doc.text("FSGR-PO-138",135,110)
+    const tableStartY = 120; // Starting Y-coordinate for the table
     const itemsPerPage = calculateItemsPerPage(doc, tableStartY);
 
     const totalPages = Math.ceil(Items.length / itemsPerPage);
 
     let lastTableBottomY = tableStartY;
+
+
 
     for (let page = 0; page < totalPages; page++) {
       if (page > 0) {
@@ -204,6 +188,7 @@ const LpoPdfDrawer = ({ data, onClose }) => {
       // Add content to the current page
       doc.setFontSize(12);
       // doc.text(`Invoice Page ${page + 1}`, 15, 15);
+
 
       const tableOptions = {
         startY: lastTableBottomY,
@@ -331,7 +316,7 @@ const LpoPdfDrawer = ({ data, onClose }) => {
     );
 
     addTextWithPageBreak(
-      "Bank Account Details:\n" + pdfData.data.invoiceData.bank_details,
+      "Warranties:\n" + pdfData.data.invoiceData.bank_details,
       175
     );
     doc.text("Authorised Signature", 15, startY + 5); // X: 15, Y: 85
@@ -475,41 +460,36 @@ const LpoPdfDrawer = ({ data, onClose }) => {
               >
                 Purchase Order
               </Text>
-              <Text fontSize={15}>{data.InvoiceData.number}</Text>
-              <Text
-                fontSize={15}
-                border="1px black solid"
-                borderRadius="md"
-                padding={1}
-                fontWeight="bold"
-              >
-                {data.InvoiceData.status}
-              </Text>
-              <Text fontWeight="bold">To</Text>
-              <Text fontWeight="bold">
-                {data.InvoiceData.client_fname} {data.InvoiceData.client_lname}
-              </Text>
-              <Text>{data.InvoiceData.client_phone}</Text>
-              <Text>{data.InvoiceData.client_address} </Text>
-              <Text>{data.InvoiceData.client_vat}</Text>
-              <Divider orientation="horizontal" height={10} />
-              {/* <Text>Expiry Date: {data.InvoiceData.expiry_date}</Text> */}
+              {/* <Divider h={5} */}
+              <Text fontSize="lg" mt="100px">DELIVERY LOCATION: yahan pr location ayegi</Text>
+              <Text fontSize="lg">PROJECT NAME: Mr. Mark Comprehensive</Text>
               <Text>
                 Contact Person: {data.InvoiceData.employee_name}{" "}
                 {data.InvoiceData.employee_surname}
               </Text>
-              <Text>{data.InvoiceData.employee_email}</Text>
+              <Text>Tel No: {data.InvoiceData.employee_number}</Text>
             </VStack>
           </SimpleGrid>
           <Divider orientation="horizontal" height={10} />
 
-          <TableContainer>
+
+          <SimpleGrid columns={2} spacing={4}>
+            <VStack>
+              <Text fontWeight="bold">L.P.O DATE</Text>
+              <Text >15-Aug-23</Text>
+            </VStack>
+            <VStack>
+              <Text fontWeight="bold">L.P.O NO</Text>
+              <Text >FSGR-PO-138</Text>
+            </VStack>
+          </SimpleGrid>
+          <TableContainer mt={4}>
             <Table>
               <Thead>
                 <Tr bg="#b81e74">
                   <Th color="white">#</Th>
                   <Th color="white">Item</Th>
-                  <Th color="white">Dimension</Th>
+                  <Th color="white">Description</Th>
                   <Th color="white">Unit</Th>
                   <Th color="white">Qty</Th>
                   <Th color="white">Rate</Th>
@@ -598,7 +578,7 @@ const LpoPdfDrawer = ({ data, onClose }) => {
             </Text>
             <Divider orientation="horizontal" height={10} />
 
-            <Text fontWeight="bold">Bank Account Details:</Text>
+            <Text fontWeight="bold">Warranties:</Text>
             <Text whiteSpace="pre-line">
               {pdfData.data.invoiceData.bank_details}
             </Text>
