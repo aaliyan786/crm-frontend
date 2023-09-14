@@ -268,13 +268,14 @@ const LpoList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateInvoi
               <Tr>
                 <Th>LPO  Number</Th>
                 <Th>Client</Th>
+                <Th>Project Name</Th>
                 <Th >Date</Th>
                 {/* <Th >Due Date</Th> */}
                 {department == "admin" ? (<Th >Added by</Th>) : null}
                 <Th>Total</Th>
-                <Th>Balance</Th>
-                <Th>Status</Th>
-                <Th>Payment</Th>
+                {/* <Th>Balance</Th> */}
+                {/* <Th>Status</Th> */}
+                {/* <Th>Payment</Th> */}
                 <Th>Actions</Th>
               </Tr>
             </Thead>
@@ -283,6 +284,7 @@ const LpoList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateInvoi
                 <Tr key={invoice.InvoiceData.id}>
                   <Td>{invoice.InvoiceData.number}</Td>
                   <Td>{invoice.InvoiceData.client_fname + ' ' + invoice.InvoiceData.client_lname}</Td>
+                  <Td>project ka naam laado sherjeel smarty</Td>
                   <Td>{new Date(invoice.InvoiceData.invoice_current_date).toISOString().split("T")[0]}</Td>
                   {/* <Td>{new Date(invoice.InvoiceData.expiry_date).toISOString().split("T")[0]}</Td> */}
 
@@ -293,13 +295,13 @@ const LpoList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateInvoi
                         + ((invoice.InvoiceData.total_amount / 100) * 5) - invoice.InvoiceData.discount)
                     }
                   </Td>
-                  <Td>
+                  {/* <Td>
                     {
                       ((invoice.InvoiceData.total_amount
                         + ((invoice.InvoiceData.total_amount / 100) * 5) - invoice.InvoiceData.discount)
                       - invoice.InvoiceData.total_amount_paid).toFixed(2)}
-                  </Td>
-                  <Td>
+                  </Td> */}
+                  {/* <Td>
                     <Badge
                       px={2}
                       py={1}
@@ -309,9 +311,9 @@ const LpoList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateInvoi
                     >
                       {invoice.InvoiceData.status}
                     </Badge>
-                  </Td>
+                  </Td> */}
                   
-                  <Td>
+                  {/* <Td>
                     <Badge
                       px={2}
                       py={1}
@@ -321,7 +323,7 @@ const LpoList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateInvoi
                     >
                       {invoice.InvoiceData.payment_status}
                     </Badge>
-                  </Td>
+                  </Td> */}
                   <Td>
                     <Menu>
                       <MenuButton
@@ -343,12 +345,7 @@ const LpoList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateInvoi
                         >
                           Edit
                         </MenuItem>
-                        <MenuItem
-                          icon={<BiCreditCard />}
-                          onClick={() => openDrawer("recordPayment", invoice)}
-                        >
-                          Record Payment
-                        </MenuItem>
+                       
                         <MenuItem
                           icon={<FiFile />}
                           onClick={() => openDrawer("pdf", invoice)}

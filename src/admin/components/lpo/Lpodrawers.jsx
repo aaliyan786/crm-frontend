@@ -11,7 +11,7 @@ import { ArrowBackIcon } from "@chakra-ui/icons";
 import AddNewDrawer from "./LpoaddNewDrawer";
 import ShowDrawer from "./LpoShowDrawer";
 import EditDrawer from "./LpoeditDrawer";
-import RecordPaymentDrawer from "./LporRcordPaymentDrawer";
+import RecordPaymentDrawer from "./LpoRecordPaymentDrawer";
 import PdfDrawer from "./LpoPdfDrawer";
 
 const LpoDrawers = ({
