@@ -161,7 +161,7 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
     setSubtotalotalAmount(newTotalAmount);
   };
 
-  // TEXT AREA INPUT HANDLES(NOTE, T&CS, PAYMENT TERMS, EXECUTION TIME, BANK DETAILS )
+  // TEXT AREA INPUT HANDLES(NOTE, Terms and ConditionsS, PAYMENT TERMS, EXECUTION TIME, BANK DETAILS )
   const statusColors = {
     DRAFT: "blue",
     PENDING: "yellow",
@@ -301,8 +301,8 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
 
       // Handle success
       toast({
-        title: "Invoice Updated",
-        item_description: "The invoice has been updated successfully.",
+        title: "LPO Updated",
+        item_description: "The LPO has been updated successfully.",
         status: "success",
         duration: 3000,
         position: "top-right",
@@ -322,7 +322,7 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
           position: "top-right",
           isClosable: true,
         });
-      } else console.error("Error saving invoice:", error);
+      } else console.error("Error saving LPO:", error);
       // Handle error state or display an error message
     }
   };
@@ -390,7 +390,7 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
             />
           </Box>
 
-          <Box>
+          {/* <Box>
             <FormLabel>Status</FormLabel>
             <Select
               value={selectedStatus}
@@ -404,7 +404,7 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
               <option value={6}>Accepted</option>
               <option value={7}>Lost</option>
             </Select>
-          </Box>
+          </Box> */}
           <Box>
             <FormLabel>Discount</FormLabel>
 
@@ -584,7 +584,7 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
           />
         </VStack>
         <VStack align="start">
-          <Text>T&C</Text>
+          <Text>Terms and Conditions</Text>
           <Textarea
             value={termsAndConditions}
             onChange={(e) => setTermsAndConditions(e.target.value)}
@@ -615,7 +615,7 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
           />
         </VStack>
         <VStack align="start">
-          <Text>Bank Details</Text>
+          <Text>Warranties</Text>
           <Textarea
             value={bankDetails}
             onChange={(e) => setBankDetails(e.target.value)}

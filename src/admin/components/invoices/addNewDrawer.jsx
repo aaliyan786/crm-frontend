@@ -531,7 +531,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
             />
           </VStack>
           <VStack align="start">
-            <FormLabel>T&C</FormLabel>
+            <FormLabel>Terms and Conditions</FormLabel>
             <Textarea
               value={termsAndConditions}
               onChange={(e) => setTermsAndConditions(e.target.value)}
