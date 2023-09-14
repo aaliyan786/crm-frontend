@@ -279,7 +279,9 @@ const LpoList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateInvoi
               </Tr>
             </Thead>
             <Tbody>
-              {currentInvoices.map((invoice) => (
+            {currentInvoices
+                .filter((invoice) => invoice.InvoiceData.is_LPO === 1)
+                .map((invoice) => (
                 <Tr key={invoice.InvoiceData.id}>
                   <Td>{invoice.InvoiceData.number}</Td>
                   <Td>{invoice.InvoiceData.client_fname + ' ' + invoice.InvoiceData.client_lname}</Td>
