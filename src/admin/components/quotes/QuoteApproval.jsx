@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
     Box,
     Button,
@@ -23,49 +23,53 @@ import {
 } from "@chakra-ui/react";
 import { sendPdfByEmail, BASE_URL } from "../../../API/api";
 import ConfirmationAlert from "../../../components/common/ConfirmationAlert";
+import { getQuotePdfById } from "../../../API/api";
+import NotFoundPage from "../../pages/NotFoundPage";
+import CryptoJS from 'crypto-js';
 
 
-const QuoteApproval = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
+
+const QuoteApproval = () => {
 
     const [pdfData, setPdfData] = useState(null);
     const [Items, setItems] = useState([]);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-  
+    const { pdfid } = useParams()
+    const encryptedData = pdfid;
+    const secretKey = 'sT#9yX^pQ&$mK!2wF@8zL7vA';
+    const decryptedData = CryptoJS.AES.decrypt(encryptedData, secretKey).toString(CryptoJS.enc.Utf8);
+
     useEffect(() => {
-      // Fetch the invoice data when the component mounts
-      const fetchQuoteData = async () => {
-        console.log("datatatatatat quotes: ", data);
-        setIsLoading(true);
-        try {
-        //   const pdfData = await getQuotePdfById(data.quotesData.id);
-          setPdfData(pdfData);
-          console.log("quote items", pdfData.data.quoteItems);
-          console.log(Items);
-          setItems(pdfData.data.quoteItems);
-          console.log("New items", Items);
-          console.log("PDF DATA", pdfData);
-        } catch (error) {
-          setError(error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      fetchQuoteData();
-    }, []);
-    
+        const fetchQuoteData = async () => {
+            setIsLoading(true);
+            try {
+                const pdfData = await getQuotePdfById(parseInt(decryptedData));
+                setPdfData(pdfData);
+                setItems(pdfData.data.quoteItems);
+            } catch (error) {
+                setError(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchQuoteData();
+    }, [pdfid]);
+
+    if (error) {
+        return <NotFoundPage />;
+    }
+
     return (
-        <div>
-            <Flex direction="row" justify="end" id="backToTop">
+        <Box pt={5}>
+            <Flex direction="row" justify="center" id="backToTop">
                 <Button
-                    variant="outline"
+                    variant="solid"
                     colorScheme="green"
                     mr={2}
+                    size="lg"
                 >
-                    Send PDF
-                </Button>
-                <Button variant="solid" colorScheme="red" >
-                    Download PDF
+                    Accept
                 </Button>
             </Flex>
             {isLoading ? (
@@ -76,7 +80,7 @@ const QuoteApproval = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
                     </div>
                 </Center>
             ) : (
-                <div  style={{ padding: "2rem" }}>
+                <div style={{ padding: "2rem" }}>
                     <SimpleGrid columns={2} justifyContent="space-between">
                         <VStack justify="start" align="start">
                             {/* <Image src={Logo} width="400px" mb={50} /> */}
@@ -93,30 +97,30 @@ const QuoteApproval = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
                             <Text fontSize={{ base: 25, md: 40 }} fontWeight="bold" align="end">
                                 QUOTATION
                             </Text>
-                            <Text fontSize={15}>{data.quotesData.number}</Text>
-                            <Text
+                            <Text fontSize={15}>{pdfData.data.quotesData?.number}</Text>
+                            {/* <Text
                                 fontSize={15}
                                 border="1px black solid"
                                 borderRadius="md"
                                 padding={1}
                                 fontWeight="bold"
                             >
-                                {data.quotesData.status}
-                            </Text>
+                                {pdfData.data.quoteData?.status}
+                            </Text> */}
                             <Text fontWeight="bold">To</Text>
                             <Text fontWeight="bold">
-                                {data.quotesData.client_fname} {data.quotesData.client_lname}
+                                {pdfData.data.client.fname} {pdfData.data.client.lname}
                             </Text>
-                            <Text>{data.quotesData.client_phone}</Text>
-                            <Text>{data.quotesData.client_address} </Text>
-                            <Text>{data.quotesData.client_vat} </Text>
+                            <Text>{pdfData.data.client.phone}</Text>
+                            <Text>{pdfData.data.client.address} </Text>
+                            <Text>{pdfData.data.client.vat} </Text>
                             <Divider orientation="horizontal" height={10} />
-                            <Text>Expiry Date: {data.quotesData.expiry_date}</Text>
+                            <Text>Expiry Date: {pdfData.data.quoteData?.expiry_date}</Text>
                             <Text>
-                                Sales Agent: {data.quotesData.employee_name}{" "}
-                                {data.quotesData.employee_surname}
+                                Sales Agent: {pdfData.data.quoteData?.employee_name}{" "}
+                                {pdfData.data.quoteData?.employee_surname}
                             </Text>
-                            <Text>{data.quotesData.employee_email}</Text>
+                            <Text>{pdfData.data.quoteData?.employee_email}</Text>
                         </VStack>
                     </SimpleGrid>
                     <Divider orientation="horizontal" height={10} />
@@ -211,8 +215,8 @@ const QuoteApproval = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
 
                 </div>
             )}
-            
-        </div>
+
+        </Box>
     )
 }
 
