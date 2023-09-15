@@ -3,6 +3,21 @@ export const BASE_URL = "http://localhost:3000";
 
 const token = localStorage.getItem("token");
 
+export const sendRegretEmail = async (employeeId, subject, clientId, description, employeePassword) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/api/send-regret`, {
+      employeeId,
+      subject,
+      clientId,
+      description,
+      employeePassword,
+    });
+
+    return response.data; // Return the response data from the API
+  } catch (error) {
+    throw error; // Handle or throw the error as needed
+  }
+};
 export const fetchDashboardData = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/api/reports/admin`);
@@ -28,7 +43,7 @@ export const fetchDashboardData = async () => {
         },
         {
           title: "Sent Quotes",
-          value: data.totalQuotesSent ,
+          value: data.totalQuotesSent,
           textColor: "purple.500",
           color: "purple.200",
         },
@@ -40,7 +55,7 @@ export const fetchDashboardData = async () => {
         },
         {
           title: "Approved Quotes",
-          value: data.totalQuoteApproved ,
+          value: data.totalQuoteApproved,
           textColor: "red.500",
           color: "red.200",
         },
@@ -223,7 +238,7 @@ export const AddClient = async (clientData) => {
       date,
       company_name,
       added_by_employee,
-      
+
 
     } = clientData;
 
@@ -237,7 +252,7 @@ export const AddClient = async (clientData) => {
       date,
       company_name,
       added_by_employee,
-      
+
     });
     if (response.status === 201 || response.status === 200) {
       return "Client added successfully";

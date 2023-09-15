@@ -26,10 +26,34 @@ import ConfirmationAlert from "../../../components/common/ConfirmationAlert";
 
 
 const QuoteApproval = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
+
     const [pdfData, setPdfData] = useState(null);
     const [Items, setItems] = useState([]);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+  
+    useEffect(() => {
+      // Fetch the invoice data when the component mounts
+      const fetchQuoteData = async () => {
+        console.log("datatatatatat quotes: ", data);
+        setIsLoading(true);
+        try {
+        //   const pdfData = await getQuotePdfById(data.quotesData.id);
+          setPdfData(pdfData);
+          console.log("quote items", pdfData.data.quoteItems);
+          console.log(Items);
+          setItems(pdfData.data.quoteItems);
+          console.log("New items", Items);
+          console.log("PDF DATA", pdfData);
+        } catch (error) {
+          setError(error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchQuoteData();
+    }, []);
+    
     return (
         <div>
             <Flex direction="row" justify="end" id="backToTop">
