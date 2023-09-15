@@ -295,7 +295,7 @@ const LpoList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateInvoi
                   <Td>
                     {
                       (invoice.InvoiceData.total_amount
-                        + ((invoice.InvoiceData.total_amount / 100) * 5) - invoice.InvoiceData.discount)
+                        + ((invoice.InvoiceData.total_amount / 100) * 5) - invoice.InvoiceData.discount).toFixed(2)
                     }
                   </Td>
                   {/* <Td>

@@ -17,6 +17,7 @@ import AdminAcceptedQuotesPage from "./admin/pages/AdminAcceptedQuotesPage";
 import SalesAssignedQuotes from "./admin/pages/SalesAssignedQuotes";
 import NotFoundPage from "./admin/pages/NotFoundPage";
 import AdminLpoPage from "./admin/pages/AdminLpoPage";
+import QuoteApproval from "./admin/components/quotes/QuoteApproval";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -44,6 +45,8 @@ export default function App() {
     "/invoices",
     "/lpo",
     "/quotes",
+    // "/quoteapproval/:id",
+    "/quoteapproval/:pdfid",
     "/lossquotes",
     "/acceptedquotes",
     "/assignedquotes",
@@ -74,6 +77,8 @@ export default function App() {
           <Route path="/invoices" element={<AdminInvoicesPage />} />
           <Route path="/lpo" element={<AdminLpoPage />} />
           <Route path="/quotes" element={<AdminQuotesPage />} />
+          {/* <Route path="/quoteapproval/:id" element={<QuoteApproval />} /> */}
+          <Route path="/quoteapproval/:pdfid" element={<QuoteApproval />} />
           <Route path="/lossquotes" element={<AdminLossQuotesPage />} />
           <Route path="/acceptedquotes" element={<AdminAcceptedQuotesPage />} />
           <Route path="/assignedquotes" element={<SalesAssignedQuotes />} />

@@ -113,7 +113,6 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
       console.log("Price: ", updatedRows[index].totalPrice);
       console.log("item_xdim: ", updatedRows[index].item_xdim);
       console.log("item_ydim: ", updatedRows[index].item_ydim);
-      
     } else if (updatedRows[index].calculationType === 1) {
       updatedRows[index].totalPrice =
         updatedRows[index].item_quantity * updatedRows[index].item_price;
@@ -136,7 +135,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
 
     const invoiceData = {
       client_email: selectedClient,
-      status: selectedStatus,
+      // status: selectedStatus,
       employee_email: email, // emp ki email ayegi
       expiry_date: todayISO, // Set it to today's date
       discount: discount,
@@ -208,7 +207,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
 
   const [customers, setCustomers] = useState([]);
   const [selectedClient, setSelectedClient] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState(1);
+  // const [selectedStatus, setSelectedStatus] = useState(1);
   const [selectedType, setSelectedType] = useState(1);
 
   const [termsAndConditions, setTermsAndConditions] = useState("");
@@ -349,21 +348,21 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
               </Box>
             </VStack>
           </Box>
-          <Box>
-            <FormLabel>Status</FormLabel>
-            <Select
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-            >
-              <option value={1}>Draft</option>
-              <option value={2}>Pending</option>
-              <option value={3}>Sent</option>
-              {/* <option value={4}>Expired</option> */}
-              {/* <option value={5}>Declined</option> */}
-              <option value={6}>Accepted</option>
-              {/* <option value={7}>Lost</option> */}
-            </Select>
-          </Box>
+          {/* <Box> */}
+          {/* <FormLabel>Status</FormLabel> */}
+          {/* <Select */}
+          {/* value={selectedStatus} */}
+          {/* onChange={(e) => setSelectedStatus(e.target.value)} */}
+          {/* > */}
+          {/* <option value={1}>Draft</option> */}
+          {/* <option value={2}>Pending</option> */}
+          {/* <option value={3}>Sent</option> */}
+          {/* <option value={4}>Expired</option> */}
+          {/* <option value={5}>Declined</option> */}
+          {/* <option value={6}>Accepted</option> */}
+          {/* <option value={7}>Lost</option> */}
+          {/* </Select> */}
+          {/* </Box> */}
 
           <Box>
             <FormLabel>Type</FormLabel>

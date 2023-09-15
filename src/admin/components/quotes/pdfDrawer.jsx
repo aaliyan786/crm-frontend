@@ -2,6 +2,7 @@
 import CryptoJS from "crypto-js";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+
 import {
   Box,
   Button,
@@ -244,10 +245,10 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     doc.text(
       data.quotesData.client_fname + " " + data.quotesData.client_lname,
       pageWidth -
-        doc.getTextWidth(
-          data.quotesData.client_fname + " " + data.quotesData.client_lname
-        ) -
-        15,
+      doc.getTextWidth(
+        data.quotesData.client_fname + " " + data.quotesData.client_lname
+      ) -
+      15,
       45
     );
     doc.setFont("helvetica", "normal");
@@ -267,17 +268,17 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     );
     doc.text(
       "Sales Agent: " +
+      data.quotesData.employee_name +
+      " " +
+      data.quotesData.employee_surname,
+      pageWidth -
+      doc.getTextWidth(
+        "Sales Agent: " +
         data.quotesData.employee_name +
         " " +
-        data.quotesData.employee_surname,
-      pageWidth -
-        doc.getTextWidth(
-          "Sales Agent: " +
-            data.quotesData.employee_name +
-            " " +
-            data.quotesData.employee_surname
-        ) -
-        15,
+        data.quotesData.employee_surname
+      ) -
+      15,
       65
     );
 
@@ -345,22 +346,20 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     doc.text(
       "Sub Total: AED" + pdfData.data.Summarry.subtotal,
       pageWidth -
-        doc.getTextWidth("Sub Total: AED" + pdfData.data.Summarry.subtotal) -
-        15,
+      doc.getTextWidth("Sub Total: AED" + pdfData.data.Summarry.subtotal) -
+      15,
       lastTableBottomY + textSpacing
     );
 
     doc.text(
-      `Tax (${
-        (pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
+      `Tax (${(pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
       }%): ` + pdfData.data.Summarry.tax,
       pageWidth -
-        doc.getTextWidth(
-          `Vat (${
-            (pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
-          }%): ` + pdfData.data.Summarry.tax
-        ) -
-        15,
+      doc.getTextWidth(
+        `Vat (${(pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
+        }%): ` + pdfData.data.Summarry.tax
+      ) -
+      15,
       lastTableBottomY + textSpacing + 5
     );
 
@@ -379,8 +378,8 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     doc.text(
       "Total: AED" + pdfData.data.Summarry.total,
       pageWidth -
-        doc.getTextWidth("Total: AED" + pdfData.data.Summarry.total) -
-        15,
+      doc.getTextWidth("Total: AED" + pdfData.data.Summarry.total) -
+      15,
       lastTableBottomY + textSpacing + 10
     );
     let startY = lastTableBottomY + textSpacing + 15; // Initial Y position
@@ -437,6 +436,12 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     // setSelectedQuoteId(quoteId); // Store the ID of the invoice to be deleted
     setIsSendEmail(true); // Open the delete confirmation dialog
   };
+  const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA";
+  const dataToEncrypt = data.quotesData.id.toString() ;
+  const encryptedData = CryptoJS.AES.encrypt(
+    dataToEncrypt,
+    secretKey
+  ).toString();
   if (error) {
     // Handle the error gracefully
     return (
@@ -612,7 +617,7 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
             width="200px"
             mb={50}
           />
-          <QRCode value={'https://www.youtube.com/watch?v=ttkGoP_M230&pp=ygURbW90aGVycyBpbnRlcmx1ZGU%3D'} id='qrcode' />
+          <QRCode value={`${BASE_URL}/quoteapproval/${encryptedData}`} id='qrcode' />
 
         </div>
       )}
