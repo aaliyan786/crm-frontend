@@ -35,15 +35,17 @@ const QuoteApproval = () => {
     const [Items, setItems] = useState([]);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const { pdfid } = useParams()
+    const { pdfid } = useParams();
     const encryptedData = pdfid;
     const secretKey = 'sT#9yX^pQ&$mK!2wF@8zL7vA';
     const decryptedData = CryptoJS.AES.decrypt(encryptedData, secretKey).toString(CryptoJS.enc.Utf8);
+
 
     useEffect(() => {
         const fetchQuoteData = async () => {
             setIsLoading(true);
             try {
+                console.log("PDF ID:::", parseInt(decryptedData));
                 const pdfData = await getQuotePdfById(parseInt(decryptedData));
                 setPdfData(pdfData);
                 setItems(pdfData.data.quoteItems);
@@ -54,11 +56,11 @@ const QuoteApproval = () => {
             }
         };
         fetchQuoteData();
-    }, [pdfid]);
+    }, []);
 
-    if (error) {
-        return <NotFoundPage />;
-    }
+    // if (error) {
+    //     return <NotFoundPage />;
+    // }
 
     return (
         <Box pt={5}>
