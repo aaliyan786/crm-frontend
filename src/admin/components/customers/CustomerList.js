@@ -23,7 +23,7 @@ import {
   InputLeftElement,
   TableContainer,
 } from "@chakra-ui/react";
-import { FiEdit, FiTrash2 } from "react-icons/fi";
+import { FiEdit, FiSend, FiTrash2 } from "react-icons/fi";
 import { HiDotsVertical } from "react-icons/hi";
 import {
   BiSearch,
@@ -36,6 +36,7 @@ import EditCustomerDrawer from "./editDrawer";
 import AddCustomerDrawer from "./addCustomerDrawer";
 import { deleteCustomer } from "../../../API/api";
 import DeleteAlert from "../../../components/common/DeleteAlert";
+import RegretEmail from "./RegretEmail";
 
 
 
@@ -84,13 +85,20 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
     setIsEditDrawerOpen(true);
   }
 
+  const [isEmailDrawerOpen, setEmailDrawerOpen] = useState(false);
+  const[selectedEmailCustomer, setselectedEmailCustomer] = useState(null);
+  const handleEmailClick = (customer) => {
+    setselectedEmailCustomer(customer);
+    setEmailDrawerOpen(true);
+  }
+
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const [customerToDelete, setCustomerToDelete] = useState(null);
 
   const handleDeleteClick = (customer) => {
     setCustomerToDelete(customer);
     setIsDeleteAlertOpen(true);
-    setDeleteErrorMessage(""); 
+    setDeleteErrorMessage("");
   };
 
   const toast = useToast();
@@ -105,7 +113,7 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
           duration: 3000,
           isClosable: true,
         });
-        onDeleteCustomer(customerToDelete.id); 
+        onDeleteCustomer(customerToDelete.id);
 
         setIsDeleteAlertOpen(false);
 
@@ -125,7 +133,7 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
         console.error("Error deleting customer:", error);
       } finally {
         setIsDeleteAlertOpen(false);
-        setCustomerToDelete(null); 
+        setCustomerToDelete(null);
       }
     }
   };
@@ -167,7 +175,7 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
             />
           </InputGroup>
         </Flex>
-        <Button size={{base:"sm", md:"md"}} w={{ base: "xs", md: "auto" }} colorScheme="blue" borderRadius="0.5rem" px={8} py={3} fontSize={{base:"xs", md:"md"}} onClick={handleAddCustomerClick}>
+        <Button size={{ base: "sm", md: "md" }} w={{ base: "xs", md: "auto" }} colorScheme="blue" borderRadius="0.5rem" px={8} py={3} fontSize={{ base: "xs", md: "md" }} onClick={handleAddCustomerClick}>
           Add New Customer
         </Button>
       </Flex>
@@ -202,6 +210,7 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
                       size="sm"
                     />
                     <MenuList>
+                      <MenuItem icon={<FiSend />} onClick={() => handleEmailClick(customer)}>Send Email</MenuItem>
                       <MenuItem icon={<BiShow />} onClick={() => handleShowClick(customer)}>Show</MenuItem>
                       <MenuItem icon={<FiEdit />} onClick={() => handleEditClick(customer)}>Edit</MenuItem>
                       <MenuItem onClick={() => handleDeleteClick(customer)} icon={<FiTrash2 />}>
@@ -261,6 +270,14 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
           onClose={() => setIsEditDrawerOpen(false)}
           customerDetails={selectedEditCustomer}
           handleFetchUpdatedCustomer={handleFetchUpdatedCustomer}
+        />
+      )}
+
+      {isEmailDrawerOpen && (
+        <RegretEmail
+          isOpen={isEmailDrawerOpen}
+          onClose={() => setEmailDrawerOpen(false)}
+          customerDetails={selectedEmailCustomer}
         />
       )}
 
