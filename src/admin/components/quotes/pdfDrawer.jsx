@@ -437,7 +437,7 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     setIsSendEmail(true); // Open the delete confirmation dialog
   };
   const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA";
-  const dataToEncrypt = data.quotesData.id ;
+  const dataToEncrypt = data.quotesData.id.toString() ;
   const encryptedData = CryptoJS.AES.encrypt(
     dataToEncrypt,
     secretKey
