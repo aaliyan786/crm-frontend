@@ -57,7 +57,9 @@ const AdminAcceptedQuotesPage = () => {
       setPendingQuotes(quotesData);
       response = await getAllQuotesByAdminStatus(2);
       quotesData = response || []; // Ensure Quote is an array
-
+      console.log('3 quotesRejected',quotesRejected)
+      console.log('2 quotesApproved',quotesApproved)
+      console.log('1 quotesPending',quotesPending)
       setApprovedQuotes(quotesData);
       setIsLoading(false);
       console.log("quotesData", quotesData)
