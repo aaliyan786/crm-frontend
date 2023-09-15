@@ -321,11 +321,11 @@ const LpoShowDrawer = ({ data, handleUpdateInvoice }) => {
             </HStack>
             <HStack spacing={2}>
               <Text>Delivery Location:</Text>
-              {/* <Text>{data.InvoiceData.location}</Text> */}
+               <Text>{data.InvoiceData.location}</Text>
             </HStack>
             <HStack spacing={2}>
               <Text>Project Name</Text>
-              {/* <Text>{data.InvoiceData.pname}</Text> */}
+              <Text>{data.InvoiceData.pname}</Text>
             </HStack>
           </SimpleGrid>
           <Divider orientation="horizontal" borderColor="0000" my={4} />
