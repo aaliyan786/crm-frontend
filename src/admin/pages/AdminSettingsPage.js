@@ -335,7 +335,7 @@ const AdminSettingsPage = () => {
               <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
                 <Stack align="center" justify="space-between" direction={{base:"column", md:"row"}} bg={bgColorCard} borderRadius={10} p={5}>
                   <Box>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Company Name</FormLabel>
                     <Input
                       name="name"
                       type="text"

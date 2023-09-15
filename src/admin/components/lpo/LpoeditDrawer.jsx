@@ -247,8 +247,8 @@ function LpoEditDrawer({ data, handleUpdateInvoice, onClose }) {
       bank_details: bankDetails,
       note: noteDetails,
       is_LPO: 1,
-      // pname,
-      // location,
+      pname: pname,
+      location: location,
       // ... (other fields)
     };
     console.log("data", updatedInvoiceData);

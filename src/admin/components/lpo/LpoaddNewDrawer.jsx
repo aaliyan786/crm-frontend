@@ -149,8 +149,8 @@ function LpoAddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
       bank_details: bankDetails,
       note: noteDetails,
       is_LPO: 1,
-      // pname,
-      // location,
+      pname: pname,
+      location: location,
     };
 
     // Prepare invoice items data based on the form input
