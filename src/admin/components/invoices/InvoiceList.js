@@ -300,14 +300,14 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
                     <Td>
                       {
                         (invoice.InvoiceData.total_amount
-                          + ((invoice.InvoiceData.total_amount / 100) * 5) - invoice.InvoiceData.discount)
+                          + ((invoice.InvoiceData.total_amount / 100) * 5) - invoice.InvoiceData.discount).toFixed(2)
                       }
                     </Td>
                     <Td>
                       {
-                        (invoice.InvoiceData.total_amount
+                        ((invoice.InvoiceData.total_amount
                           + ((invoice.InvoiceData.total_amount / 100) * 5) - invoice.InvoiceData.discount)
-                        - invoice.InvoiceData.total_amount_paid
+                        - invoice.InvoiceData.total_amount_paid).toFixed(2)
                       }
                     </Td>
                     {/* <Td>
