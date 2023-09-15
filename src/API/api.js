@@ -8,6 +8,7 @@ export const fetchDashboardData = async () => {
     const response = await axios.get(`${BASE_URL}/api/reports/admin`);
     const data = response.data;
 
+
     const statusList = [
       "DRAFT",
       "PENDING",
@@ -101,7 +102,6 @@ export const fetchDashboardData = async () => {
         date: new Date(quote.quote_date).toLocaleDateString(),
       })),
     };
-
     return formattedData;
   } catch (error) {
     console.error("Error fetching API data:", error);
@@ -863,6 +863,104 @@ export async function getInvoicePdfById(invoiceId) {
     throw error;
   }
 }
+export async function getdashboarddatasales() {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/reports/sales`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = response.data;
+    const statusList = [
+      "DRAFT",
+      "PENDING",
+      "SENT",
+      "EXPIRED",
+      "DECLINED",
+      "ACCEPTED",
+      "LOST",
+    ];
+
+    const formattedData = {
+      invoiceData: [
+        {
+          title: "Sent Quotes",
+          value: data.salesReport.quoteSet ,
+          textColor: "purple.500",
+          color: "purple.200",
+        },
+        {
+          title: "Draft Quotes",
+          value: data.salesReport.quoteDraft,
+          textColor: "blue.500",
+          color: "blue.200",
+        },
+        {
+          title: "Approved Quotes",
+          value: data.salesReport.quoteApproved ,
+          textColor: "red.500",
+          color: "red.200",
+        },
+      ],
+      recentQuotesData: data.recentQuotes.map((quote) => ({
+        // number: quote.number,
+        client: quote.client_name,
+        total: quote.total_amount + " AED",
+        status: statusList[quote.status - 1],
+        date: new Date(quote.quote_date).toLocaleDateString(),
+      })),
+    };
+    return formattedData;
+  } catch (error) {
+    console.error("Error fetching API data:", error);
+    throw error;
+  }
+};
+
+export async function getdashboarddataaccounts() {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/reports/accounts`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log("api",response.data)
+    const data = response.data;
+    const statusList = [
+      "DRAFT",
+      "PENDING",
+      "SENT",
+      "EXPIRED",
+      "DECLINED",
+      "ACCEPTED",
+      "LOST",
+    ];
+
+    const formattedData = {
+      recentInvoicesData: data.recentInvoices.map((invoice) => ({
+        number: invoice.number,
+        client: invoice.client_name,
+        total: invoice.total_amount + " AED",
+        status: statusList[invoice.status - 1],
+        date: new Date(invoice.invoice_current_date).toLocaleDateString(),
+      })),
+    };
+    return formattedData;
+  } catch (error) {
+    console.error("Error fetching API data:", error);
+    throw error;
+  }
+};
+
+
 
 export async function getQuotePdfById(quoteId) {
   try {

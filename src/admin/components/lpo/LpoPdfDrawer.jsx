@@ -98,8 +98,8 @@ const LpoPdfDrawer = ({ data, onClose }) => {
     doc.setFont("helvetica", "bold");
     doc.text("From", 15, 40); // X: 15, Y: 85
     doc.setFont("helvetica", "normal");
-    doc.text(`${pdfData.data.settings.name}`, 15, 45); // X: 15, Y: 85
-    doc.text("Tel No: " + `${pdfData.data.settings.name}`, 15, 50); // X: 15, Y: 85
+    doc.text(`${pdfData.data.employee.fname} ${pdfData.data.employee.lname}`, 15, 45); // X: 15, Y: 85
+    doc.text("Tel No: " + `hardcoded number`, 15, 50); // X: 15, Y: 85
     doc.text("Address: " + `${pdfData.data.settings.address}`, 15, 55); // X: 15, Y: 85
 
     doc.setFont("helvetica", "bold");
@@ -110,7 +110,7 @@ const LpoPdfDrawer = ({ data, onClose }) => {
     doc.text("Email: " + `${data.InvoiceData.client_email}`, 15, 80); // X: 15, Y: 85
     doc.text("Address: " + `${data.InvoiceData.client_address}`, 15, 85); // X: 15, Y: 85
     doc.setFont("helvetica", "bold");
-    doc.text("ATTN: " + "yahan pr naam ayega", 15, 90); // X: 15, Y: 85
+    // doc.text("ATTN: " + "yahan pr naam ayega", 15, 90); // X: 15, Y: 85
 
     // doc.setFontSize(8);
     // Place address lines below the "Four Seasons" text, aligned with the left edge
@@ -135,27 +135,27 @@ const LpoPdfDrawer = ({ data, onClose }) => {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
     doc.text(
-      "DELIVERY LOCATION: " + "yahan pr locaiton ayegi",
+      "DELIVERY LOCATION: " + `${data.InvoiceData.location}`,
       pageWidth -
       doc.getTextWidth(
-        "DELIVERY LOCATION: " + "yahan pr locaiton ayegi"
+        "DELIVERY LOCATION: " + `${data.InvoiceData.location}`
       ) -
       15,
       40
     );
     doc.text(
-      "PROJECT NAME: " + "yahn pr project name ayega",
-      pageWidth - doc.getTextWidth("PROJECT NAME: " + "yahn pr project name ayega") - 15,
+      "PROJECT NAME: " + `${data.InvoiceData.pname}`,
+      pageWidth - doc.getTextWidth("PROJECT NAME: " + `${data.InvoiceData.pname}`) - 15,
       45
     );
     doc.text(
-      "Contant Person: " + "hello",
-      pageWidth - doc.getTextWidth("Contant Person: " + "hello") - 15,
+      "Contact Person: " + `${data.InvoiceData.employee_name} ${data.InvoiceData.employee_surname}`,
+      pageWidth - doc.getTextWidth("Contact Person: " + `${data.InvoiceData.employee_name} ${data.InvoiceData.employee_surname}`) - 15,
       50
     );
     doc.text(
-      "Tel No: " + "yahan pr telno ayega",
-      pageWidth - doc.getTextWidth("Tel No: " + "yahan pr telno ayega") - 15,
+      "Tel No: " + `${data.InvoiceData.employee_phone}`,
+      pageWidth - doc.getTextWidth("Tel No: " + `${data.InvoiceData.employee_phone}`) - 15,
       55
     );
 
@@ -442,7 +442,7 @@ const LpoPdfDrawer = ({ data, onClose }) => {
               {/* <Image src={Logo} width="400px" mb={50} /> */}
               <Text fontWeight="bold">From:</Text>
               <Text >{pdfData.data.settings.name}</Text>
-              <Text >Tel No: {pdfData.data.settings.tellno}</Text>
+              <Text >Tel No: hard coded number</Text>
               <Text>Address: {pdfData.data.settings.address}</Text>
               {/* <Text>Email: <a href="mailto:info@fourseason.ae" >info@fourseason.ae</a></Text> */}
               <Text fontWeight="bold">To:</Text>
@@ -450,7 +450,6 @@ const LpoPdfDrawer = ({ data, onClose }) => {
               <Text>Tel No: {data.InvoiceData.client_phone}</Text>
               <Text>Email: {data.InvoiceData.client_email}</Text>
               <Text>Address: {data.InvoiceData.client_address}</Text>
-              <Text fontWeight="bold">ATTN: naam dedo</Text>
             </VStack>
             <VStack align="end">
               <Text
@@ -461,13 +460,12 @@ const LpoPdfDrawer = ({ data, onClose }) => {
                 Purchase Order
               </Text>
               {/* <Divider h={5} */}
-              <Text fontSize="lg" mt="100px">DELIVERY LOCATION: yahan pr location ayegi</Text>
-              <Text fontSize="lg">PROJECT NAME: Mr. Mark Comprehensive</Text>
+              <Text fontSize="lg" mt="100px">DELIVERY LOCATION: {data.InvoiceData.location}</Text>
+              <Text fontSize="lg">PROJECT NAME: {data.InvoiceData.pname}</Text>
               <Text>
-                Contact Person: {data.InvoiceData.employee_name}{" "}
-                {data.InvoiceData.employee_surname}
+                Contact Person: {pdfData.data.employee.fname} {pdfData.data.employee.lname}
               </Text>
-              <Text>Tel No: {data.InvoiceData.employee_number}</Text>
+              <Text>Tel No: {data.InvoiceData.employee_phone}</Text>
             </VStack>
           </SimpleGrid>
           <Divider orientation="horizontal" height={10} />
@@ -476,11 +474,11 @@ const LpoPdfDrawer = ({ data, onClose }) => {
           <SimpleGrid columns={2} spacing={4}>
             <VStack>
               <Text fontWeight="bold">L.P.O DATE</Text>
-              <Text >15-Aug-23</Text>
+              <Text >{new Date(data.InvoiceData.invoice_current_date).toISOString().split("T")[0]}</Text>
             </VStack>
             <VStack>
               <Text fontWeight="bold">L.P.O NO</Text>
-              <Text >FSGR-PO-138</Text>
+              <Text>{data.InvoiceData.number}</Text>
             </VStack>
           </SimpleGrid>
           <TableContainer mt={4}>

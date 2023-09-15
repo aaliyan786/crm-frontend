@@ -129,19 +129,10 @@ function EditDrawerE({ data, handleAddOrUpdateEmployee, onClose }) {
 
       <FormControl isRequired>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
-          <Box>
-            <FormLabel>Surname</FormLabel>
-            <Input
-              type="text"
-              style={inputStyles}
-              value={inputData.surname}
-              onChange={(e) => handleInputChange("surname", e.target.value)}
-              placeholder="Zahid"
-            />
-          </Box>
+          
 
           <Box>
-            <FormLabel>Name</FormLabel>
+            <FormLabel>First Name</FormLabel>
             <Input
               type="text"
               value={inputData.name}
@@ -149,6 +140,16 @@ function EditDrawerE({ data, handleAddOrUpdateEmployee, onClose }) {
               style={inputStyles}
               placeholder="ahmed"
             ></Input>
+          </Box>
+          <Box>
+            <FormLabel>Last Name</FormLabel>
+            <Input
+              type="text"
+              style={inputStyles}
+              value={inputData.surname}
+              onChange={(e) => handleInputChange("surname", e.target.value)}
+              placeholder="Zahid"
+            />
           </Box>
           {/* <Box>
             <FormLabel>Password</FormLabel>
