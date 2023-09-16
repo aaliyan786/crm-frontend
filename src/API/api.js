@@ -2,7 +2,14 @@ import axios from "axios";
 export const BASE_URL = "http://localhost:3000";
 
 const token = localStorage.getItem("token");
-
+export const updateQuoteApprovalStatus = async (quoteId) => {
+  try {
+    const response = await axios.patch(`${BASE_URL}/api/quote/${quoteId}/approvedByClient`);
+    return response.data; // You can return the response data if needed
+  } catch (error) {
+    throw error;
+  }
+};
 export const sendRegretEmail = async (employeeId, subject, clientId, description, employeePassword) => {
   try {
     const response = await axios.post(`${BASE_URL}/api/send-regret`, {
