@@ -15,7 +15,6 @@ import { fetchCustomerDataByEmployee } from "../../API/api";
 const AdminCustomersPage = () => {
   const bgColor = useColorModeValue("gray.100", "gray.700");
   const [customers, setCustomers] = useState([]);
-  const [customersForEmployee, setCustomersForEmployee] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   let department = "";
