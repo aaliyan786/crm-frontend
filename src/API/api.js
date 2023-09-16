@@ -140,21 +140,7 @@ export const fetchDashboardData = async () => {
   }
 };
 
-// Function to fetch customer data
-export const fetchCustomers = async () => {
-  try {
-    const response = await axios.get(`${BASE_URL}/clients`);
-    const data = response.data;
-    if (data.success) {
-      return data;
-    } else {
-      throw new Error("Failed to fetch customer data");
-    }
-  } catch (error) {
-    console.error("Error fetching customer data:", error);
-    throw error;
-  }
-};
+
 
 export const updateClientDetails = async (clientId, updatedData) => {
   try {
@@ -986,26 +972,7 @@ export async function getQuotePdfById(quoteId) {
   }
 }
 
-export const fetchCustomerDataByEmployee = async () => {
-  try {
-    const response = await axios.get(`${BASE_URL}/api/employee/clients`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-    const data = response.data;
-    console.log("hello",response.data)
-    if (data.success) {
-      return response.data;
-    } else {
-      throw new Error("Failed to fetch customer data");
-    }
-  } catch (error) {
-    console.error("Error fetching customer data:", error);
-    throw error;
-  }
-};
+
 
 export const getAllQuotesByAdminStatus = async (type) => {
   try {
@@ -1074,3 +1041,41 @@ export async function sendPdfByEmail(
     throw error; // Handle or log the error as needed
   }
 }
+
+
+export const fetchCustomerDataByEmployee = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/employee/clients`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    const data = response.data;
+    console.log("hello",response.data)
+    if (data.success) {
+      return response.data;
+    } else {
+      throw new Error("Failed to fetch customer data");
+    }
+  } catch (error) {
+    console.error("Error fetching customer data:", error);
+    throw error;
+  }
+};
+
+// Function to fetch customer data
+export const fetchCustomers = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/clients`);
+    const data = response.data;
+    if (data.success) {
+      return response.data;
+    } else {
+      throw new Error("Failed to fetch customer data");
+    }
+  } catch (error) {
+    console.error("Error fetching customer data:", error);
+    throw error;
+  }
+};

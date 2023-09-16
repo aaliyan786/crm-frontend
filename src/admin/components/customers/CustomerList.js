@@ -58,7 +58,7 @@ const CustomerList = ({
       customer.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       customer.added_by_employee?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
+
 
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
@@ -69,7 +69,8 @@ const CustomerList = ({
     indexOfFirstItem,
     indexOfLastItem
   );
-    console.log("currentItems",currentItems)
+  console.log("currentItems", currentItems)
+  console.log("customers", customers)
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };

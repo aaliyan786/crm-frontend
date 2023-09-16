@@ -1,9 +1,6 @@
 // src\admin\pages\AdminCustomersPage.js
 import React, { useState, useEffect } from "react";
 import CryptoJS from "crypto-js";
-
-
-
 import {
   Box,
   Container,
@@ -12,80 +9,64 @@ import {
   Center,
 } from "@chakra-ui/react";
 import CustomerList from "../components/customers/CustomerList";
-import { fetchCustomers } from "../../API/api"; // Import the fetchCustomers function
-import { fetchCustomerDataByEmployee } from "../../API/api"
+import { fetchCustomers } from "../../API/api";
+import { fetchCustomerDataByEmployee } from "../../API/api";
 
 const AdminCustomersPage = () => {
   const bgColor = useColorModeValue("gray.100", "gray.700");
   const [customers, setCustomers] = useState([]);
-  const [customersforemployee, setCustomersForEmployee] = useState([]); // Initialize with an empty array
- // State to hold fetched customer data
+  const [customersForEmployee, setCustomersForEmployee] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  let department = ""; // Initialize the department variable
+  let department = "";
   const encryptedData = localStorage.getItem("encryptedData");
-  const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA"; // Replace with your own secret key
-  if (encryptedData) {
-    try {
-      // Decrypt the data
-      const decryptedData = CryptoJS.AES.decrypt(
-        encryptedData,
-        secretKey
-      ).toString(CryptoJS.enc.Utf8);
-        console.log("Department",decryptedData)
-      if (decryptedData) {
-        // Data successfully decrypted, assign it to the department variable
-        department = decryptedData;
+  const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA";
 
-      } else {
-        // Handle the case where decryption resulted in empty data
-        console.error("Decryption resulted in empty data");
-      }
-    } catch (error) {
-      // Handle decryption errors
-      console.error("Decryption error:", error);
-    }
-  } else {
-    // Handle the case where 'encryptedData' is not found in local storage
-    console.error("Item not found in local storage");
-  }
   useEffect(() => {
-
-    if (department === "sales" || department === "accounts") {
-      async function fetchCustomersDataByEmployee() {
-        setIsLoading(true);
-        try {
-          const response = await fetchCustomerDataByEmployee(); // Replace with the correct function name
-          setCustomersForEmployee(response);
-          console.log("s/a",customersforemployee)
-        } catch (error) {
-          console.error("Error fetching customer data by employee:", error);
-        } finally {
-          setIsLoading(false);
+    if (encryptedData) {
+      try {
+        const decryptedData = CryptoJS.AES.decrypt(
+          encryptedData,
+          secretKey
+        ).toString(CryptoJS.enc.Utf8);
+        console.log("Department", decryptedData);
+        if (decryptedData) {
+          department = decryptedData;
+        } else {
+          console.error("Decryption resulted in empty data");
         }
+      } catch (error) {
+        console.error("Decryption error:", error);
       }
-      fetchCustomersDataByEmployee();
-
     } else {
-      async function fetchCustomersData() {
-        setIsLoading(true);
-        try {
-          const response = await fetchCustomers(); // Use the fetchCustomers function
-          setCustomers(response.data);
-        } catch (error) {
-          console.error("Error fetching customer data:", error);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-      fetchCustomersData();
+      console.error("Item not found in local storage");
     }
-  }, [department]);
 
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        let response;
+        if (department === "sales" || department === "accounts") {
+          response = await fetchCustomerDataByEmployee();
+          setCustomers(response.data);
+          console.log("Fetched customers for sales/accounts", customers);
+        } else {
+          response = await fetchCustomers();
+          setCustomers(response.data);
+          console.log("Fetched customers for admin", customers);
+        }
+      } catch (error) {
+        console.error("Error fetching customer data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [department]);
 
   const handleDeleteCustomer = (customerId) => {
     if (customers) {
-      // Check if the customers array exists
       const updatedCustomers = customers.filter(
         (customer) => customer.id !== customerId
       );
@@ -93,28 +74,25 @@ const AdminCustomersPage = () => {
     }
   };
 
-  if(department==='admin')
-  {
   const handleFetchUpdatedCustomer = async () => {
+    setIsLoading(true);
     try {
-      const response = await fetchCustomers(); // Use the fetchCustomers function
-      setCustomers(response.data);
+      let response;
+      if (department === "sales" || department === "accounts") {
+        response = await fetchCustomerDataByEmployee();
+        setCustomers(response);
+      } else {
+        response = await fetchCustomers();
+        setCustomers(response);
+      }
+      console.log("Fetched customers", response);
     } catch (error) {
       console.error("Error fetching customer data:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
-}
-else
-{
-  const handleFetchUpdatedCustomer = async () => {
-    try {
-      const response = await fetchCustomers(); // Use the fetchCustomers function
-      setCustomers(response.data);
-    } catch (error) {
-      console.error("Error fetching customer data:", error);
-    }
-  };
-}
+
   return (
     <Box bg={bgColor} minH="100vh">
       <Container maxW="container.xl" marginRight="0">
@@ -122,33 +100,21 @@ else
           Customer Management
         </Heading>
         {isLoading ? (
-          // Display CircularProgress (Spinner) while loading
           <Center>
             <div className="loader">
               <div className="cover"></div>
             </div>
           </Center>
         ) : (
-          <>
-            {department==='admin' ? (
-              <CustomerList
-                customers={customers}
-                handleFetchUpdatedCustomer={handleFetchUpdatedCustomer}
-                onDeleteCustomer={handleDeleteCustomer}
-              />
-            ) : (
-              <CustomerList
-                customers={customersforemployee}
-                handleFetchUpdatedCustomer={handleFetchUpdatedCustomer}
-                onDeleteCustomer={handleDeleteCustomer}
-              />
-            )}
-          </>
+          <CustomerList
+            customers={customers}
+            handleFetchUpdatedCustomer={handleFetchUpdatedCustomer}
+            onDeleteCustomer={handleDeleteCustomer}
+          />
         )}
       </Container>
     </Box>
   );
-  
 };
 
 export default AdminCustomersPage;
