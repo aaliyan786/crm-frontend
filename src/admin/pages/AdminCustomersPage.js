@@ -12,11 +12,13 @@ import {
   Center,
 } from "@chakra-ui/react";
 import CustomerList from "../components/customers/CustomerList";
-import { fetchCustomers,fetchCustomerDataByEmployee } from "../../API/api"; // Import the fetchCustomers function
+import { fetchCustomers } from "../../API/api"; // Import the fetchCustomers function
+import { fetchCustomerDataByEmployee } from "../../API/api"
 
 const AdminCustomersPage = () => {
   const bgColor = useColorModeValue("gray.100", "gray.700");
-  const [customers, setCustomers] = useState([]); // State to hold fetched customer data
+  const [customers, setCustomers] = useState([]); // Initialize with an empty array
+ // State to hold fetched customer data
   const [isLoading, setIsLoading] = useState(true);
 
   let department = ""; // Initialize the department variable
@@ -29,10 +31,11 @@ const AdminCustomersPage = () => {
         encryptedData,
         secretKey
       ).toString(CryptoJS.enc.Utf8);
-
+        console.log("Department",decryptedData)
       if (decryptedData) {
         // Data successfully decrypted, assign it to the department variable
         department = decryptedData;
+
       } else {
         // Handle the case where decryption resulted in empty data
         console.error("Decryption resulted in empty data");
@@ -46,9 +49,9 @@ const AdminCustomersPage = () => {
     console.error("Item not found in local storage");
   }
   useEffect(() => {
+
     if (department === "sales" || department === "accounts") {
-      // Call the "fetchcustomerdatabyemployee" function
-      async function fetchCustomerDataByEmployee() {
+      async function fetchCustomersDataByEmployee() {
         setIsLoading(true);
         try {
           const response = await fetchCustomerDataByEmployee(); // Replace with the correct function name
@@ -59,7 +62,8 @@ const AdminCustomersPage = () => {
           setIsLoading(false);
         }
       }
-      fetchCustomerDataByEmployee();
+      fetchCustomersDataByEmployee();
+
     } else {
       async function fetchCustomersData() {
         setIsLoading(true);
@@ -78,11 +82,13 @@ const AdminCustomersPage = () => {
 
 
   const handleDeleteCustomer = (customerId) => {
-    // Filter out the deleted customer from the customers state
-    const updatedCustomers = customers.filter(
-      (customer) => customer.id !== customerId
-    );
-    setCustomers(updatedCustomers);
+    if (customers) {
+      // Check if the customers array exists
+      const updatedCustomers = customers.filter(
+        (customer) => customer.id !== customerId
+      );
+      setCustomers(updatedCustomers);
+    }
   };
   const handleFetchUpdatedCustomer = async () => {
     try {
