@@ -55,7 +55,8 @@ const AdminCustomersPage = () => {
         setIsLoading(true);
         try {
           const response = await fetchCustomerDataByEmployee(); // Replace with the correct function name
-          setCustomers(response.data);
+          setCustomers(response);
+          console.log("i like to party",response)
         } catch (error) {
           console.error("Error fetching customer data by employee:", error);
         } finally {

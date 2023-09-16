@@ -995,8 +995,9 @@ export const fetchCustomerDataByEmployee = async () => {
       },
     });
     const data = response.data;
+    console.log("hello",response.data)
     if (data.success) {
-      return data;
+      return response.data;
     } else {
       throw new Error("Failed to fetch customer data");
     }

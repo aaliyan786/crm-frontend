@@ -114,9 +114,7 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
           isClosable: true,
         });
         onDeleteCustomer(customerToDelete.id);
-
         setIsDeleteAlertOpen(false);
-
         setCustomerToDelete(null);
         setDeleteErrorMessage("");
 
@@ -144,7 +142,6 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
   const handleAddCustomerClick = () => {
     setIsAddCustomerDrawerOpen(true);
   }
-
   return (
     <Box
       bg={bgColor}
