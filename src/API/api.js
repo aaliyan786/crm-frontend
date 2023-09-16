@@ -4,12 +4,16 @@ export const BASE_URL = "http://localhost:3000";
 const token = localStorage.getItem("token");
 export const updateQuoteApprovalStatus = async (quoteId) => {
   try {
-    const response = await axios.patch(`${BASE_URL}/api/quote/${quoteId}/approvedByClient`);
+    const response = await axios.patch(
+      `${BASE_URL}/api/quote/${quoteId}/approvedByClient`,
+      { isApprovedByClient: 1 } // Include the data in the request body
+    );
     return response.data; // You can return the response data if needed
   } catch (error) {
     throw error;
   }
 };
+
 export const sendRegretEmail = async (employeeId, subject, clientId, description, employeePassword) => {
   try {
     const response = await axios.post(`${BASE_URL}/api/send-regret`, {
@@ -911,7 +915,7 @@ export async function getdashboarddatasales() {
       invoiceData: [
         {
           title: "Sent Quotes",
-          value: data.salesReport.quoteSet ,
+          value: data.salesReport.quoteSet,
           textColor: "purple.500",
           color: "purple.200",
         },
@@ -923,7 +927,7 @@ export async function getdashboarddatasales() {
         },
         {
           title: "Approved Quotes",
-          value: data.salesReport.quoteApproved ,
+          value: data.salesReport.quoteApproved,
           textColor: "red.500",
           color: "red.200",
         },
@@ -954,7 +958,7 @@ export async function getdashboarddataaccounts() {
         },
       }
     );
-    console.log("api",response.data)
+    console.log("api", response.data)
     const data = response.data;
     const statusList = [
       "DRAFT",
