@@ -46,7 +46,7 @@ const AdminCustomersPage = () => {
     console.error("Item not found in local storage");
   }
   useEffect(() => {
-    if (department !== "admin") {
+    if (department === "sales" || department === "accounts") {
       // Call the "fetchcustomerdatabyemployee" function
       async function fetchCustomerDataByEmployee() {
         setIsLoading(true);
