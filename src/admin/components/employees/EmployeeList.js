@@ -150,8 +150,8 @@ const EmployeeList = ({ employees, handleAddOrUpdateEmployee }) => {
         <Table variant="simple">
           <Thead>
             <Tr>
-              <Th>Name</Th>
-              <Th>Surname</Th>
+              <Th>First Name</Th>
+              <Th>Last Name</Th>
               {/* <Th>DOB</Th> */}
               <Th>Department</Th>
               <Th>Position</Th>

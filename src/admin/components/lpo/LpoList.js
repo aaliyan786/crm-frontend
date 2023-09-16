@@ -287,7 +287,7 @@ const LpoList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateInvoi
                 <Tr key={invoice.InvoiceData.id}>
                   <Td>{invoice.InvoiceData.number}</Td>
                   <Td>{invoice.InvoiceData.client_fname + ' ' + invoice.InvoiceData.client_lname}</Td>
-                  <Td>project ka naam laado sherjeel smarty</Td>
+                  <Td>{invoice.InvoiceData.pname}</Td>
                   <Td>{new Date(invoice.InvoiceData.invoice_current_date).toISOString().split("T")[0]}</Td>
                   {/* <Td>{new Date(invoice.InvoiceData.expiry_date).toISOString().split("T")[0]}</Td> */}
 

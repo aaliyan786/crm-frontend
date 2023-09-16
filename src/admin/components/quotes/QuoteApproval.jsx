@@ -94,6 +94,11 @@ const QuoteApproval = () => {
       }
     }
   };
+ 
+    
+    // if (error) {
+    //     return <NotFoundPage />;
+    // }
 
   return (
     <Box pt={5}>

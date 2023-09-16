@@ -44,11 +44,11 @@ function AddNewDrawerE({ onClose, handleAddOrUpdateEmployee }) {
       [field]: value,
     }));
   };
-const toast=useToast()
+  const toast = useToast()
   const handleSubmit = async () => {
     console.log(inputData);
     try {
-       await createEmployee(inputData);
+      await createEmployee(inputData);
       toast({
         title: "Employee Added",
         description: "The Employee has been added successfully.",
@@ -121,25 +121,24 @@ const toast=useToast()
       <FormControl isRequired>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
           <Box>
-            <FormLabel>Surname</FormLabel>
-            <Input
-              type="text"
-              style={inputStyles}
-              value={inputData.surname}
-              onChange={(e) => handleInputChange("surname", e.target.value)}
-              placeholder="Zahid"
-            />
-          </Box>
-
-          <Box>
-            <FormLabel>Name</FormLabel>
+            <FormLabel>First Name</FormLabel>
             <Input
               type="text"
               value={inputData.name}
               onChange={(e) => handleInputChange("name", e.target.value)}
               style={inputStyles}
-              placeholder="ahmed"
+              placeholder="Enter your First Name"
             ></Input>
+          </Box>
+          <Box>
+            <FormLabel>Last Name</FormLabel>
+            <Input
+              type="text"
+              style={inputStyles}
+              value={inputData.surname}
+              onChange={(e) => handleInputChange("surname", e.target.value)}
+              placeholder="Enter your Last Name"
+            />
           </Box>
           <Box>
             <FormLabel>Password</FormLabel>
