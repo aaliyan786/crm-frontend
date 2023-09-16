@@ -50,13 +50,17 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
     setSearchTerm(event.target.value);
   };
 
-  const filteredCustomers = customers.filter(
-    (customer) =>
+  const filteredCustomers = Array.isArray(customers)
+  ? customers.filter((customer) =>
       customer.company_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (customer.fname + " " + customer.lname)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       customer.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       customer.added_by_employee?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      
+    )
+  : [];
+  console.log(customers)
+
 
 
   const itemsPerPage = 10;
@@ -176,6 +180,7 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
           Add New Customer
         </Button>
       </Flex>
+      
       <TableContainer>
         <Table variant="simple">
           <Thead>
