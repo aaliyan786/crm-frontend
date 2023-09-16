@@ -1,5 +1,9 @@
 // src\admin\pages\AdminCustomersPage.js
 import React, { useState, useEffect } from "react";
+import CryptoJS from "crypto-js";
+
+
+
 import {
   Box,
   Container,
@@ -8,31 +12,76 @@ import {
   Center,
 } from "@chakra-ui/react";
 import CustomerList from "../components/customers/CustomerList";
-import { fetchCustomers } from "../../API/api"; // Import the fetchCustomers function
+import { fetchCustomers,fetchCustomerDataByEmployee } from "../../API/api"; // Import the fetchCustomers function
 
 const AdminCustomersPage = () => {
   const bgColor = useColorModeValue("gray.100", "gray.700");
   const [customers, setCustomers] = useState([]); // State to hold fetched customer data
-  const [isLoading,setIsLoading]=useState(true)
-  useEffect(() => {
-    // Fetch customer data when the component mounts
-    async function fetchCustomersData() {
-      setIsLoading(true)
-      try {
-        const response = await fetchCustomers(); // Use the fetchCustomers function
-        setCustomers(response.data);
-      } catch (error) {
-        console.error("Error fetching customer data:", error);
-      }finally{
-        setIsLoading(false)
-      }
-    }
+  const [isLoading, setIsLoading] = useState(true);
 
-    fetchCustomersData();
-  }, []); // Empty dependency array ensures this runs only once after mounting
+  let department = ""; // Initialize the department variable
+  const encryptedData = localStorage.getItem("encryptedData");
+  const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA"; // Replace with your own secret key
+  if (encryptedData) {
+    try {
+      // Decrypt the data
+      const decryptedData = CryptoJS.AES.decrypt(
+        encryptedData,
+        secretKey
+      ).toString(CryptoJS.enc.Utf8);
+
+      if (decryptedData) {
+        // Data successfully decrypted, assign it to the department variable
+        department = decryptedData;
+      } else {
+        // Handle the case where decryption resulted in empty data
+        console.error("Decryption resulted in empty data");
+      }
+    } catch (error) {
+      // Handle decryption errors
+      console.error("Decryption error:", error);
+    }
+  } else {
+    // Handle the case where 'encryptedData' is not found in local storage
+    console.error("Item not found in local storage");
+  }
+  useEffect(() => {
+    if (department !== "admin") {
+      // Call the "fetchcustomerdatabyemployee" function
+      async function fetchCustomerDataByEmployee() {
+        setIsLoading(true);
+        try {
+          const response = await fetchCustomerDataByEmployee(); // Replace with the correct function name
+          setCustomers(response.data);
+        } catch (error) {
+          console.error("Error fetching customer data by employee:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+      fetchCustomerDataByEmployee();
+    } else {
+      async function fetchCustomersData() {
+        setIsLoading(true);
+        try {
+          const response = await fetchCustomers(); // Use the fetchCustomers function
+          setCustomers(response.data);
+        } catch (error) {
+          console.error("Error fetching customer data:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+      fetchCustomersData();
+    }
+  }, [department]);
+
+
   const handleDeleteCustomer = (customerId) => {
     // Filter out the deleted customer from the customers state
-    const updatedCustomers = customers.filter((customer) => customer.id !== customerId);
+    const updatedCustomers = customers.filter(
+      (customer) => customer.id !== customerId
+    );
     setCustomers(updatedCustomers);
   };
   const handleFetchUpdatedCustomer = async () => {
@@ -49,17 +98,20 @@ const AdminCustomersPage = () => {
         <Heading as="h1" size="xl" mb={4}>
           Customer Management
         </Heading>
-        {isLoading? (
-           // Display CircularProgress (Spinner) while loading
-           <Center>
-           <div class="loader">
-             <div class="cover"></div>
-           </div>
-         </Center>
-         
+        {isLoading ? (
+          // Display CircularProgress (Spinner) while loading
+          <Center>
+            <div class="loader">
+              <div class="cover"></div>
+            </div>
+          </Center>
         ) : (
           // Display CustomerList component when data is fetched
-          <CustomerList customers={customers} handleFetchUpdatedCustomer={handleFetchUpdatedCustomer} onDeleteCustomer={handleDeleteCustomer} />
+          <CustomerList
+            customers={customers}
+            handleFetchUpdatedCustomer={handleFetchUpdatedCustomer}
+            onDeleteCustomer={handleDeleteCustomer}
+          />
         )}
       </Container>
     </Box>

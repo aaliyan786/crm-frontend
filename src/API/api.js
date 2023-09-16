@@ -1005,6 +1005,23 @@ export async function getQuotePdfById(quoteId) {
   }
 }
 
+export async function fetchCustomerDataByEmployee() {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/api/employee/clients`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 export const getAllQuotesByAdminStatus = async (type) => {
   try {
@@ -1067,3 +1084,4 @@ export async function sendPdfByEmail(pdfFile, employeeId, clientId, employeePass
     throw error; // Handle or log the error as needed
   }
 }
+
