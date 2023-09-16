@@ -17,7 +17,8 @@ import { fetchCustomerDataByEmployee } from "../../API/api"
 
 const AdminCustomersPage = () => {
   const bgColor = useColorModeValue("gray.100", "gray.700");
-  const [customers, setCustomers] = useState([]); // Initialize with an empty array
+  const [customers, setCustomers] = useState([]);
+  const [customersforemployee, setCustomersForEmployee] = useState([]); // Initialize with an empty array
  // State to hold fetched customer data
   const [isLoading, setIsLoading] = useState(true);
 
@@ -55,8 +56,8 @@ const AdminCustomersPage = () => {
         setIsLoading(true);
         try {
           const response = await fetchCustomerDataByEmployee(); // Replace with the correct function name
-          setCustomers(response);
-          console.log("i like to party",response)
+          setCustomersForEmployee(response);
+          console.log("s/a",customersforemployee)
         } catch (error) {
           console.error("Error fetching customer data by employee:", error);
         } finally {
@@ -91,6 +92,9 @@ const AdminCustomersPage = () => {
       setCustomers(updatedCustomers);
     }
   };
+
+  if(department==='admin')
+  {
   const handleFetchUpdatedCustomer = async () => {
     try {
       const response = await fetchCustomers(); // Use the fetchCustomers function
@@ -99,6 +103,18 @@ const AdminCustomersPage = () => {
       console.error("Error fetching customer data:", error);
     }
   };
+}
+else
+{
+  const handleFetchUpdatedCustomer = async () => {
+    try {
+      const response = await fetchCustomers(); // Use the fetchCustomers function
+      setCustomers(response.data);
+    } catch (error) {
+      console.error("Error fetching customer data:", error);
+    }
+  };
+}
   return (
     <Box bg={bgColor} minH="100vh">
       <Container maxW="container.xl" marginRight="0">
@@ -108,21 +124,31 @@ const AdminCustomersPage = () => {
         {isLoading ? (
           // Display CircularProgress (Spinner) while loading
           <Center>
-            <div class="loader">
-              <div class="cover"></div>
+            <div className="loader">
+              <div className="cover"></div>
             </div>
           </Center>
         ) : (
-          // Display CustomerList component when data is fetched
-          <CustomerList
-            customers={customers}
-            handleFetchUpdatedCustomer={handleFetchUpdatedCustomer}
-            onDeleteCustomer={handleDeleteCustomer}
-          />
+          <>
+            {department==='admin' ? (
+              <CustomerList
+                customers={customers}
+                handleFetchUpdatedCustomer={handleFetchUpdatedCustomer}
+                onDeleteCustomer={handleDeleteCustomer}
+              />
+            ) : (
+              <CustomerList
+                customers={customersforemployee}
+                handleFetchUpdatedCustomer={handleFetchUpdatedCustomer}
+                onDeleteCustomer={handleDeleteCustomer}
+              />
+            )}
+          </>
         )}
       </Container>
     </Box>
   );
+  
 };
 
 export default AdminCustomersPage;
