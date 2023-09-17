@@ -153,7 +153,8 @@ const QuoteList = ({ quotes, handleAddUpdateDeleteQuote }) => {
         title: "Quote Deleted",
         description: "The Quote has been deleted successfully.",
         status: "success",
-        duration: 3000,
+          position: "top-right",
+          duration: 3000,
         isClosable: true,
       });
 
@@ -165,6 +166,7 @@ const QuoteList = ({ quotes, handleAddUpdateDeleteQuote }) => {
           title: "Error",
           description: error.response.data.error,
           status: "error",
+          position: "top-right",
           duration: 3000,
           isClosable: true,
         });
