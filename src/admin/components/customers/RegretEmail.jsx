@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import CryptoJS from "crypto-js";
+
 import {
   Drawer,
   DrawerOverlay,
@@ -21,9 +23,10 @@ import {
 
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { FiSend } from "react-icons/fi"; // Import FiSend
-
 // Assuming these imports are correct
 import { sendRegretEmail } from "../../../API/api";
+
+
 
 const RegretEmail = ({ isOpen, onClose, customerDetails, onSend, onEdit }) => {
   const bgColor = useColorModeValue("gray.100", "gray.700");
@@ -41,14 +44,42 @@ const RegretEmail = ({ isOpen, onClose, customerDetails, onSend, onEdit }) => {
     }
   };
 
+  let password = "";
+  const encryptedData = localStorage.getItem("password");
+  const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA"; // Replace with your own secret key
+  if (encryptedData) {
+    try {
+      // Decrypt the data
+      const decryptedData = CryptoJS.AES.decrypt(
+        encryptedData,
+        secretKey
+      ).toString(CryptoJS.enc.Utf8);
+
+      if (decryptedData) {
+        // Data successfully decrypted, assign it to the department variable
+        password = decryptedData;
+      } else {
+        // Handle the case where decryption resulted in empty data
+        console.error("Decryption resulted in empty data");
+      }
+    } catch (error) {
+      // Handle decryption errors
+      console.error("Decryption error:", error);
+    }
+  } else {
+    // Handle the case where 'encryptedData' is not found in local storage
+    console.error("Item not found in local storage");
+  } // Replace with your own secret key
+  
+  const user = sessionStorage.getItem("user");
   const handleSendEmailClick = async () => {
     try {
       const response = await sendRegretEmail(
-        1, //employee id
+        user.id, //employee id
         subject, // Use the subject state
         customerDetails.id,
         description,
-        "password" //employee password
+        password, //employee password
       );
 
       console.log("Email sent successfully:", response);

@@ -4,13 +4,23 @@ export const BASE_URL = "http://localhost:3000";
 const token = localStorage.getItem("token");
 export const updateQuoteApprovalStatus = async (quoteId) => {
   try {
-    const response = await axios.patch(`${BASE_URL}/api/quote/${quoteId}/approvedByClient`);
+    const response = await axios.patch(
+      `${BASE_URL}/api/quote/${quoteId}/approvedByClient`,
+      { isApprovedByClient: 1 } // Include the data in the request body
+    );
     return response.data; // You can return the response data if needed
   } catch (error) {
     throw error;
   }
 };
-export const sendRegretEmail = async (employeeId, subject, clientId, description, employeePassword) => {
+
+export const sendRegretEmail = async (
+  employeeId,
+  subject,
+  clientId,
+  description,
+  employeePassword
+) => {
   try {
     const response = await axios.post(`${BASE_URL}/api/send-regret`, {
       employeeId,
@@ -29,7 +39,6 @@ export const fetchDashboardData = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/api/reports/admin`);
     const data = response.data;
-
 
     const statusList = [
       "DRAFT",
@@ -131,21 +140,7 @@ export const fetchDashboardData = async () => {
   }
 };
 
-// Function to fetch customer data
-export const fetchCustomers = async () => {
-  try {
-    const response = await axios.get(`${BASE_URL}/clients`);
-    const data = response.data;
-    if (data.success) {
-      return data;
-    } else {
-      throw new Error("Failed to fetch customer data");
-    }
-  } catch (error) {
-    console.error("Error fetching customer data:", error);
-    throw error;
-  }
-};
+
 
 export const updateClientDetails = async (clientId, updatedData) => {
   try {
@@ -173,14 +168,12 @@ export const updateClientDetails = async (clientId, updatedData) => {
 
 export const deleteCustomer = async (customerId, token) => {
   try {
-    const response = await axios.delete(`${BASE_URL}/client/${customerId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axios.delete(`${BASE_URL}/client/${customerId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
     const data = response.data;
     if (data.success) {
@@ -195,16 +188,14 @@ export const deleteCustomer = async (customerId, token) => {
 };
 export const getInvoiceById = async (invoiceId) => {
   try {
-    const response = await axios.get(`${BASE_URL}/api/invoice/${invoiceId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-    console.log('response.data get invoice by id ', response.data)
-    return response.data.InvoiceData
-      ;
+    const response = await axios.get(`${BASE_URL}/api/invoice/${invoiceId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("response.data get invoice by id ", response.data);
+    return response.data.InvoiceData;
   } catch (error) {
     throw error;
   }
@@ -245,8 +236,6 @@ export const AddClient = async (clientData) => {
       date,
       company_name,
       added_by_employee,
-
-
     } = clientData;
 
     const response = await axios.post(`${BASE_URL}/client`, {
@@ -259,7 +248,6 @@ export const AddClient = async (clientData) => {
       date,
       company_name,
       added_by_employee,
-
     });
     if (response.status === 201 || response.status === 200) {
       return "Client added successfully";
@@ -308,10 +296,7 @@ export const createQuoteApi = async (QuoteData, token) => {
 };
 export async function loginUser(credentials) {
   try {
-    const response = await axios.post(
-      `${BASE_URL}/auth/login`,
-      credentials
-    );
+    const response = await axios.post(`${BASE_URL}/auth/login`, credentials);
     return response.data;
   } catch (error) {
     throw error;
@@ -321,12 +306,13 @@ export async function loginUser(credentials) {
 export const deleteInvoice = async (invoiceId) => {
   try {
     const response = await axios.delete(
-      `${BASE_URL}/api/invoice/${invoiceId}/delete`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    }
+      `${BASE_URL}/api/invoice/${invoiceId}/delete`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response.data;
   } catch (error) {
@@ -336,12 +322,13 @@ export const deleteInvoice = async (invoiceId) => {
 export const deleteQuote = async (quoteId) => {
   try {
     const response = await axios.delete(
-      `${BASE_URL}/api/quote/${quoteId}/delete`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    }
+      `${BASE_URL}/api/quote/${quoteId}/delete`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response.data;
   } catch (error) {
@@ -349,16 +336,14 @@ export const deleteQuote = async (quoteId) => {
   }
 };
 
-
 export const getQuoteById = async (quoteId) => {
   try {
-    const response = await axios.get(`${BASE_URL}/api/quote/${quoteId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+    const response = await axios.get(`${BASE_URL}/api/quote/${quoteId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
     return response.data;
   } catch (error) {
     throw error;
@@ -367,13 +352,12 @@ export const getQuoteById = async (quoteId) => {
 
 export const fetchPaymentModes = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/api/payment-modes`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+    const response = await axios.get(`${BASE_URL}/api/payment-modes`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching payment modes:", error);
@@ -514,10 +498,10 @@ export async function addInvoiceItem(invoiceId, data) {
         },
       }
     );
-    console.log(response.data)
+    console.log(response.data);
     return response.data;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     throw error;
   }
 }
@@ -568,7 +552,7 @@ export async function updateQuoteData(quoteId, data) {
         },
       }
     );
-    console.log('edit quote response', response.data)
+    console.log("edit quote response", response.data);
     return response.data;
   } catch (error) {
     throw error;
@@ -576,7 +560,7 @@ export async function updateQuoteData(quoteId, data) {
 }
 
 const sendRequest = async (url, data) => {
-  console.log('dataaaaaaaaaa', data)
+  console.log("dataaaaaaaaaa", data);
   try {
     const response = await axios.post(`${BASE_URL}/api${url}`, data);
     return response.data;
@@ -587,8 +571,8 @@ const sendRequest = async (url, data) => {
 };
 
 export const addOrUpdateLogo = async (logoFormData) => {
-  console.log('api formData.entries:', Array.from(logoFormData.entries())); // Convert iterator to array
-  console.log('api formData.keys:', Array.from(logoFormData.keys()));
+  console.log("api formData.entries:", Array.from(logoFormData.entries())); // Convert iterator to array
+  console.log("api formData.keys:", Array.from(logoFormData.keys()));
   return sendRequest("/logo/add-or-update", logoFormData);
 };
 
@@ -610,13 +594,12 @@ export const addOrUpdateStamp = async (stampFormData) => {
 
 export const getAllSettings = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/api/get-settings`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+    const response = await axios.get(`${BASE_URL}/api/get-settings`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
     return response.data;
   } catch (error) {
     // Handle error here, e.g., log the error or show a user-friendly error message.
@@ -626,13 +609,12 @@ export const getAllSettings = async () => {
 
 export const getAllPaymentModes = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/api/payment-modes`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+    const response = await axios.get(`${BASE_URL}/api/payment-modes`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
     console.log("res: ", response.data);
     return response.data;
   } catch (error) {
@@ -647,13 +629,12 @@ export const updatePaymentModeRecord = async (
 ) => {
   const url = `${BASE_URL}/api/payment-modes/${paymentModeID}`;
   try {
-    const response = await axios.put(url, paymentModeData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+    const response = await axios.put(url, paymentModeData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
     return response.data;
   } catch (error) {
     throw error;
@@ -697,13 +678,12 @@ export async function createPaymentMode(paymentModeData) {
 
 export async function getAllEmployees() {
   try {
-    const response = await axios.get(`${BASE_URL}/api/admin/all-employees`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+    const response = await axios.get(`${BASE_URL}/api/admin/all-employees`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
     return response.data; // Return the data from the API response
   } catch (error) {
     throw error;
@@ -810,13 +790,16 @@ export const updateEmployee = async (id, updatedData) => {
 };
 export const createAnnouncement = async (announcementData) => {
   try {
-    const response = await axios.post(`${BASE_URL}/api/admin/create-announcement`, announcementData,
+    const response = await axios.post(
+      `${BASE_URL}/api/admin/create-announcement`,
+      announcementData,
       {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-      });
+      }
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -825,15 +808,12 @@ export const createAnnouncement = async (announcementData) => {
 
 export async function getAnnouncementByEmployee() {
   try {
-    const response = await axios.get(
-      `${BASE_URL}/api/employee/announcements`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axios.get(`${BASE_URL}/api/employee/announcements`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -854,12 +834,15 @@ export const getAllLostQuotes = async () => {
 
 export const deleteLostQuote = async (quoteId, token) => {
   try {
-    const response = await fetch(`${BASE_URL}/api/admin/lost-quotes/${quoteId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${BASE_URL}/api/admin/lost-quotes/${quoteId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     const data = await response.json();
     return data;
   } catch (error) {
@@ -867,7 +850,6 @@ export const deleteLostQuote = async (quoteId, token) => {
     throw error;
   }
 };
-
 
 export async function getInvoicePdfById(invoiceId) {
   try {
@@ -887,15 +869,12 @@ export async function getInvoicePdfById(invoiceId) {
 }
 export async function getdashboarddatasales() {
   try {
-    const response = await axios.get(
-      `${BASE_URL}/api/reports/sales`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axios.get(`${BASE_URL}/api/reports/sales`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
     const data = response.data;
     const statusList = [
       "DRAFT",
@@ -911,7 +890,7 @@ export async function getdashboarddatasales() {
       invoiceData: [
         {
           title: "Sent Quotes",
-          value: data.salesReport.quoteSet ,
+          value: data.salesReport.quoteSet,
           textColor: "purple.500",
           color: "purple.200",
         },
@@ -923,7 +902,7 @@ export async function getdashboarddatasales() {
         },
         {
           title: "Approved Quotes",
-          value: data.salesReport.quoteApproved ,
+          value: data.salesReport.quoteApproved,
           textColor: "red.500",
           color: "red.200",
         },
@@ -941,20 +920,17 @@ export async function getdashboarddatasales() {
     console.error("Error fetching API data:", error);
     throw error;
   }
-};
+}
 
 export async function getdashboarddataaccounts() {
   try {
-    const response = await axios.get(
-      `${BASE_URL}/api/reports/accounts`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    console.log("api",response.data)
+    const response = await axios.get(`${BASE_URL}/api/reports/accounts`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("api", response.data);
     const data = response.data;
     const statusList = [
       "DRAFT",
@@ -980,21 +956,16 @@ export async function getdashboarddataaccounts() {
     console.error("Error fetching API data:", error);
     throw error;
   }
-};
-
-
+}
 
 export async function getQuotePdfById(quoteId) {
   try {
-    const response = await axios.get(
-      `${BASE_URL}/api/quote/${quoteId}/pdf`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axios.get(`${BASE_URL}/api/quote/${quoteId}/pdf`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
     return response.data;
   } catch (error) {
     throw error;
@@ -1002,18 +973,20 @@ export async function getQuotePdfById(quoteId) {
 }
 
 
+
 export const getAllQuotesByAdminStatus = async (type) => {
   try {
-    const response = await axios.get(`${BASE_URL}/api/quote/${type}/adminStatus`);
-    console.log('response.data', response.data)
-    console.log(type, 'API STATUS QUOTE: ', response.data)
+    const response = await axios.get(
+      `${BASE_URL}/api/quote/${type}/adminStatus`
+    );
+    console.log("response.data", response.data);
+    console.log(type, "API STATUS QUOTE: ", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching quotes:", error);
     throw error;
   }
 };
-
 
 export const acceptRejectQuote = async (quoteId, isApproved) => {
   try {
@@ -1031,17 +1004,22 @@ export const acceptRejectQuote = async (quoteId, isApproved) => {
 
 export async function updatePayment(paymentId, paymentData) {
   try {
-    const response = await axios.put(`${BASE_URL}/api/payment/${paymentId}/edit`, paymentData);
+    const response = await axios.put(
+      `${BASE_URL}/api/payment/${paymentId}/edit`,
+      paymentData
+    );
     return response.data;
   } catch (error) {
     throw error;
   }
 }
 
-
-
-
-export async function sendPdfByEmail(pdfFile, employeeId, clientId, employeePassword) {
+export async function sendPdfByEmail(
+  pdfFile,
+  employeeId,
+  clientId,
+  employeePassword
+) {
   try {
     const formData = new FormData();
 
@@ -1063,3 +1041,41 @@ export async function sendPdfByEmail(pdfFile, employeeId, clientId, employeePass
     throw error; // Handle or log the error as needed
   }
 }
+
+
+export const fetchCustomerDataByEmployee = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/employee/clients`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    const data = response.data;
+    console.log("hello",response.data)
+    if (data.success) {
+      return response.data;
+    } else {
+      throw new Error("Failed to fetch customer data");
+    }
+  } catch (error) {
+    console.error("Error fetching customer data:", error);
+    throw error;
+  }
+};
+
+// Function to fetch customer data
+export const fetchCustomers = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/clients`);
+    const data = response.data;
+    if (data.success) {
+      return response.data;
+    } else {
+      throw new Error("Failed to fetch customer data");
+    }
+  } catch (error) {
+    console.error("Error fetching customer data:", error);
+    throw error;
+  }
+};

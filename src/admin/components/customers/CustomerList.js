@@ -38,10 +38,11 @@ import { deleteCustomer } from "../../../API/api";
 import DeleteAlert from "../../../components/common/DeleteAlert";
 import RegretEmail from "./RegretEmail";
 
-
-
-
-const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer }) => {
+const CustomerList = ({
+  customers,
+  onDeleteCustomer,
+  handleFetchUpdatedCustomer,
+}) => {
   const bgColor = useColorModeValue("white", "gray.700");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const [searchTerm, setSearchTerm] = useState("");
@@ -64,8 +65,12 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredCustomers.slice(indexOfFirstItem, indexOfLastItem);
-
+  const currentItems = filteredCustomers.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+  console.log("currentItems", currentItems)
+  console.log("customers", customers)
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
@@ -83,14 +88,14 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
   const handleEditClick = (customer) => {
     setSelectedEditCustomer(customer);
     setIsEditDrawerOpen(true);
-  }
+  };
 
   const [isEmailDrawerOpen, setEmailDrawerOpen] = useState(false);
-  const[selectedEmailCustomer, setselectedEmailCustomer] = useState(null);
+  const [selectedEmailCustomer, setselectedEmailCustomer] = useState(null);
   const handleEmailClick = (customer) => {
     setselectedEmailCustomer(customer);
     setEmailDrawerOpen(true);
-  }
+  };
 
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const [customerToDelete, setCustomerToDelete] = useState(null);
@@ -114,14 +119,15 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
           isClosable: true,
         });
         onDeleteCustomer(customerToDelete.id);
-
         setIsDeleteAlertOpen(false);
-
         setCustomerToDelete(null);
         setDeleteErrorMessage("");
-
       } catch (error) {
-        if (error.response && error.response.data && error.response.data.error) {
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.error
+        ) {
           toast({
             title: "Error",
             description: "You cannot delete this client",
@@ -138,13 +144,10 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
     }
   };
 
-
-
   const [isAddCustomerDrawerOpen, setIsAddCustomerDrawerOpen] = useState(false);
   const handleAddCustomerClick = () => {
     setIsAddCustomerDrawerOpen(true);
-  }
-
+  };
   return (
     <Box
       bg={bgColor}
@@ -158,7 +161,12 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
       <Flex align="end" justify="flex-end" mb={4}>
         <Flex align="end" justify="center">
           <InputGroup maxW="300px">
-            <InputLeftElement pointerEvents="none" color="gray.400" fontSize="1.2em" ml={2}>
+            <InputLeftElement
+              pointerEvents="none"
+              color="gray.400"
+              fontSize="1.2em"
+              ml={2}
+            >
               <BiSearch />
             </InputLeftElement>
             <Input
@@ -175,10 +183,20 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
             />
           </InputGroup>
         </Flex>
-        <Button size={{ base: "sm", md: "md" }} w={{ base: "xs", md: "auto" }} colorScheme="blue" borderRadius="0.5rem" px={8} py={3} fontSize={{ base: "xs", md: "md" }} onClick={handleAddCustomerClick}>
+        <Button
+          size={{ base: "sm", md: "md" }}
+          w={{ base: "xs", md: "auto" }}
+          colorScheme="blue"
+          borderRadius="0.5rem"
+          px={8}
+          py={3}
+          fontSize={{ base: "xs", md: "md" }}
+          onClick={handleAddCustomerClick}
+        >
           Add New Customer
         </Button>
       </Flex>
+      {/* {console.log("customerlist", customer)} */}
       <TableContainer>
         <Table variant="simple">
           <Thead>
@@ -210,10 +228,28 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
                       size="sm"
                     />
                     <MenuList>
-                      <MenuItem icon={<FiSend />} onClick={() => handleEmailClick(customer)}>Send Email</MenuItem>
-                      <MenuItem icon={<BiShow />} onClick={() => handleShowClick(customer)}>Show</MenuItem>
-                      <MenuItem icon={<FiEdit />} onClick={() => handleEditClick(customer)}>Edit</MenuItem>
-                      <MenuItem onClick={() => handleDeleteClick(customer)} icon={<FiTrash2 />}>
+                      <MenuItem
+                        icon={<FiSend />}
+                        onClick={() => handleEmailClick(customer)}
+                      >
+                        Send Email
+                      </MenuItem>
+                      <MenuItem
+                        icon={<BiShow />}
+                        onClick={() => handleShowClick(customer)}
+                      >
+                        Show
+                      </MenuItem>
+                      <MenuItem
+                        icon={<FiEdit />}
+                        onClick={() => handleEditClick(customer)}
+                      >
+                        Edit
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => handleDeleteClick(customer)}
+                        icon={<FiTrash2 />}
+                      >
                         Delete
                       </MenuItem>
                     </MenuList>
@@ -241,7 +277,8 @@ const CustomerList = ({ customers, onDeleteCustomer, handleFetchUpdatedCustomer 
           />
         </Box>
         <Text fontSize="sm">
-          Page {currentPage} of {Math.ceil(filteredCustomers.length / itemsPerPage)}
+          Page {currentPage} of{" "}
+          {Math.ceil(filteredCustomers.length / itemsPerPage)}
         </Text>
       </Flex>
 

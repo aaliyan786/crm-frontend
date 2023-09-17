@@ -62,6 +62,7 @@ const QuoteApproval = () => {
 
   const handleApproveQuote = async () => {
     try {
+      console.log("pdfData.data.quoteData?.id: ", pdfData.data.quoteData?.id);
       await updateQuoteApprovalStatus(pdfData.data.quoteData?.id); // Pass the quote ID as an argument
       toast({
         title: "Quote Approved",
@@ -85,7 +86,7 @@ const QuoteApproval = () => {
         toast({
           title: "Error",
           description: "Error approving quote",
-          status: "success",
+          status: "error",
           duration: 3000,
           position: "top-right",
           isClosable: true,
@@ -94,19 +95,13 @@ const QuoteApproval = () => {
       }
     }
   };
- 
-    
-    // if (error) {
-    //     return <NotFoundPage />;
-    // }
+
+  // if (error) {
+  //     return <NotFoundPage />;
+  // }
 
   return (
     <Box pt={5}>
-      <Flex direction="row" justify="center" id="backToTop">
-        <Button variant="solid" colorScheme="green" mr={2} size="lg" onClick={handleApproveQuote}>
-          Accept
-        </Button>
-      </Flex>
       {isLoading ? (
         // Display CircularProgress (Spinner) while loading
         <Center>
@@ -116,6 +111,24 @@ const QuoteApproval = () => {
         </Center>
       ) : (
         <div style={{ padding: "2rem" }}>
+          {pdfData.data.quoteData?.id === 0 ? (
+            <Flex direction="row" justify="center" id="backToTop">
+              <Button
+                variant="solid"
+                colorScheme="green"
+                mr={2}
+                size="lg"
+                onClick={handleApproveQuote}
+              >
+                Accept
+              </Button>
+            </Flex>
+          ) : (
+            <Box textAlign="center" mt={4}>
+              <Text fontSize="lg">This quote is already accepted</Text>
+            </Box>
+          )}
+
           <SimpleGrid columns={2} justifyContent="space-between">
             <VStack justify="start" align="start">
               {/* <Image src={Logo} width="400px" mb={50} /> */}
@@ -163,7 +176,6 @@ const QuoteApproval = () => {
             </VStack>
           </SimpleGrid>
           <Divider orientation="horizontal" height={10} />
-
           <TableContainer>
             <Table>
               <Thead>
