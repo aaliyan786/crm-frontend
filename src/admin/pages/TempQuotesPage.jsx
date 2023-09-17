@@ -5,9 +5,10 @@ import {
   Container,
   Heading,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import QuoteList from "../components/quotes/QuoteList";
-import { getAllQuotes } from "../../API/api";
+import { getAllApprovedByClientQuotes } from "../../API/api";
 import TempQuote from "../components/TempQuote/TempQuote";
 
 const TempQuotesPage = () => {
@@ -18,7 +19,7 @@ const TempQuotesPage = () => {
   // Function to fetch quotes from the API
   const fetchQuotes = async () => {
     try {
-      const response = await getAllQuotes();
+      const response = await getAllApprovedByClientQuotes();
       const quotesData = response.Quote || []; // Ensure Quote is an array
       setQuotes(quotesData);
       setIsLoading(false);
@@ -35,7 +36,7 @@ const TempQuotesPage = () => {
 
   const handleAddUpdateDeleteQuote = async () => {
     try {
-      const response = await getAllQuotes();
+      const response = await getAllApprovedByClientQuotes();
       const quotesData = response.Quote; // Ensure Quote is an array
       setQuotes(quotesData);
       setIsLoading(false);

@@ -19,35 +19,36 @@ import {
   ModalBody,
   ModalFooter,
 } from "@chakra-ui/react";
-import {
-  CloseIcon
-} from "@chakra-ui/icons";
-import { createQuoteApi, fetchCustomers } from "../../../API/api";
-
-
+import { CloseIcon } from "@chakra-ui/icons";
+import { fetchAllAccountsEmployee } from "../../../API/api";
+import { convertQuoteToInvoice } from "../../../API/api";
 
 function TempAssignModal({
+  quoteId,
   handleAddUpdateDeleteQuote,
   onClose,
   isOpen, // Add isOpen prop to control modal visibility
 }) {
-
   const bgColor = useColorModeValue("gray.100", "gray.700");
 
-  const [tableRows, setTableRows] = useState([]);
-
-  const [customers, setCustomers] = useState([]);
-  const [selectedClient, setSelectedClient] = useState("");
+  const [employees, setemployees] = useState([]);
+  const [selectedEmployeeEmail, setSelectedEmployeeEmail] = useState("");
 
   useEffect(() => {
-    // Fetch customer data when the component mounts
+    // Log the selectedEmployeeId when it changes
+    console.log("Selected employee ID: ", selectedEmployeeEmail);
+  }, [selectedEmployeeEmail]); // Add
+
+  useEffect(() => {
+    // Fetch employee data when the component mounts
     async function fetchData() {
       try {
-        const customerData = await fetchCustomers();
-        setCustomers(customerData.data); // Access the customer data inside the "data" array
+        const employeeData = await fetchAllAccountsEmployee();
+        setemployees(employeeData.employees); // Access the employee data inside the "data" array
+        console.log("employeeData", employeeData);
       } catch (error) {
         // Handle the error here
-        console.error("Error fetching customers:", error);
+        console.error("Error fetching employees:", error);
       }
     }
 
@@ -55,43 +56,84 @@ function TempAssignModal({
   }, []);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredCustomers, setFilteredCustomers] = useState(customers);
-  const [selectedClientName, setSelectedClientName] = useState("");
+  const [filteredemployees, setFilteredemployees] = useState(employees);
+  const [selectedEmployeeName, setSelectedEmployeeName] = useState("");
 
   const handleSearchChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
 
-    setSelectedClientName(query); // Update selectedClientName directly
+    setSelectedEmployeeName(query); // Update selectedEmployeeName directly
 
-    const filtered = customers.filter((customer) =>
-      customer.company_name.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredCustomers(filtered);
+    const filtered = employees.filter((employee) => {
+      const fullName = `${employee.name} ${employee.surname}`.toLowerCase();
+      return fullName.includes(query.toLowerCase());
+    });
+
+    setFilteredemployees(filtered);
   };
 
   const inputRef = useRef(null); // Create a ref for the input element
 
-  const handleSelectCustomer = (selectedCustomer) => {
-    setSelectedClient(selectedCustomer.email);
-    setSelectedClientName(selectedCustomer.company_name);
+  const handleSelectemployee = (selectedemployee) => {
+    setSelectedEmployeeEmail(selectedemployee.email);
+    setSelectedEmployeeName(
+      selectedemployee.name + " " + selectedemployee.surname
+    );
     setSearchQuery(""); // Clear the search query when selecting an option
-    setFilteredCustomers([]); // Clear the filtered customers
-
+    setFilteredemployees([]); // Clear the filtered employees
     // Set the selected company name directly to the input value using the ref
-    inputRef.current.value = selectedCustomer.company_name;
+    inputRef.current.value = selectedemployee.company_name;
   };
 
   const handleClearSearch = () => {
-    setSelectedClientName(""); // Clear the selected client name
+    setSelectedEmployeeName(""); // Clear the selected client name
     setSearchQuery(""); // Clear the search query
-    setFilteredCustomers([]); // Clear the filtered customers
+    setFilteredemployees([]); // Clear the filtered employees
   };
-  // Calculate sub-total, VAT tax, and total
-  const subTotal = tableRows.reduce(
-    (total, row) => total + row.item_quantity * row.item_price,
-    0
-  );
+
+  const toast = useToast();
+  // Handle the API call when assigning an employee
+  const handleAssignEmployee = async () => {
+    try {
+      // Make the API call to convert the quote to an invoice and assign it to the selected employee
+      await convertQuoteToInvoice(quoteId, selectedEmployeeEmail);
+      toast({
+        title: "Quote converted and assigned",
+        description: `The quote converted to invoice and assigned to employee ${selectedEmployeeEmail}`,
+        status: "success",
+        duration: 3000,
+        position: "top-right",
+        isClosable: true,
+      });
+      handleAddUpdateDeleteQuote();
+      onClose(onClose);
+      // You can add any success handling here (e.g., displaying a success message)
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.error) {
+        toast({
+          title: "Error",
+          description: error.response.data.error,
+          status: "error",
+          duration: 3000,
+          position: "top-right",
+
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Error assigning quote to employee",
+          status: "error",
+          duration: 3000,
+          position: "top-right",
+          isClosable: true,
+        });
+        // Handle errors (e.g., display an error message)
+        console.error("Error assigning employee:", error);
+      }
+    }
+  };
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
@@ -105,7 +147,7 @@ function TempAssignModal({
               <VStack align="start">
                 <InputGroup>
                   <Input
-                    value={selectedClientName} // Use selectedClientName as the value
+                    value={selectedEmployeeName} // Use selectedEmployeeName as the value
                     onChange={handleSearchChange}
                     bg={bgColor}
                     placeholder="Search for a employee"
@@ -130,15 +172,15 @@ function TempAssignModal({
                   maxH="150px"
                   overflowY="auto"
                 >
-                  {filteredCustomers.map((customer) => (
+                  {filteredemployees.map((employee) => (
                     <Button
-                      key={customer.id}
+                      key={employee.id}
                       justifyContent="start"
                       width="100%"
                       variant="ghost"
-                      onClick={() => handleSelectCustomer(customer)}
+                      onClick={() => handleSelectemployee(employee)}
                     >
-                      {customer.company_name}
+                      {`${employee.name} ${employee.surname}`}
                     </Button>
                   ))}
                 </Box>
@@ -150,7 +192,13 @@ function TempAssignModal({
           <Button variant="outline" colorScheme="red" mr={3} onClick={onClose}>
             Cancel
           </Button>
-          <Button variant="solid" colorScheme="green">Assign Employee</Button>
+          <Button
+            variant="solid"
+            colorScheme="green"
+            onClick={handleAssignEmployee}
+          >
+            Assign Employee
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

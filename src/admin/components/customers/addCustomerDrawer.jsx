@@ -122,7 +122,8 @@ const AddCustomerDrawer = ({
           title: "Client Added",
           description: "Client added successfully",
           status: "success",
-          duration: 3000,
+        position:'top-right',
+        duration: 3000,
           isClosable: true,
         });
        
@@ -137,7 +138,8 @@ const AddCustomerDrawer = ({
           toast({
             title: "Error",
             description: error.response.data.error,
-            status: "error",
+        position:'top-right',
+        status: "error",
             duration: 3000,
             isClosable: true,
           });

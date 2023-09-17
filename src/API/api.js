@@ -223,6 +223,14 @@ export const getAllQuotes = async () => {
     throw error;
   }
 };
+export const getAllApprovedByClientQuotes = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/quote/getAllApprovedByClientQuotes`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const AddClient = async (clientData) => {
   try {
@@ -1052,7 +1060,7 @@ export const fetchCustomerDataByEmployee = async () => {
       },
     });
     const data = response.data;
-    console.log("hello",response.data)
+    console.log("hello", response.data)
     if (data.success) {
       return response.data;
     } else {
@@ -1077,5 +1085,35 @@ export const fetchCustomers = async () => {
   } catch (error) {
     console.error("Error fetching customer data:", error);
     throw error;
+  }
+};
+
+
+export const fetchAllAccountsEmployee = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/admin/all-accountsEmployees`);
+    const data = response.data;
+    if (data.success) {
+      return response.data;
+    } else {
+      throw new Error("Failed to fetch customer data");
+    }
+  } catch (error) {
+    console.error("Error fetching customer data:", error);
+    throw error;
+  }
+};
+
+
+// Function to convert a quote to an invoice and assign it to a specific employee
+export const convertQuoteToInvoice = async (quoteId, employeeEmail) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/api/quote/convertQuoteToInvoice`, {
+      quoteId,
+      employeeEmail,
+    });
+    return response.data; // You can return the response data or handle it as needed
+  } catch (error) {
+    throw error; // Handle the error in your component
   }
 };

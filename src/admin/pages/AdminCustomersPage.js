@@ -79,10 +79,10 @@ const AdminCustomersPage = () => {
       let response;
       if (department === "sales" || department === "accounts") {
         response = await fetchCustomerDataByEmployee();
-        setCustomers(response);
+        setCustomers(response.data);
       } else {
         response = await fetchCustomers();
-        setCustomers(response);
+        setCustomers(response.data);
       }
       console.log("Fetched customers", response);
     } catch (error) {

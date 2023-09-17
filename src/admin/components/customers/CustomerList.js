@@ -115,7 +115,8 @@ const CustomerList = ({
           title: "Invoice Deleted",
           description: "The invoice has been deleted successfully.",
           status: "success",
-          duration: 3000,
+        position:'top-right',
+        duration: 3000,
           isClosable: true,
         });
         onDeleteCustomer(customerToDelete.id);

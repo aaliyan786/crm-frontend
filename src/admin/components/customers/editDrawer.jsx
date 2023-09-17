@@ -46,9 +46,9 @@ const EditCustomerDrawer = ({
       editedCustomer.lname &&
       editedCustomer.fname &&
       editedCustomer.email &&
-      editedCustomer.phone && 
+      editedCustomer.phone &&
       editedCustomer.address &&
-      editedCustomer.vat ;
+      editedCustomer.vat;
 
     setIsFormValid(requiredFieldsFilled);
   }, [editedCustomer]);
@@ -80,8 +80,8 @@ const EditCustomerDrawer = ({
     managerName: "",
     email: "",
     phone: "",
-    address:"",
-    vat:"",
+    address: "",
+    vat: "",
   });
 
   const validateEmail = (email) => {
