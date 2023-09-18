@@ -68,7 +68,6 @@ const TempQuote = ({ quotes, handleAddUpdateDeleteQuote }) => {
     LOST: "gray",
   };
 
-  console.log("quotesssssssssssssssssssssssssss", quotes);
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
 

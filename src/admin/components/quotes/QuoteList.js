@@ -66,7 +66,7 @@ const QuoteList = ({ quotes, handleAddUpdateDeleteQuote }) => {
   };
 
 
-  console.log("quotesssssssssssssssssssssssssss", quotes)
+  console.log("hello", quotes)
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
 

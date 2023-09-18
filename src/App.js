@@ -66,6 +66,7 @@ export default function App() {
       <ChakraProvider theme={theme}>
         <Routes>
           <Route path="/" element={<SignIn />} />
+          <Route path="/*" element={<SignIn />} />
         </Routes>
       </ChakraProvider>
     );
