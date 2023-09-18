@@ -9,7 +9,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import QuoteList from "../components/quotes/QuoteList";
-import { getAllQuotes,getAllQuotesByEmployee } from "../../API/api";
+import { getAllQuotes, getAllQuotesByEmployee } from "../../API/api";
 
 
 let department = "";
@@ -45,18 +45,20 @@ const AdminQuotesPage = () => {
       let response;
       if (department === "sales" || department === "accounts") {
         response = await getAllQuotesByEmployee();
-        quotesData = response.Quote || [];
+        quotesData = response.Quote;
         setQuotes(quotesData);
-          console.log("Fetched quotes for sales/accounts", response);
-        } else {
-         response = await getAllQuotes();
+        console.log("Fetched quotes for sales/accounts", response.Quote);
+      } else {
+        response = await getAllQuotes();
         quotesData = response.Quote || [];
-          console.log("admin quotes",response);
-          setQuotes(quotesData);
-          console.log("Fetched invoices for admin", quotes);
-        }
+        console.log("admin quotes", response);
+        setQuotes(quotesData);
+        console.log("Fetched invoices for admin", quotes);
+      }
     } catch (error) {
       console.error("Error fetching quotes:", error);
+      setIsLoading(false);
+    }finally {
       setIsLoading(false);
     }
   };
@@ -70,18 +72,21 @@ const AdminQuotesPage = () => {
       let response;
       if (department === "sales" || department === "accounts") {
         response = await getAllQuotesByEmployee();
-        quotesData = response.Quote || [];
+        quotesData = response.Quote;
         setQuotes(quotesData);
-          console.log("Fetched quotes for sales/accounts", response);
-        } else {
-         response = await getAllQuotes();
+        console.log("Fetched quotes for sales/accounts", quotesData);
+      } else {
+        response = await getAllQuotes();
         quotesData = response.Quote || [];
-          console.log("admin quotes",response);
-          setQuotes(quotesData);
-          console.log("Fetched invoices for admin", quotes);
-        }
+        console.log("admin quotes", response);
+        setQuotes(quotesData);
+        console.log("Fetched invoices for admin", quotes);
+      }
     } catch (error) {
       console.error("Error fetching quotes:", error);
+
+    }
+    finally {
       setIsLoading(false);
     }
   }
@@ -95,10 +100,10 @@ const AdminQuotesPage = () => {
         </Heading>
         {isLoading ? (
           <Center justifyContent="center">
-          <div class="loader">
-            <div class="cover"></div>
-          </div>
-        </Center>
+            <div class="loader">
+              <div class="cover"></div>
+            </div>
+          </Center>
         ) : (
           <QuoteList
             quotes={quotes}

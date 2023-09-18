@@ -201,28 +201,7 @@ export const getInvoiceById = async (invoiceId) => {
   }
 };
 
-export const getAllQuotes = async () => {
-  try {
-    const response = await axios.get(`${BASE_URL}/api/quote/all`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-export const getAllQuotesByEmployee = async () => {
-  try {
-    const response = await axios.get(`${BASE_URL}/api/employee/documents`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+
 export const getAllApprovedByClientQuotes = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/api/quote/getAllApprovedByClientQuotes`);
@@ -985,7 +964,7 @@ export const fetchAllInvoices = async () => {
     const data = response.data;
     console.log('admin incoice  response.data', response.data)
     if (data.success) {
-      return data.Invoice      ;
+      return data.Invoice;
     } else {
       throw new Error("Failed to fetch customer data");
     }
@@ -1150,5 +1129,31 @@ export const convertQuoteToInvoice = async (quoteId, employeeEmail) => {
     return response.data; // You can return the response data or handle it as needed
   } catch (error) {
     throw error; // Handle the error in your component
+  }
+};
+
+export const getAllQuotesByEmployee = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/employee/documents`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+    console.log('getAllQuotesByEmployee sales', response.data)
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllQuotes = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/quote/all`);
+    console.log('getAllQuotes admin', response.data)
+    return response.data;
+  } catch (error) {
+    throw error;
   }
 };
