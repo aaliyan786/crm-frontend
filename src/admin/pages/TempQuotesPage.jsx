@@ -5,7 +5,6 @@ import {
   Container,
   Heading,
   useColorModeValue,
-  useToast,
 } from "@chakra-ui/react";
 import QuoteList from "../components/quotes/QuoteList";
 import { getAllApprovedByClientQuotes } from "../../API/api";
