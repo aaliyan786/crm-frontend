@@ -2,7 +2,6 @@ import axios from "axios";
 
 export const BASE_URL = "https://backend.fourseasonglassrooms.com:3000";
 
-
 export async function getAnnouncementByEmployee() {
   const token = localStorage.getItem("token");
   try {
