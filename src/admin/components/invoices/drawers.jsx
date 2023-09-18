@@ -19,7 +19,6 @@ const Drawers = ({
   onClose,
   drawerType,
   data,
-  onAddNewInvoice,
   handleUpdateInvoice,
 }) => {
   const renderDrawer = () => {
@@ -27,7 +26,6 @@ const Drawers = ({
       case "addNew":
         return (
           <AddNewDrawer
-            onAddNewInvoice={onAddNewInvoice}
             handleUpdateInvoice={handleUpdateInvoice}
             onClose={onClose}
           />

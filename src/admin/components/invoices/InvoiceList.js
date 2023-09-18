@@ -45,7 +45,9 @@ import DeleteAlert from "../../../components/common/DeleteAlert";
 import { deleteInvoice } from "../../../API/api";
 
 
-const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateInvoice }) => {
+const InvoiceList = ({ invoices, handleUpdateInvoice }) => {
+
+  console.log("InvoiceList: ", invoices)
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedPaymentFilter, setSelectedPaymentFilter] = useState("all");
   const [selectedStatusFilter, setSelectedStatusFilter] = useState("all");
@@ -156,7 +158,7 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
 
       // Remove the deleted invoice from the list
       const updatedInvoices = invoices.filter((invoice) => invoice.InvoiceData.id !== selectedInvoiceId);
-      onDeleteInvoice(updatedInvoices); // Call the prop function to update the parent's state
+      handleUpdateInvoice(); // Call the prop function to update the parent's state
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {
         toast({
@@ -307,7 +309,7 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
                       {
                         ((invoice.InvoiceData.total_amount
                           + ((invoice.InvoiceData.total_amount / 100) * 5) - invoice.InvoiceData.discount)
-                        - invoice.InvoiceData.total_amount_paid).toFixed(2)
+                          - invoice.InvoiceData.total_amount_paid).toFixed(2)
                       }
                     </Td>
                     {/* <Td>
@@ -417,7 +419,6 @@ const InvoiceList = ({ invoices, onDeleteInvoice, onAddNewInvoice, handleUpdateI
         onClose={closeDrawer}
         drawerType={selectedDrawerType}
         data={selectedInvoiceData}
-        onAddNewInvoice={onAddNewInvoice}
         handleUpdateInvoice={handleUpdateInvoice}
       />
       <DeleteAlert
