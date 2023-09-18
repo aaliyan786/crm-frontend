@@ -81,7 +81,6 @@ export default function App() {
           <Route path="/lpo" element={<AdminLpoPage />} />
           <Route path="/quotes" element={<AdminQuotesPage />} />
           <Route path="/tempquote" element={<TempQuotesPage />} />
-          {/* <Route path="/quoteapproval/:id" element={<QuoteApproval />} /> */}
           <Route path="/quoteapproval/:pdfid" element={<QuoteApproval />} />
           <Route path="/lossquotes" element={<AdminLossQuotesPage />} />
           <Route path="/acceptedquotes" element={<AdminAcceptedQuotesPage />} />
