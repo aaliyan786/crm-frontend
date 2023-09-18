@@ -60,7 +60,7 @@ function SignIn() {
             localStorage.setItem("encryptedData", encryptedData);
 
       localStorage.setItem("isUserLoggedIn", "true");
-      window.location.href = "/tempquote";
+      window.location.href = "/";
     }
     else {
       loginUser(credentials)
