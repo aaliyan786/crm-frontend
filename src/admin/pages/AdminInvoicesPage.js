@@ -45,13 +45,14 @@ const AdminInvoicesPage = () => {
       try {
         let response;
         if (department === "sales" || department === "accounts") {
-        response = await getdata();
-        setInvoices(response);
-          console.log("Fetched invoices for sales/accounts", response);
+          response = await getdata();
+          console.log("saless invoices", response);
+          setInvoices(response);
+          console.log("Fetched invoices for admin", invoices);
         } else {
-         response = await fetchAllInvoices();
-          console.log("admin invoices",response);
-        setInvoices(response);
+          response = await fetchAllInvoices();
+          console.log("admin invoices", response);
+          setInvoices(response);
           console.log("Fetched invoices for admin", invoices);
         }
       } catch (error) {
@@ -60,38 +61,31 @@ const AdminInvoicesPage = () => {
         setIsLoading(false);
       }
       setIsLoading(true);
+      try {
+
+      } catch (error) {
+        console.error("Error fetching invoices:", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
     fetchInvoices();
   }, [department]);
 
-  const handleDeleteInvoice = (updatedInvoices) => {
-    setInvoices(updatedInvoices);
-  };
-
-  const handleAddNewInvoice = async (invoiceId) => {
-    try {
-      const newInvoiceData = await getInvoiceById(invoiceId);
-      if (newInvoiceData.success) {
-        setInvoices((prevInvoices) => [...prevInvoices, newInvoiceData.Invoice]);
-      }
-    } catch (error) {
-      // Handle the error
-      console.error("Error adding new invoice:", error);
-    }
-  };
 
   const handleUpdateInvoice = async () => {
     setIsLoading(true);
     try {
       let response;
       if (department === "sales" || department === "accounts") {
-      response = await getdata();
-      setInvoices(response);
-        console.log("Fetched invoices for sales/accounts", response);
+        response = await getdata();
+        console.log("saless invoices", response);
+        setInvoices(response);
+        console.log("Fetched invoices for admin", invoices);
       } else {
-       response = await fetchAllInvoices();
-        console.log("admin invoices",response);
-      setInvoices(response);
+        response = await fetchAllInvoices();
+        console.log("admin invoices", response);
+        setInvoices(response);
         console.log("Fetched invoices for admin", invoices);
       }
     } catch (error) {
@@ -100,10 +94,16 @@ const AdminInvoicesPage = () => {
       setIsLoading(false);
     }
     setIsLoading(true);
-      setIsLoading(true);
+    try {
+
+    } catch (error) {
+      console.error("Error fetching invoices:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  console.log("last",invoices)
+  console.log("last", invoices)
   return (
     <Box bg={bgColor} py={8} minH="100vh">
       <Container maxW="container.xl" marginRight="0">
@@ -117,7 +117,7 @@ const AdminInvoicesPage = () => {
             </div>
           </Center>
         ) : (
-          <InvoiceList invoices={invoices} handleUpdateInvoice={handleUpdateInvoice} onDeleteInvoice={handleDeleteInvoice} onAddNewInvoice={handleAddNewInvoice} />
+          <InvoiceList invoices={invoices} handleUpdateInvoice={handleUpdateInvoice} />
         )}
       </Container>
     </Box>

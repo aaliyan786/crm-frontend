@@ -174,7 +174,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
       // Assuming response.data contains the newly created invoice data
       if (response.success) {
         const newInvoiceId = response.InvoiceId;
-        onAddNewInvoice(newInvoiceId);
+        handleUpdateInvoice();
       }
       // Call the onAddNewInvoice prop function with the new invoice data
       setIsLoading(false);
