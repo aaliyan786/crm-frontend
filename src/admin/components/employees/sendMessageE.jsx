@@ -53,6 +53,7 @@ function SendMessageE({ data, onClose }) {
       setTitle("");
       setPriority(""); // Fix: Clear priority state
       setMessage("");
+      onClose();
     } catch (error) {
       toast({
         title: "Error",
