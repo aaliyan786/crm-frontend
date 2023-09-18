@@ -980,6 +980,25 @@ export async function getQuotePdfById(quoteId) {
   }
 }
 
+export const getdata = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/employee/documents`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    const data = response.data;
+    if (data.success) {
+      return data.Invoice;
+    } else {
+      throw new Error("Failed to fetch customer data");
+    }
+  } catch (error) {
+    console.error("Error fetching customer data:", error);
+    throw error;
+  }
+}
 
 
 export const getAllQuotesByAdminStatus = async (type) => {

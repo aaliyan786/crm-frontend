@@ -81,7 +81,7 @@ const DataTable = ({ data, title, buttonLabel, to }) => {
             <Th>N#</Th>
             <Th>Client</Th>
             <Th>Total</Th>
-            <Th>Status</Th>
+            {/* <Th>Status</Th> */}
             <Th>Date</Th>
           </Tr>
         </Thead>
@@ -91,14 +91,14 @@ const DataTable = ({ data, title, buttonLabel, to }) => {
               <Td>{serialNumber + index}</Td>
               <Td>{item.client}</Td>
               <Td>{item.total}</Td>
-              <Td>
+              {/* <Td>
                 <Badge
                   fontSize="0.8em"
                   colorScheme={statusColors[item.status]}
                 >
                   {item.status}
                 </Badge>
-              </Td>
+              </Td> */}
               <Td>{item.date}</Td>
 
             </Tr>

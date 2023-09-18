@@ -135,7 +135,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
 
     const invoiceData = {
       client_email: selectedClient,
-      // status: selectedStatus,
+       status: selectedStatus,
       employee_email: email, // emp ki email ayegi
       expiry_date: todayISO, // Set it to today's date
       discount: discount,
@@ -207,7 +207,7 @@ function AddNewDrawer({ onAddNewInvoice, onClose, handleUpdateInvoice }) {
 
   const [customers, setCustomers] = useState([]);
   const [selectedClient, setSelectedClient] = useState("");
-  // const [selectedStatus, setSelectedStatus] = useState(1);
+  const [selectedStatus, setSelectedStatus] = useState(1);
   const [selectedType, setSelectedType] = useState(1);
 
   const [termsAndConditions, setTermsAndConditions] = useState("");
