@@ -45,15 +45,14 @@ const AdminQuotesPage = () => {
       let response;
       if (department === "sales" || department === "accounts") {
         response = await getAllQuotesByEmployee();
+        console.log('s/a',response);
         quotesData = response.Quote || [];
         setQuotes(quotesData);
-          console.log("Fetched quotes for sales/accounts", response);
         } else {
          response = await getAllQuotes();
+        console.log('admin',response);
         quotesData = response.Quote || [];
-          console.log("admin quotes",response);
           setQuotes(quotesData);
-          console.log("Fetched invoices for admin", quotes);
         }
     } catch (error) {
       console.error("Error fetching quotes:", error);
@@ -72,13 +71,10 @@ const AdminQuotesPage = () => {
         response = await getAllQuotesByEmployee();
         quotesData = response.Quote || [];
         setQuotes(quotesData);
-          console.log("Fetched quotes for sales/accounts", response);
         } else {
          response = await getAllQuotes();
         quotesData = response.Quote || [];
-          console.log("admin quotes",response);
           setQuotes(quotesData);
-          console.log("Fetched invoices for admin", quotes);
         }
     } catch (error) {
       console.error("Error fetching quotes:", error);
