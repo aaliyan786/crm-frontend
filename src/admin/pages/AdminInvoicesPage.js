@@ -39,15 +39,15 @@ const AdminInvoicesPage = () => {
   }
 
   useEffect(() => {
-    async function fetchInvoices() {
+
+    const fetchInvoices = async () => {
       setIsLoading(true);
       try {
         let response;
         if (department === "sales" || department === "accounts") {
         response = await getdata();
-          console.log("admin invoices",response);
         setInvoices(response);
-          console.log("Fetched invoices for admin", invoices);
+          console.log("Fetched invoices for sales/accounts", response);
         } else {
          response = await fetchAllInvoices();
           console.log("admin invoices",response);
@@ -60,13 +60,6 @@ const AdminInvoicesPage = () => {
         setIsLoading(false);
       }
       setIsLoading(true);
-      try {
-        
-      } catch (error) {
-        console.error("Error fetching invoices:", error);
-      } finally {
-        setIsLoading(false);
-      }
     }
     fetchInvoices();
   }, [department]);
@@ -89,23 +82,24 @@ const AdminInvoicesPage = () => {
 
   const handleUpdateInvoice = async () => {
     setIsLoading(true);
-      try {
-        let response;
-        if (department === "sales" || department === "accounts") {
-          response = await getdata();
-          setInvoices(response.data.documents);
-          console.log("ananas",invoices)
-          console.log("Fetched invoices for sales/accounts", response.data.documents);
-        } else if (department === 'admin') {
-          const response = await fetchAllInvoices();
-        setInvoices(response);
-          console.log("Fetched invoices for admin", response);
-        }
-      } catch (error) {
-        console.error("Error fetching invoice data:", error);
-      } finally {
-        setIsLoading(false);
+    try {
+      let response;
+      if (department === "sales" || department === "accounts") {
+      response = await getdata();
+      setInvoices(response);
+        console.log("Fetched invoices for sales/accounts", response);
+      } else {
+       response = await fetchAllInvoices();
+        console.log("admin invoices",response);
+      setInvoices(response);
+        console.log("Fetched invoices for admin", invoices);
       }
+    } catch (error) {
+      console.error("Error fetching invoice data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+    setIsLoading(true);
       setIsLoading(true);
   };
 

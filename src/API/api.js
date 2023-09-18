@@ -223,6 +223,20 @@ export const getAllQuotes = async () => {
     throw error;
   }
 };
+export const getAllQuotesByEmployee = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/employee/documents`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 export const getAllApprovedByClientQuotes = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/api/quote/getAllApprovedByClientQuotes`);
@@ -989,8 +1003,9 @@ export const getdata = async () => {
       },
     });
     const data = response.data;
+    console.log("Api",data.invoices)
     if (data.success) {
-      return data.Invoice;
+      return data.invoices;
     } else {
       throw new Error("Failed to fetch customer data");
     }
