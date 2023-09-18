@@ -1,5 +1,5 @@
 import axios from "axios";
-export const BASE_URL = "http://localhost:3000";
+export const BASE_URL = "https://backend.fourseasonglassrooms.com:3000";
 
 const token = localStorage.getItem("token");
 export const updateQuoteApprovalStatus = async (quoteId) => {
