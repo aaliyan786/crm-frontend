@@ -25,7 +25,6 @@ import {
   Center,
   Badge,
   TableContainer,
-  useToast,
 } from "@chakra-ui/react";
 import { FiCreditCard, FiEdit, FiFile, FiTrash2 } from "react-icons/fi";
 import { HiDotsVertical } from "react-icons/hi";
@@ -124,7 +123,6 @@ const TempQuote = ({ quotes, handleAddUpdateDeleteQuote }) => {
     setSelectedDrawerType("");
     setSelectedQuoteData(null);
   };
-  const toast = useToast();
 
   const token = localStorage.getItem("token");
 

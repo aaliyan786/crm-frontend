@@ -139,7 +139,8 @@ const QuoteList = ({ quotes, handleAddUpdateDeleteQuote }) => {
         description: "The Quote has been deleted successfully.",
         status: "success",
         duration: 3000,
-        isClosable: true,
+          position: "top-right",
+          isClosable: true,
       });
 
       // Remove the deleted invoice from the list
@@ -151,6 +152,7 @@ const QuoteList = ({ quotes, handleAddUpdateDeleteQuote }) => {
           title: "Error",
           description: error.response.data.error,
           status: "error",
+          position: "top-right",
           duration: 3000,
           isClosable: true,
         });
