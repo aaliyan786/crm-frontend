@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import CryptoJS from "crypto-js";
+
 import {
   Box,
   Center,
@@ -7,23 +9,56 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import QuoteList from "../components/quotes/QuoteList";
-import { getAllQuotes } from "../../API/api";
+import { getAllQuotes, getAllQuotesByEmployee } from "../../API/api";
+
+
+let department = "";
+const encryptedData = localStorage.getItem("encryptedData");
+const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA";
+if (encryptedData) {
+  try {
+    const decryptedData = CryptoJS.AES.decrypt(
+      encryptedData,
+      secretKey
+    ).toString(CryptoJS.enc.Utf8);
+    console.log("Department", decryptedData);
+    if (decryptedData) {
+      department = decryptedData;
+    } else {
+      console.error("Decryption resulted in empty data");
+    }
+  } catch (error) {
+    console.error("Decryption error:", error);
+  }
+} else {
+  console.error("Item not found in local storage");
+}
 
 const AdminQuotesPage = () => {
   const bgColor = useColorModeValue("gray.100", "gray.700");
   const [quotes, setQuotes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  let quotesData;
   // Function to fetch quotes from the API
   const fetchQuotes = async () => {
     try {
-      const response = await getAllQuotes();
-      const quotesData = response.Quote || []; // Ensure Quote is an array
-      setQuotes(quotesData);
-      setIsLoading(false);
-      console.log("daatatatatat",quotesData)
+      let response;
+      if (department === "sales" || department === "accounts") {
+        response = await getAllQuotesByEmployee();
+        quotesData = response.Quote;
+        setQuotes(quotesData);
+        console.log("Fetched quotes for sales/accounts", response.Quote);
+      } else {
+        response = await getAllQuotes();
+        quotesData = response.Quote || [];
+        console.log("admin quotes", response);
+        setQuotes(quotesData);
+        console.log("Fetched invoices for admin", quotes);
+      }
     } catch (error) {
       console.error("Error fetching quotes:", error);
+      setIsLoading(false);
+    }finally {
       setIsLoading(false);
     }
   };
@@ -34,12 +69,24 @@ const AdminQuotesPage = () => {
 
   const handleAddUpdateDeleteQuote = async () => {
     try {
-      const response = await getAllQuotes();
-      const quotesData = response.Quote; // Ensure Quote is an array
-      setQuotes(quotesData);
-      setIsLoading(false);
+      let response;
+      if (department === "sales" || department === "accounts") {
+        response = await getAllQuotesByEmployee();
+        quotesData = response.Quote;
+        setQuotes(quotesData);
+        console.log("Fetched quotes for sales/accounts", quotesData);
+      } else {
+        response = await getAllQuotes();
+        quotesData = response.Quote || [];
+        console.log("admin quotes", response);
+        setQuotes(quotesData);
+        console.log("Fetched invoices for admin", quotes);
+      }
     } catch (error) {
       console.error("Error fetching quotes:", error);
+
+    }
+    finally {
       setIsLoading(false);
     }
   }
@@ -53,10 +100,10 @@ const AdminQuotesPage = () => {
         </Heading>
         {isLoading ? (
           <Center justifyContent="center">
-          <div class="loader">
-            <div class="cover"></div>
-          </div>
-        </Center>
+            <div class="loader">
+              <div class="cover"></div>
+            </div>
+          </Center>
         ) : (
           <QuoteList
             quotes={quotes}

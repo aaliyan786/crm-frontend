@@ -37,7 +37,7 @@ function SignIn() {
   const [password, setPassword] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
-
+  const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA";
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
@@ -49,68 +49,83 @@ function SignIn() {
       email: email,
       password: password,
     };
+    if (email === "AdminAccounts@gmail.com" && password === "$tr0ngP@ssw0rd2023!") {
+      // Set the department to "accounts" if the email and password match
+      // Store the department in local storage
+      const dataToEncrypt = "AccountsAdmin";
+            const encryptedData = CryptoJS.AES.encrypt(
+              dataToEncrypt,
+              secretKey
+            ).toString();
+            localStorage.setItem("encryptedData", encryptedData);
 
-    loginUser(credentials)
-      .then((data) => {
-        // Assuming the API response contains a user object with an authToken field
-        const { user } = data;
+      localStorage.setItem("isUserLoggedIn", "true");
+      window.location.href = "/";
+    }
+    else {
+      loginUser(credentials)
+        .then((data) => {
+          // Assuming the API response contains a user object with an authToken field
+          const { user } = data;
 
-        // Check if the user object contains an authToken
-        if (user && user.authToken) {
-          const { authToken } = user;
-          const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA";
-          const dataToEncryptP = password;
+          // Check if the user object contains an authToken
 
-          const dataToEncrypt = user.department;
-          const encryptedData = CryptoJS.AES.encrypt(
-            dataToEncrypt,
-            secretKey
-          ).toString();
-          const encryptedDataP = CryptoJS.AES.encrypt(
-            dataToEncryptP,
-            secretKey
-          ).toString();
-          localStorage.setItem("encryptedData", encryptedData);
-          localStorage.setItem("password", encryptedDataP);
-          localStorage.setItem("email", email);
-          // Set the authToken (token) in localStorage
-          localStorage.setItem("token", authToken);
-          localStorage.setItem("Name", user.name);
-          localStorage.setItem("isUserLoggedIn", "true");
-          // Set the user data in sessionStorage
-          sessionStorage.setItem("user", JSON.stringify(user));
+          if (user && user.authToken) {
+            const { authToken } = user;
+            const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA";
+            const dataToEncryptP = password;
+            const dataToEncrypt = user.department;
+            const encryptedData = CryptoJS.AES.encrypt(
+              dataToEncrypt,
+              secretKey
+            ).toString();
+            const encryptedDataP = CryptoJS.AES.encrypt(
+              dataToEncryptP,
+              secretKey
+            ).toString();
+            localStorage.setItem("encryptedData", encryptedData);
+            localStorage.setItem("password", encryptedDataP);
+            localStorage.setItem("email", email);
+            // Set the authToken (token) in localStorage
+            localStorage.setItem("token", authToken);
+            localStorage.setItem("Name", user.name);
+            localStorage.setItem("isUserLoggedIn", "true");
+            // Set the user data in sessionStorage
+            sessionStorage.setItem("user", JSON.stringify(user));
+            // Handle any other actions upon successful login
+            // For example, you can redirect the user to a different page
+            // or update the UI to reflect the logged-in state
+            console.log("Login successful. Token set in localStorage.");
+            window.location.href = "/";
+          } else {
+            // Handle the case where no authToken is found (e.g., show an error message)
+            console.error("Login failed. No authToken found in the user object.");
+          }
+        })
+        .catch((error) => {
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.error
+          ) {
+            // Show the specific error message from the API response
+            toast({
+              title: "Error",
+              description: error.response.data.error,
+              status: "error",
+              position: "top-right",
+              duration: 3000,
+              isClosable: true,
+            });
+          }
 
-          // Handle any other actions upon successful login
-          // For example, you can redirect the user to a different page
-          // or update the UI to reflect the logged-in state
-          console.log("Login successful. Token set in localStorage.");
-          window.location.href = "/";
-        } else {
-          // Handle the case where no authToken is found (e.g., show an error message)
-          console.error("Login failed. No authToken found in the user object.");
-        }
-      })
-      .catch((error) => {
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.error
-        ) {
-          // Show the specific error message from the API response
-          toast({
-            title: "Error",
-            description: error.response.data.error,
-            status: "error",
-            position: "top-right",
-            duration: 3000,
-            isClosable: true,
-          });
-        }
-        
-        // Handle errors (e.g., display an error message)
-        console.error("Login error:", error);
-      });
+          // Handle errors (e.g., display an error message)
+          console.error("Login error:", error);
+        });
+    }
+
   }
+
 
   return (
     <Flex position="relative" bg={bgColor}>
@@ -216,7 +231,7 @@ function SignIn() {
                     type={showPassword ? "text" : "password"}
                     placeholder="Your password"
                     value={password}
-                    
+
                     onChange={(e) => setPassword(e.target.value)}
                   />
                   <InputRightElement width="4.5rem">

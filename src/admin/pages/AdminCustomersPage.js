@@ -20,27 +20,29 @@ const AdminCustomersPage = () => {
   let department = "";
   const encryptedData = localStorage.getItem("encryptedData");
   const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA";
+  if (encryptedData) {
+    try {
+      const decryptedData = CryptoJS.AES.decrypt(
+        encryptedData,
+        secretKey
+      ).toString(CryptoJS.enc.Utf8);
+      console.log("Department", decryptedData);
+      if (decryptedData) {
+        department = decryptedData;
+      } else {
+        console.error("Decryption resulted in empty data");
+      }
+    } catch (error) {
+      console.error("Decryption error:", error);
+    }
+  } else {
+    console.error("Item not found in local storage");
+  }
+
+
 
   useEffect(() => {
-    if (encryptedData) {
-      try {
-        const decryptedData = CryptoJS.AES.decrypt(
-          encryptedData,
-          secretKey
-        ).toString(CryptoJS.enc.Utf8);
-        console.log("Department", decryptedData);
-        if (decryptedData) {
-          department = decryptedData;
-        } else {
-          console.error("Decryption resulted in empty data");
-        }
-      } catch (error) {
-        console.error("Decryption error:", error);
-      }
-    } else {
-      console.error("Item not found in local storage");
-    }
-
+   
     const fetchData = async () => {
       setIsLoading(true);
       try {
@@ -48,7 +50,7 @@ const AdminCustomersPage = () => {
         if (department === "sales" || department === "accounts") {
           response = await fetchCustomerDataByEmployee();
           setCustomers(response.data);
-          console.log("Fetched customers for sales/accounts", customers);
+          console.log("Fetched customers for sales/accounts", response.data);
         } else {
           response = await fetchCustomers();
           setCustomers(response.data);
@@ -75,22 +77,27 @@ const AdminCustomersPage = () => {
 
   const handleFetchUpdatedCustomer = async () => {
     setIsLoading(true);
-    try {
-      let response;
-      if (department === "sales" || department === "accounts") {
-        response = await fetchCustomerDataByEmployee();
-        setCustomers(response.data);
-      } else {
-        response = await fetchCustomers();
-        setCustomers(response.data);
-      }
-      console.log("Fetched customers", response);
-    } catch (error) {
-      console.error("Error fetching customer data:", error);
-    } finally {
-      setIsLoading(false);
-    }
+    
+    // Simulate a loading delay for 1.5 seconds (adjust as needed)
+    
+      try {
+        console.log('hello department',department);
+        let response;
+        if (department === "sales" || department === "accounts") {
+          response = await fetchCustomerDataByEmployee();
+          setCustomers(response.data);
+        } else if (department === 'admin') {
+          response = await fetchCustomers();
+          setCustomers(response.data);
+        }
+        console.log("Fetched customers", response);
+      } catch (error) {
+        console.error("Error fetching customer data:", error);
+      } finally {
+        setIsLoading(false);
+      }// Adjust the delay duration (in milliseconds) as needed
   };
+  
 
   return (
     <Box bg={bgColor} minH="100vh">

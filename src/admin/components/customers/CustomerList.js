@@ -1,5 +1,7 @@
 // src\admin\components\customers\CustomerList.js
 import React, { useState } from "react";
+import CryptoJS from "crypto-js";
+
 import {
   Box,
   Table,
@@ -144,7 +146,32 @@ const CustomerList = ({
       }
     }
   };
+  let department = ""; // Initialize the department variable
+  const encryptedData = localStorage.getItem("encryptedData");
+  const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA"; // Replace with your own secret key
+  if (encryptedData) {
+    try {
+      // Decrypt the data
+      const decryptedData = CryptoJS.AES.decrypt(
+        encryptedData,
+        secretKey
+      ).toString(CryptoJS.enc.Utf8);
 
+      if (decryptedData) {
+        // Data successfully decrypted, assign it to the department variable
+        department = decryptedData;
+      } else {
+        // Handle the case where decryption resulted in empty data
+        console.error("Decryption resulted in empty data");
+      }
+    } catch (error) {
+      // Handle decryption errors
+      console.error("Decryption error:", error);
+    }
+  } else {
+    // Handle the case where 'encryptedData' is not found in local storage
+    console.error("Item not found in local storage");
+  }
   const [isAddCustomerDrawerOpen, setIsAddCustomerDrawerOpen] = useState(false);
   const handleAddCustomerClick = () => {
     setIsAddCustomerDrawerOpen(true);
@@ -207,7 +234,7 @@ const CustomerList = ({
               <Th>Last Name</Th>
               <Th>Email</Th>
               <Th>Phone</Th>
-              <Th>Added by Employee</Th>
+              {department === 'admin' && <Th>Added by Employee</Th>}
               <Th>Actions</Th>
             </Tr>
           </Thead>
@@ -219,7 +246,7 @@ const CustomerList = ({
                 <Td>{customer.fname}</Td>
                 <Td>{customer.email}</Td>
                 <Td>{customer.phone}</Td>
-                <Td>{customer.added_by_employee}</Td>
+                {department === 'admin' && customer.added_by_employee}
                 <Td>
                   <Menu>
                     <MenuButton

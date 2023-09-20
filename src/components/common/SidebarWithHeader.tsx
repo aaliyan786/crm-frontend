@@ -1,5 +1,5 @@
 "use client";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 // import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import CryptoJS from "crypto-js";
 
@@ -118,6 +118,7 @@ if (encryptedData) {
     console.error("Decryption error:", error);
   }
 } else {
+  
   // Handle the case where 'encryptedData' is not found in local storage
   console.error("Item not found in local storage");
 }
@@ -129,6 +130,7 @@ let linkItems = [
   { name: "LPO", icon: FiFileText, to: "/lpo" },
   { name: "Quote", icon: FiFile, to: "/quotes" },
   { name: "Lost Quotes", icon: FiFileMinus, to: "/lossquotes" },
+  { name: "Approved Quotes By Clients", icon: FiFileMinus, to: "/tempquote" },
   { name: "Quote Approval", icon: FiFileMinus, to: "/acceptedquotes" },
   { name: "Assigned Quotes", icon: FiFilePlus, to: "/assignedquotes" },
   { name: "Employee", icon: FiUser, to: "/employees" },
@@ -170,6 +172,13 @@ if (department === "admin") {
       item.name === "Customer" ||
       item.name === "Invoice"||
       item.name === "LPU"
+  );
+}
+else if (department === "AccountsAdmin") {
+  // Include only specific items for accounts
+  linkItems = linkItems.filter(
+    (item) =>
+      item.name === "Approved Quotes By Clients"
   );
 }
 

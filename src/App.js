@@ -66,6 +66,7 @@ export default function App() {
       <ChakraProvider theme={theme}>
         <Routes>
           <Route path="/" element={<SignIn />} />
+          <Route path="/*" element={<SignIn />} />
         </Routes>
       </ChakraProvider>
     );
@@ -81,7 +82,6 @@ export default function App() {
           <Route path="/lpo" element={<AdminLpoPage />} />
           <Route path="/quotes" element={<AdminQuotesPage />} />
           <Route path="/tempquote" element={<TempQuotesPage />} />
-          {/* <Route path="/quoteapproval/:id" element={<QuoteApproval />} /> */}
           <Route path="/quoteapproval/:pdfid" element={<QuoteApproval />} />
           <Route path="/lossquotes" element={<AdminLossQuotesPage />} />
           <Route path="/acceptedquotes" element={<AdminAcceptedQuotesPage />} />

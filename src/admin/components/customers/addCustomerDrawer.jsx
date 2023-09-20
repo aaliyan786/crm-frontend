@@ -114,7 +114,7 @@ const AddCustomerDrawer = ({
           address: newCustomer.address,
           date: formattedDate, 
           company_name: newCustomer.company,
-          added_by_employee: employee_id, // added by employee ki id session se ayegi
+          added_by_employee: employee_id, 
         });
 
 

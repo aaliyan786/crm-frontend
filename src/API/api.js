@@ -1,5 +1,5 @@
 import axios from "axios";
-export const BASE_URL = "http://localhost:3000";
+export const BASE_URL = "https://backend.fourseasonglassrooms.com:3000";
 
 const token = localStorage.getItem("token");
 export const updateQuoteApprovalStatus = async (quoteId) => {
@@ -200,29 +200,8 @@ export const getInvoiceById = async (invoiceId) => {
     throw error;
   }
 };
-export const fetchAllInvoices = async () => {
-  try {
-    const response = await axios.get(`${BASE_URL}/api/invoice/all`);
-    const data = response.data;
-    if (data.success) {
-      return data.Invoice;
-    } else {
-      throw new Error("Failed to fetch customer data");
-    }
-  } catch (error) {
-    console.error("Error fetching customer data:", error);
-    throw error;
-  }
-};
 
-export const getAllQuotes = async () => {
-  try {
-    const response = await axios.get(`${BASE_URL}/api/quote/all`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+
 export const getAllApprovedByClientQuotes = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/api/quote/getAllApprovedByClientQuotes`);
@@ -979,7 +958,42 @@ export async function getQuotePdfById(quoteId) {
     throw error;
   }
 }
+export const fetchAllInvoices = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/invoice/all`);
+    const data = response.data;
+    console.log('admin incoice  response.data', response.data)
+    if (data.success) {
+      return data.Invoice;
+    } else {
+      throw new Error("Failed to fetch customer data");
+    }
+  } catch (error) {
+    console.error("Error fetching customer data:", error);
+    throw error;
+  }
+};
 
+export const getdata = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/employee/documents`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    const data = response.data;
+    console.log('accounts incoice  response.data', response.data)
+    if (data.success) {
+      return data.invoices;
+    } else {
+      throw new Error("Failed to fetch customer data");
+    }
+  } catch (error) {
+    console.error("Error fetching customer data:", error);
+    throw error;
+  }
+}
 
 
 export const getAllQuotesByAdminStatus = async (type) => {
@@ -1115,5 +1129,31 @@ export const convertQuoteToInvoice = async (quoteId, employeeEmail) => {
     return response.data; // You can return the response data or handle it as needed
   } catch (error) {
     throw error; // Handle the error in your component
+  }
+};
+
+export const getAllQuotesByEmployee = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/employee/documents`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+    console.log('getAllQuotesByEmployee sales', response.data)
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllQuotes = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/quote/all`);
+    console.log('getAllQuotes admin', response.data)
+    return response.data;
+  } catch (error) {
+    throw error;
   }
 };

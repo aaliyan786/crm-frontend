@@ -50,7 +50,7 @@ const TempQuotesPage = () => {
     <Box bg={bgColor} py={8} minH="100vh">
       <Container maxW="container.xl" marginRight="0">
         <Heading as="h1" size="xl" mb={4}>
-          TEmp Quote Management
+        Approved Quotes By Clients
         </Heading>
         {isLoading ? (
           <Center justifyContent="center">
