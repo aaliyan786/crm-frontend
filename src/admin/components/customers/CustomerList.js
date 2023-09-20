@@ -246,7 +246,7 @@ const CustomerList = ({
                 <Td>{customer.fname}</Td>
                 <Td>{customer.email}</Td>
                 <Td>{customer.phone}</Td>
-                {department === 'admin' && customer.added_by_employee}
+                {department === 'admin' && <Th>{customer.added_by_employee}</Th>}
                 <Td>
                   <Menu>
                     <MenuButton
