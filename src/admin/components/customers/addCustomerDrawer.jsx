@@ -251,7 +251,7 @@ const AddCustomerDrawer = ({
                   <FormLabel fontWeight="bold">VAT Number</FormLabel>
                   <Input
                     name="vat"
-                    type="text"
+                    type="number"
                     value={newCustomer.vat}
                     onChange={handleInputChange}
                   />

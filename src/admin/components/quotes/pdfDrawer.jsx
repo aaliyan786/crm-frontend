@@ -34,6 +34,7 @@ import { updateQuoteData } from "../../../API/api";
 import ConfirmationAlert from "../../../components/common/ConfirmationAlert";
 import { sendPdfByEmail, BASE_URL } from "../../../API/api";
 import QRCode from "qrcode.react";
+import { BASE_URL_FRONTEND } from "../../../API/api";
 
 function addTextWithMaxWidth(doc, title, text, maxWidth, startY, lineHeight) {
   doc.setFont("helvetica", "bold");
@@ -617,7 +618,7 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
             width="200px"
             mb={50}
           />
-          <QRCode value={`${BASE_URL}/quoteapproval/${encryptedData}`} id='qrcode' />
+          <QRCode value={`${BASE_URL_FRONTEND}/quoteapproval/${encryptedData}`} id='qrcode' />
 
         </div>
       )}

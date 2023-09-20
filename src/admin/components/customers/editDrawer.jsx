@@ -118,6 +118,7 @@ const EditCustomerDrawer = ({
           title: "Invoice Created",
           description: "The record has been updated successfully",
           status: "success",
+          position: "top-right",
           duration: 3000,
           isClosable: true,
         });
@@ -133,6 +134,7 @@ const EditCustomerDrawer = ({
             title: "Error",
             description: error.response.data.error,
             status: "error",
+            position: "top-right",
             duration: 3000,
             isClosable: true,
           });
@@ -173,6 +175,7 @@ const EditCustomerDrawer = ({
                   <FormLabel fontWeight="bold">Company Name:</FormLabel>
                   <Input
                     name="company_name"
+                    type="text"
                     value={editedCustomer.company_name}
                     onChange={handleInputChange}
                     required
@@ -189,6 +192,7 @@ const EditCustomerDrawer = ({
                   <FormLabel fontWeight="bold">First Name:</FormLabel>
                   <Input
                     name="lname"
+                    type="text"
                     value={editedCustomer.lname}
                     onChange={handleInputChange}
                     required
@@ -205,6 +209,7 @@ const EditCustomerDrawer = ({
                   <FormLabel fontWeight="bold">Last Name:</FormLabel>
                   <Input
                     name="fname"
+                    type="text"
                     value={editedCustomer.fname}
                     onChange={handleInputChange}
                     required
@@ -221,6 +226,7 @@ const EditCustomerDrawer = ({
                   <FormLabel fontWeight="bold">Email:</FormLabel>
                   <Input
                     name="email"
+                    type="email"
                     value={editedCustomer.email}
                     onChange={handleInputChange}
                     required
@@ -237,6 +243,7 @@ const EditCustomerDrawer = ({
                   <FormLabel fontWeight="bold">Phone:</FormLabel>
                   <Input
                     name="phone"
+                    type="tel"
                     value={editedCustomer.phone}
                     onChange={handleInputChange}
                     required
@@ -253,6 +260,7 @@ const EditCustomerDrawer = ({
                   <FormLabel fontWeight="bold">Address:</FormLabel>
                   <Input
                     name="address"
+                    type="text"
                     value={editedCustomer.address}
                     onChange={handleInputChange}
                     required
@@ -269,6 +277,7 @@ const EditCustomerDrawer = ({
                   <FormLabel fontWeight="bold">VAT Number:</FormLabel>
                   <Input
                     name="vat"
+                    type="number"
                     value={editedCustomer.vat}
                     onChange={handleInputChange}
                     required
@@ -292,10 +301,12 @@ const EditCustomerDrawer = ({
 
         <DrawerFooter justifyContent="start">
           <Button
-            variant="outline"
+            variant="solid"
             mr={3}
             onClick={handleSaveClick}
             disabled={!isFormValid}
+            colorScheme="green"
+            
           >
             Save
           </Button>
