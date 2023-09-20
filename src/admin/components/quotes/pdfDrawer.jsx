@@ -591,23 +591,23 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
           </VStack>
           <VStack align="start">
             <Text fontWeight="bold">Note:</Text>
-            <Text>{pdfData.data.quoteData.note}</Text>
+            <Text whiteSpace="pre-line">{pdfData.data.quoteData.note}</Text>
             <Divider orientation="horizontal" height={10} />
 
             <Text fontWeight="bold">Terms & Conditions:</Text>
-            <Text>{pdfData.data.quoteData.terms_and_condition}</Text>
+            <Text whiteSpace="pre-line">{pdfData.data.quoteData.terms_and_condition}</Text>
             <Divider orientation="horizontal" height={10} />
 
             <Text fontWeight="bold">Payment Terms:</Text>
-            <Text>{pdfData.data.quoteData.payment_terms}</Text>
+            <Text whiteSpace="pre-line">{pdfData.data.quoteData.payment_terms}</Text>
             <Divider orientation="horizontal" height={10} />
 
             <Text fontWeight="bold">Execution Time:</Text>
-            <Text>{pdfData.data.quoteData.execution_time}</Text>
+            <Text whiteSpace="pre-line">{pdfData.data.quoteData.execution_time}</Text>
             <Divider orientation="horizontal" height={10} />
 
             <Text fontWeight="bold">Bank Account Details:</Text>
-            <Text>{pdfData.data.quoteData.bank_details}</Text>
+            <Text whiteSpace="pre-line">{pdfData.data.quoteData.bank_details}</Text>
             <Divider orientation="horizontal" height={10} />
           </VStack>
           <Divider orientation="horizontal" height={10} />
