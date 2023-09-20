@@ -353,37 +353,32 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     );
 
     doc.text(
-      `Tax (${(pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
-      }%): ` + pdfData.data.Summarry.tax,
+      `Tax (${((pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100).toFixed(2)
+      }%): ` + (pdfData.data.Summarry.tax).toFixed(2),
       pageWidth -
       doc.getTextWidth(
-        `Vat (${(pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100
-        }%): ` + pdfData.data.Summarry.tax
+        `Vat (${((pdfData.data.Summarry.tax / pdfData.data.Summarry.subtotal) * 100).toFixed(2)
+        }%): ` + (pdfData.data.Summarry.tax).toFixed(2)
       ) -
       15,
       lastTableBottomY + textSpacing + 5
     );
 
-    // doc.text(
-    //   "Adjustment: " +
-    //   adjustment,
-    //   pageWidth -
-    //   doc.getTextWidth(
-    //     "Adjustment: " +
-    //     adjustment
-    //   ) -
-    //   15,
-    //   lastTableBottomY + textSpacing + 10
-    // );
-
+    doc.text(
+      "Discount: AED " + pdfData.data.quoteData.discount,
+      pageWidth -
+      doc.getTextWidth("Discount: AED " + pdfData.data.quoteData.discount) -
+      15,
+      lastTableBottomY + textSpacing + 10
+    );
     doc.text(
       "Total: AED" + pdfData.data.Summarry.total,
       pageWidth -
       doc.getTextWidth("Total: AED" + pdfData.data.Summarry.total) -
       15,
-      lastTableBottomY + textSpacing + 10
+      lastTableBottomY + textSpacing + 15
     );
-    let startY = lastTableBottomY + textSpacing + 15; // Initial Y position
+    let startY = lastTableBottomY + textSpacing + 20; // Initial Y position
     const lineHeight = 4; // Adjust this value as needed for line spacing
 
     const addTextWithPageBreak = (text, maxWidth) => {
@@ -438,7 +433,7 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
     setIsSendEmail(true); // Open the delete confirmation dialog
   };
   const secretKey = "sT#9yX^pQ&$mK!2wF@8zL7vA";
-  const dataToEncrypt = data.quotesData.id.toString() ;
+  const dataToEncrypt = data.quotesData.id.toString();
   const encryptedData = CryptoJS.AES.encrypt(
     dataToEncrypt,
     secretKey
@@ -570,23 +565,29 @@ const PdfDrawerQ = ({ data, handleAddUpdateDeleteQuote, onClose }) => {
                 </Text>
                 <Text align="start" fontWeight="bold" flex="1">
                   Tax (
-                  {(pdfData.data.Summarry.tax /
+                  {((pdfData.data.Summarry.tax /
                     pdfData.data.Summarry.subtotal) *
-                    100}
+                    100).toFixed(2)}
                   )%
                 </Text>
-                {/* <Text align="start" fontWeight="bold" flex="1">
-                Adjustment
-              </Text> */}
+                <Text align="start" fontWeight="bold" flex="1">
+                  Discount
+                </Text>
                 <Text align="start" fontWeight="bold" flex="1">
                   Total
                 </Text>
               </VStack>
               <VStack align="start">
                 <Text align="end">AED {pdfData.data.Summarry.subtotal}</Text>
-                <Text align="end">AED {pdfData.data.Summarry.tax}</Text>
-                {/* <Text align="end">AED {adjustment}</Text> */}
-                <Text align="end">AED {pdfData.data.Summarry.total}</Text>
+                <Text align="end">AED {pdfData.data.Summarry.tax.toFixed(2)}</Text>
+                <Text align="end">
+                  AED {pdfData.data.quoteData?.discount}
+                </Text>
+                <Text align="end">
+                  AED{" "}
+                  {pdfData.data.Summarry.total -
+                    pdfData.data.quoteData?.discount}
+                </Text>
               </VStack>
             </SimpleGrid>
           </VStack>
